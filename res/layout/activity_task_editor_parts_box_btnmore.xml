@@ -7,7 +7,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btnMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/task_editor_parts_layout_margin_Left_Right"
@@ -16,11 +16,11 @@
             android:background="@color/actionbar_text"
             android:minHeight="30dp"
             android:minLines="1"
-            android:text="更多"
+            android:text="@string/btnMore_More"
             android:textColor="@color/card_expand_title_color"
             android:textColorHint="@color/card_expand_title_color"
             android:textColorLink="@color/background_window"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
     

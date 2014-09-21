@@ -18,22 +18,16 @@
 
 package me.iamcxa.remindme.cardfragment;
 
-import common.CommonVar;
 import common.MyCalendar;
 import common.MyDebug;
 
 import it.gmariotti.cardslib.library.view.CardListView;
 import me.iamcxa.remindme.R;
-import me.iamcxa.remindme.RemindmeFragment;
-import me.iamcxa.remindme.RemindmeMainActivity;
 import me.iamcxa.remindme.database.ColumnAlert;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -41,7 +35,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 /**
@@ -151,7 +144,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		getLoaderManager().initLoader(101, null, this);
+		getLoaderManager().initLoader(101, savedInstanceState, this);
 		//getLoaderManager().initLoader(201, null, this);
 		//getLoaderManager().initLoader(301, null, this);
 		init();

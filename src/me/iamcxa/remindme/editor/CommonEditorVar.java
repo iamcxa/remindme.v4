@@ -7,6 +7,7 @@ public class CommonEditorVar {
 	public final int TIME_DIALOG_ID = 1;
 
 	public static CommonEditorVar EditorVarInstance = new CommonEditorVar();
+	
 	//切割分類
 	public DateVar TaskDate = new DateVar();
 	public LocationVar TaskLocation = new LocationVar();
@@ -14,7 +15,7 @@ public class CommonEditorVar {
 	public TaskTypeVar TaskType= new TaskTypeVar();
 	public AlertVar TaskAlert= new AlertVar();
 	public OtherVar TaskOther= new OtherVar();
-
+	
 	private CommonEditorVar(){}
 
 	public static CommonEditorVar GetInstance(){
@@ -175,12 +176,12 @@ class AlertVar {
 class DateVar {
 
 	// 日期
-	private int mYear=0;
-	private int mMonth=0;
-	private int mDay=0;
+	protected int mYear=0;
+	protected int mMonth=0;
+	protected int mDay=0;
 	// 時間
-	private int mHour=0;
-	private int mMinute=0;
+	protected int mHour=0;
+	protected int mMinute=0;
 	//private int target;
 
 	//---------------Getter/Setter-----------------//

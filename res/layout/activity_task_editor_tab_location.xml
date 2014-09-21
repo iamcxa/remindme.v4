@@ -54,6 +54,7 @@
         android:layout_height="366dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/includeA"
         layout="@layout/activity_task_editor_parts_dialog_location" />
 

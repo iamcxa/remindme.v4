@@ -17,7 +17,7 @@ import android.widget.Toast;
 public class TaskEditorTab extends FragmentActivity  {
 
 	static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
-	static DbAction_SaveOrUpdate mSaveOrUpdate;
+	static Act_SaveToDb mSaveOrUpdate;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -39,7 +39,7 @@ public class TaskEditorTab extends FragmentActivity  {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayUseLogoEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle("建立待辦事項");
+		actionBar.setTitle(getResources().getString(R.string.TaskEditor_ActionBar_Title));
 
 		// actionAdd
 		MenuItem actionAdd = menu.findItem(R.id.action_add);
@@ -110,17 +110,17 @@ public class TaskEditorTab extends FragmentActivity  {
 				.setIcon(getResources().getDrawable(R.drawable.tear_of_calendar))
 				.setTabListener(new MyTabListener(fragMarriSug)));
 
-		Fragment fragGame =  TaskEditorLocation.newInstance();
-		actBar.addTab(actBar.newTab()
-				.setText("")
-				.setIcon(getResources().getDrawable(R.drawable.map_marker))
-				.setTabListener(new MyTabListener(fragGame)));
-
-		Fragment fragVideo = new TaskEditorMain();
-		actBar.addTab(actBar.newTab()
-				.setText("")
-				.setIcon(getResources().getDrawable(android.R.drawable.ic_media_play))
-				.setTabListener(new MyTabListener(fragVideo)));
+//		Fragment fragGame =  TaskEditorLocation.newInstance();
+//		actBar.addTab(actBar.newTab()
+//				.setText("")
+//				.setIcon(getResources().getDrawable(R.drawable.map_marker))
+//				.setTabListener(new MyTabListener(fragGame)));
+//
+//		Fragment fragVideo = new TaskEditorMain();
+//		actBar.addTab(actBar.newTab()
+//				.setText("")
+//				.setIcon(getResources().getDrawable(android.R.drawable.ic_media_play))
+//				.setTabListener(new MyTabListener(fragVideo)));
 
 	}
 
@@ -139,7 +139,7 @@ public class TaskEditorTab extends FragmentActivity  {
 
 				btnActionAdd();
 
-			}else if (itemName.contentEquals( "action_add")) {
+			}else if (itemName.contentEquals( "action_cancel")) {
 				//btnActionCancel();//暫時取消此功能
 			}
 
@@ -157,7 +157,7 @@ public class TaskEditorTab extends FragmentActivity  {
 		if(!isEmpty){
 			try {
 
-				mSaveOrUpdate=new DbAction_SaveOrUpdate(getApplicationContext());
+				mSaveOrUpdate=new Act_SaveToDb(getApplicationContext());
 				finish();
 
 			} catch (Exception e) {

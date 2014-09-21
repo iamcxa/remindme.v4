@@ -64,6 +64,7 @@ public class MyCalendar {
 		return curDate;
 	}
 	
+	
 	public static String getDate_From_TimeMillis(boolean HasHourAndMins,long A_Time_In_Milliseconds ) {
 		SimpleDateFormat sdf = null;
 		if (HasHourAndMins) {

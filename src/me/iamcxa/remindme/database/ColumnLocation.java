@@ -19,7 +19,7 @@ public final class ColumnLocation implements BaseColumns {
 	// 存取Uri
 	public static final Uri URI =
 			Uri.parse("content://" + CommonVar.AUTHORITY + "/" + TABLE_NAME);
-	
+
 	public static final String exec_SQL_Statment=
 			"CREATE TABLE "
 					+ TABLE_NAME
@@ -29,7 +29,12 @@ public final class ColumnLocation implements BaseColumns {
 					+KEY.lat + " TEXT,"
 					+KEY.lon + " TEXT,"
 					+KEY.dintance + " INTEGER"
-					+ ");";
+					+ ");"+
+					" INSERT INTO "+ TABLE_NAME 
+					+KEY.name+ " VALUES ('請選擇地點')"
+					+KEY.lat + " VALUES ('0')" 
+					+KEY.lon + " VALUES ('0')"
+					+KEY.dintance + " VALUES ('0');";
 	// 查詢欄位陣列
 	public static final String[] PROJECTION = new String[] { 
 		KEY._id ,
