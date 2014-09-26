@@ -1,15 +1,10 @@
 package me.iamcxa.remindme.editor;
 
-import java.util.List;
-
 import common.MyCalendar;
 import common.CommonVar;
-import common.MyDebug;
-
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -40,6 +35,7 @@ import android.widget.TimePicker;
 public class TaskEditorMain extends Fragment  implements
 LoaderManager.LoaderCallbacks<Cursor>  {
 
+	private static CustomDialog cDialog;
 	private static SimpleCursorAdapter mAdapter;
 
 	private static MultiAutoCompleteTextView taskTitle; 	// 任務標題
@@ -90,8 +86,8 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		super.onActivityCreated(savedInstanceState);
 		obtainData();
 		if(savedInstanceState==null){
+
 		}
-		getLoaderManager().initLoader(0, null, this);
 	}
 
 
@@ -160,22 +156,19 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		taskProject.setPrompt(getResources().getString(R.string.TaskEditor_Field_Project_Hint));
 		taskProject.setVisibility(View.GONE);
 
-
+		getLoaderManager().initLoader(0, null, this);
 	}
 
 
-	//  由資料庫初始化變數
+	//------------------------------------- 由資料庫初始化變數
 	public static void init(Intent intent) {
 		Bundle b = intent.getBundleExtra(CommonVar.BundleName);
 		if (b != null) {
 			//參照 底部之TaskFieldContents/RemindmeVar.class等處, 確保變數欄位與順序都相同
 			mEditorVar.Task.setTaskId(b.getInt(ColumnTask.KEY._id));
-
 			TaskEditorMain.setTaskTitle(b.getString(ColumnTask.KEY.title));
 			TaskEditorMain.setTaskDueDate(b.getString(ColumnTask.KEY.due_date_string));
 			TaskEditorMain.setTaskContent(b.getString(ColumnTask.KEY.content));
-
-
 		}
 	}
 
@@ -186,7 +179,8 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.imageButtonResetDate:
-				ShowTaskDueDateSelectMenu();
+				//ShowTaskDueDateSelectMenu();
+				new CustomDialog(getView().getContext()).show();
 				break;
 
 			case R.id.imageButtonSetLocation:
@@ -219,13 +213,13 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	//--------------任務到期日選單---------------//
 	@SuppressLint("InflateParams")
 	private TaskEditorMain ShowTaskDueDateSelectMenu() {
-		//LayoutInflater inflater = LayoutInflater.from(getActivity());
-		//		View mview = inflater.inflate(
-		//				R.layout.activity_task_editor_parts_textedit,
-		//				null);
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		View mview = inflater.inflate(
+				R.layout.custom_dialog,
+				null);
 		new AlertDialog.Builder(getActivity())
 		.setTitle(getResources().getString(R.string.TaskEditor_btnTaskDueDate_Title))
-		//暫時不用.setView(mview)
+		.setView(mview)
 		.setItems(R.array.Array_TaskEditor_btnTaskDueDate_String,
 				new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,
@@ -249,6 +243,10 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 					break;
 				case 4:// 選擇日期
 					showDataPicker();
+
+
+					
+
 
 					break;
 					//				case 5:// 說明
@@ -333,7 +331,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		TaskEditorMain.taskContent.setText(taskContent);
 	}
 
-
 	//-----------------TaskCategory------------------//
 	public static Spinner getTaskCategory() {
 		return taskCategory;
@@ -342,7 +339,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		TaskEditorMain.taskCategory = taskCategory;
 	}
 
-
 	//-----------------TaskPriority------------------//
 	public static Spinner getTaskPriority() {
 		return taskPriority;
@@ -350,7 +346,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	public static void setTaskPriority(Spinner taskPriority) {
 		TaskEditorMain.taskPriority = taskPriority;
 	}
-
 
 	//-----------------DataPicker------------------//
 	private TaskEditorMain showDataPicker() {
@@ -364,12 +359,27 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 				mDateSetListener, 
 				year,month, day
 				).show();
+
 		return this;
 	}
 
+	//-----------------TimePicker------------------//
+	private TaskEditorMain showTimePicker() {
+		String[] dataString=MyCalendar.getTodayString(0).split("/");
+
+		int min=Integer.valueOf(dataString[0]);
+		int hour=Integer.valueOf(dataString[1])-1;
+
+		new TimePickerDialog(getActivity(),
+				mTimeSetListener, 
+				hour,min, false
+				).show();
+		return this;
+	}
 
 	//-----------------時間選擇對話方塊------------------//
-	private TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+	private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+			new TimePickerDialog.OnTimeSetListener() {
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			mEditorVar.TaskDate.mHour = hourOfDay;
@@ -377,7 +387,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 			//timeDesc.setText(EditorVar.mHour + ":" + EditorVar.mMinute);
 		}
 	};
-
 
 	//-----------------日期選擇對話方塊------------------//
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -390,20 +399,21 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		}
 	};
 
-
 	//-----------------設定任務地點陣列------------------//
 	private ArrayAdapter<String> setLocationArray(Cursor data){
 		ArrayAdapter<String> adapter =
 				new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		if (data.getCount()>0){
-			data.moveToFirst();
-			adapter.add(getResources().getString(R.string.TaskEditor_Field_Location_Spinner_Hint).toString());
-			adapter.add(data.getString(data.getColumnIndex("name")));
-			tasklocation.setEnabled(true);
-		}else{
-			adapter.add(getResources().getString(R.string.TaskEditor_Field_Location_Is_Empty).toString());
-			tasklocation.setEnabled(false);
+		if(data!=null){
+			if (data.getCount()>0){
+				data.moveToFirst();
+				adapter.add(getResources().getString(R.string.TaskEditor_Field_Location_Spinner_Hint).toString());
+				adapter.add(data.getString(data.getColumnIndex("name")));
+				if(tasklocation!=null) tasklocation.setEnabled(true);
+			}else{
+				adapter.add(getResources().getString(R.string.TaskEditor_Field_Location_Is_Empty).toString());
+				if(tasklocation!=null) tasklocation.setEnabled(false);
+			}
 		}
 		return adapter;
 	}
@@ -416,18 +426,19 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		String LocSelection = "name is not 'null'"; 
 		String LocSortOrder = ColumnLocation.DEFAULT_SORT_ORDER;
 		String[] selectionArgs =null;
-		Loader<Cursor> loader =  new CursorLoader(getView().getContext(), ColumnLocation.URI,
+		Loader<Cursor> loader =  new CursorLoader(getView().getContext(),
+				ColumnLocation.URI,
 				projectionLoc, LocSelection, selectionArgs, LocSortOrder);
-
 		return loader;
 	}
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		tasklocation.setAdapter(setLocationArray(data));
+		if(tasklocation!=null) tasklocation.setAdapter(setLocationArray(data));
 	}
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		tasklocation.setAdapter(setLocationArray(null));
+		if(tasklocation!=null) tasklocation.setAdapter(setLocationArray(null));
 	}
+
 
 }

@@ -107,6 +107,27 @@ public class MyCalendar {
 			month="0"+month;
 		}
 		return year+"/"+month+"/"+dayOfMonth;
+	}	
+	
+	public static String getThisMonth() {
+		Calendar today = Calendar.getInstance();
+		String month = String.valueOf(today.get(Calendar.MONTH)+1);
+		if (String.valueOf(month).length()==1){
+			month="0"+month;
+		}
+		return month;
+	}
+	
+	public static String getThisYear() {
+		Calendar today = Calendar.getInstance();
+		int year=today.get(Calendar.YEAR);
+		return String.valueOf(year);
+	}	
+	
+	public static String getThisDay() {
+		Calendar today = Calendar.getInstance();
+		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
+		return String.valueOf(dayOfMonth);
 	}
 	
 	// Get the defaulf Local of android

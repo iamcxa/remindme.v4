@@ -129,7 +129,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 
 		// set up the drawer's list view with items and click listener
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, mPlanetTitles));
+				R.layout.activity_main_drawer_list_item, mPlanetTitles));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer

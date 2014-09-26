@@ -43,6 +43,11 @@
                 android:layout_height="wrap_content"
                 layout="@layout/activity_task_editor_parts_box_duedate" />
 
+            <!-- <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/activity_task_editor_parts_box_alarm" /> -->
+
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

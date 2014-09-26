@@ -30,5 +30,11 @@
         <item>每</item>
     </string-array>
 
+    <string name="String_Task_Editor_Date_Month">月</string>
+    <string name="String_Task_Editor_Date_Day">日</string>
+    
+    <string name="String_Task_Editor_Dialog_Pick_A_Time">挑個時間</string>
+    
+  
 
 </resources>
