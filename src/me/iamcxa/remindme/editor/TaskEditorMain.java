@@ -273,7 +273,7 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	private TaskEditorMain ShowTaskDueDateSelectMenu() {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View mview = inflater.inflate(
-				R.layout.custom_dialog,
+				R.layout.custom_dialog_duedate,
 				null);
 		new AlertDialog.Builder(getActivity())
 		.setTitle(getResources().getString(R.string.TaskEditor_btnTaskDueDate_Title))

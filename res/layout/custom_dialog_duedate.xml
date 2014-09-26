@@ -22,10 +22,17 @@
             android:layout_weight="1" >
 
             <CalendarView
-                android:id="@+id/calendarView1"
+                android:id="@+id/calendarView01"
                 android:layout_width="400dp"
                 android:layout_height="288dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="5dp" />
+
+            <TimePicker
+                android:id="@+id/timePicker01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
 
             <ListView
                 android:id="@+id/listView01"

@@ -7,9 +7,8 @@
 
     <!-- class="me.iamcxa.remindme.provider.WorkaroundMapFragment" /> -->
 
-    <fragment
+    <com.google.android.gms.maps.MapView
         android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

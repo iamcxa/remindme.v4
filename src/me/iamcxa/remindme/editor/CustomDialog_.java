@@ -30,7 +30,7 @@ import android.widget.Toast;
  * Tab 1 will be a list view. Tab 2 will be a list view.
  * 
  */
-public class CustomDialog_DueDate extends AlertDialog
+public class CustomDialog_ extends AlertDialog
 {
 	private static  CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 
@@ -49,7 +49,7 @@ public class CustomDialog_DueDate extends AlertDialog
 	 * 
 	 * @param context
 	 */
-	public CustomDialog_DueDate(Context context)
+	public CustomDialog_(Context context)
 	{
 		super(context);
 
@@ -60,7 +60,7 @@ public class CustomDialog_DueDate extends AlertDialog
 
 		// change the position. 0,0 is center
 		params.x = 0;
-		params.y = 50;
+		params.y = -150;
 		params.height=-2;
 		params.width=-2;
 		this.getWindow().setAttributes(params); 
