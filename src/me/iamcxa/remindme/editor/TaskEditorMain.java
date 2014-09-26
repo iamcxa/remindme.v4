@@ -11,6 +11,7 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,18 +25,22 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 public class TaskEditorMain extends Fragment  implements
 LoaderManager.LoaderCallbacks<Cursor>  {
 
-	private static CustomDialog cDialog;
+	private static CustomDialog_DueDate cDialog;
 	private static SimpleCursorAdapter mAdapter;
 
 	private static MultiAutoCompleteTextView taskTitle; 	// 任務標題
@@ -90,7 +95,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		}
 	}
 
-
 	private void setupStringArray(){
 		String[] BasicStringArray =
 				getResources().getStringArray(R.array.Array_Task_Editor_Date_Basic_Meaning_String);
@@ -99,7 +103,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		CommonVar.TASKEDITOR_DUEDATE_BASIC_STRING_ARRAY=BasicStringArray;
 		CommonVar.TASKEDITOR_DUEDATE_EXTRA_STRING_ARRAY=RepeatStringArray;
 	}
-
 
 	private void setupViewComponent(){
 		// 標題 - 輸入框
@@ -159,7 +162,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-
 	//------------------------------------- 由資料庫初始化變數
 	public static void init(Intent intent) {
 		Bundle b = intent.getBundleExtra(CommonVar.BundleName);
@@ -180,7 +182,63 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 			switch (v.getId()) {
 			case R.id.imageButtonResetDate:
 				//ShowTaskDueDateSelectMenu();
-				new CustomDialog(getView().getContext()).show();
+				new CustomDialog_DueDate(getView().getContext()).show();
+
+				//---------------------------------------------------------------//
+
+				//			        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+				//			       final EditText etInput    = new EditText(getActivity());
+				//			 
+				//			        alert.setTitle("Custom alert demo");
+				//			        LayoutInflater inflater = getActivity().getLayoutInflater();
+				//			        View dialoglayout = inflater.inflate(R.layout.custom_dialog, null);
+				//			        alert.setView(dialoglayout);
+				//		
+				//					// get our tabHost from the xml
+				//					TabHost tabs = (TabHost)dialoglayout.findViewById(R.id.TabHost01);
+				//					tabs.setup();
+				//
+				//					// create tab 1
+				//					TabHost.TabSpec tab1 = tabs.newTabSpec("tab1");
+				//					tab1.setContent(R.id.listView01);
+				//					tab1.setIndicator("1");
+				//					tabs.addTab(tab1);
+				//
+				//					// create tab 2	
+				//					TabHost.TabSpec tab2 = tabs.newTabSpec("tab2");
+				//					tab2.setContent(R.id.listView02);
+				//					tab2.setIndicator("2");
+				//					tabs.addTab(tab2);
+				//
+				//					// tab3
+				//					TabHost.TabSpec tab3 = tabs.newTabSpec("tab3");
+				//					tab3.setContent(R.id.calendarView1);
+				//					CalendarView cal = (CalendarView)getView().findViewById(R.id.calendarView1);
+				//					tab3.setIndicator("jj");
+				//					tabs.addTab(tab3);
+				//			        
+				//			        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				//			 
+				//			            @Override
+				//			            public void onClick(DialogInterface dialog, int which) {
+				//			                dialog.cancel(); 
+				//			            }
+				//			        });
+				//			 
+				//			        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				//			 
+				//			            @Override
+				//			            public void onClick(DialogInterface dialog, int which) {
+				//			                String name = etInput.getText().toString();
+				//			                // Toast.makeText(getActivity(), name, Toast.LENGTH_SHORT).show();
+				//			            }
+				//			        });
+				//			 
+				//			        alert.show();
+
+
+				//---------------------------------------------------------------//
+
 				break;
 
 			case R.id.imageButtonSetLocation:
@@ -208,7 +266,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 			}
 		}
 	};
-
 
 	//--------------任務到期日選單---------------//
 	@SuppressLint("InflateParams")
@@ -245,7 +302,7 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 					showDataPicker();
 
 
-					
+
 
 
 					break;
@@ -257,7 +314,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		}).show();
 		return this;
 	}
-
 
 	//--------------任務地點選擇器---------------//
 	@SuppressLint("InflateParams")
@@ -280,14 +336,12 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		return this;
 	}
 
-
 	//-----------------obtainData------------------//
 	private void obtainData() {
 		// Show indeterminate progress
 		mHandler = new Handler();
 		mHandler.postDelayed(mShowContentRunnable, 5);
 	}
-
 
 	//-----------------TaskTitle------------------//
 	public static String getTaskTitle() {
@@ -303,7 +357,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		TaskEditorMain.taskTitle.setText(taskTitle);
 	}
 
-
 	//-----------------TaskDueDate------------------//
 	public static String getTaskDueDate() {
 		String taskDueDateString=nullString;
@@ -316,7 +369,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	public static void setTaskDueDate(String taskDueDate) {
 		TaskEditorMain.taskDueDate.setText(taskDueDate);
 	}
-
 
 	//-----------------TaskContent------------------//
 	public static String getTaskContent() {
@@ -418,7 +470,6 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		return adapter;
 	}
 
-
 	//-----------------LoaderManager------------------//
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -439,6 +490,5 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	public void onLoaderReset(Loader<Cursor> loader) {
 		if(tasklocation!=null) tasklocation.setAdapter(setLocationArray(null));
 	}
-
 
 }

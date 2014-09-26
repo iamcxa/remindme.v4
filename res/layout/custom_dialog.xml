@@ -19,7 +19,8 @@
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal|center" >
 
         <ListView
             android:id="@+id/listView01"
@@ -37,10 +38,11 @@
 
         <CalendarView
             android:id="@+id/calendarView1"
-            android:layout_width="260dp"
-            android:layout_height="300dp" 
-            android:scrollbars="vertical"
-            android:scrollbarFadeDuration="1000000"/>
+            android:layout_width="250dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_vertical|center_horizontal|center"
+            android:scrollbarFadeDuration="1000000"
+            android:scrollbars="vertical" />
 
         </FrameLayout>
     </LinearLayout>

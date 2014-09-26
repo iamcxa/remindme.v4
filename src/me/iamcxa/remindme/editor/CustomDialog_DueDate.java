@@ -4,9 +4,8 @@ import common.MyCalendar;
 import me.iamcxa.remindme.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.DialogInterface;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,19 +16,21 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.Toast;
 
 /**
  * This is a custom dialog class that will hold a tab view with 2 tabs.
  * Tab 1 will be a list view. Tab 2 will be a list view.
  * 
  */
-public class CustomDialog extends AlertDialog
+public class CustomDialog_DueDate extends AlertDialog
 {
 	private static  CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 
@@ -43,15 +44,16 @@ public class CustomDialog extends AlertDialog
 	 */
 	ListView02Adapter listView02Adapter = null;
 
-
 	/**
 	 * Default constructor.
 	 * 
 	 * @param context
 	 */
-	public CustomDialog(Context context)
+	public CustomDialog_DueDate(Context context)
 	{
 		super(context);
+
+		this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
 		// get this window's layout parameters so we can change the position
 		WindowManager.LayoutParams params = getWindow().getAttributes(); 
@@ -60,18 +62,20 @@ public class CustomDialog extends AlertDialog
 		params.x = 0;
 		params.y = -100;
 		params.height=-2;
+		params.width=-2;
 		this.getWindow().setAttributes(params); 
-		//this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.custom_dialog);
+		//ViewGroup viewGroup=(ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content);
+		LayoutInflater inflater = getWindow().getLayoutInflater();
+		View dialoglayout = inflater.inflate(R.layout.custom_dialog, null);
+		setView(dialoglayout);
 
 		// instantiate our list views for each tab
-		ListView listView01 = (ListView)findViewById(R.id.listView01);
-		ListView listView02 = (ListView)findViewById(R.id.listView02);
+		ListView listView01 = (ListView)dialoglayout.findViewById(R.id.listView01);
+		ListView listView02 = (ListView)dialoglayout.findViewById(R.id.listView02);
 
 		// register a context menu for all our listView02 items
-		registerForContextMenu(listView02);
+		registerForContextMenu(listView01);
 
 		// instantiate and set our custom list view adapters
 		listView01Adapter = new ListView01Adapter(context);
@@ -101,17 +105,17 @@ public class CustomDialog extends AlertDialog
 		});
 
 		// get our tabHost from the xml
-		TabHost tabs = (TabHost)findViewById(R.id.TabHost01);
+		TabHost tabs = (TabHost)dialoglayout.findViewById(R.id.TabHost01);
 		tabs.setup();
 
-		// create tab 1
+		// create tab 1 - calendar
 		String tab1_Title=
 				MyCalendar.getThisMonth()
 				+getContext().getResources().getString(R.string.String_Task_Editor_Date_Month).toString()
 				+MyCalendar.getThisDay()
 				+getContext().getResources().getString(R.string.String_Task_Editor_Date_Day).toString();
 		TabHost.TabSpec tab1 = tabs.newTabSpec("tab1");
-		tab1.setContent(R.id.listView01);
+		tab1.setContent(R.id.calendarView1);
 		tab1.setIndicator(tab1_Title);
 		tabs.addTab(tab1);
 
@@ -121,14 +125,72 @@ public class CustomDialog extends AlertDialog
 		tab2.setContent(R.id.listView02);
 		tab2.setIndicator(tab2_Title);
 		tabs.addTab(tab2);
-		
-		// tab3
+
+		// create tab 3
 		TabHost.TabSpec tab3 = tabs.newTabSpec("tab3");
-		tab3.setContent(R.id.calendarView1);
-		CalendarView cal = (CalendarView)findViewById(R.id.calendarView1);
+		tab3.setContent(R.id.listView01);
 		tab3.setIndicator("jj");
 		tabs.addTab(tab3);
+
+		// Calendar - data picker
+		CalendarView cal = (CalendarView)dialoglayout.findViewById(R.id.calendarView1);
+
+		// set Buttons
+		this.setButton(BUTTON_NEGATIVE, "no", ClickListener);
+		this.setButton(BUTTON_NEUTRAL, "oo", ClickListener);
+		this.setButton(BUTTON_POSITIVE, "yes", ClickListener);
+
+		// tab host Tab Changed Listener
+		tabs.setOnTabChangedListener(tabsChangedListener);
 	}
+
+	/**
+	 * 建立三個按鈕的監聽式
+	 */
+	private DialogInterface.OnClickListener ClickListener = new DialogInterface.OnClickListener()
+	{
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			//which可以用來分辨是按下哪一個按鈕
+			switch (which) {
+			case Dialog.BUTTON_POSITIVE:  
+				//快顯訊息
+				Toast.makeText(getContext(), "左邊按鈕",  
+						Toast.LENGTH_SHORT).show();
+				break; 
+			case Dialog.BUTTON_NEUTRAL:  
+				//快顯訊息
+				Toast.makeText(getContext(), "中間按鈕",  
+						Toast.LENGTH_SHORT).show();
+				break; 
+			case Dialog.BUTTON_NEGATIVE:  
+				//快顯訊息
+				Toast.makeText(getContext(), "右邊按鈕",  
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+	};
+
+	/**
+	 *  TabHost On Tab ChangeListener
+	 */	
+	private TabHost.OnTabChangeListener tabsChangedListener = new OnTabChangeListener() {
+		@Override
+		public void onTabChanged(String tabId) {
+			// TODO Auto-generated method stub
+			TabHost tabs = (TabHost)getWindow().findViewById(R.id.TabHost01);
+			String tag=tabs.getCurrentTabTag();
+			Toast.makeText(getContext(),tag,Toast.LENGTH_SHORT).show();
+			Button positiveButton = getButton(AlertDialog.BUTTON_POSITIVE);
+			Button negativeButton = getButton(AlertDialog.BUTTON_NEGATIVE);
+			Button nutralButton = getButton(AlertDialog.BUTTON_NEUTRAL);
+
+			if(tag=="tab1") nutralButton.setVisibility(ViewGroup.GONE);
+			if(tag=="tab2") nutralButton.setVisibility(ViewGroup.VISIBLE);
+		}
+	};
+
 
 	/**
 	 * A custom list adapter for the listView01
@@ -189,7 +251,6 @@ public class CustomDialog extends AlertDialog
 
 				// set our holder to the row
 				row.setTag(holder);
-
 
 			}
 			else
