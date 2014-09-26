@@ -18,6 +18,5 @@
     <string name="clockshadow">3/0/0/#55000000</string>
 
     <!-- A suggested iconPack for drawer, insert here the packagename of the app you'd like to suggest -->
-    <string name="iconpack">@string/pkg</string>
 
 </resources>
