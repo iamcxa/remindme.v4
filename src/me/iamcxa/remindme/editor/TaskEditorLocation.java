@@ -78,7 +78,6 @@ public class TaskEditorLocation extends ProgressFragment  /*implements GPSCallba
 	
 		 mContentView =inflater.inflate(R.layout.activity_task_editor_tab_location, container, false);
 		
-	
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
@@ -97,7 +96,7 @@ public class TaskEditorLocation extends ProgressFragment  /*implements GPSCallba
 //            	SearchPlace();
 //            }         
 //
-//        });  
+//        });
 	}
 
 	@Override

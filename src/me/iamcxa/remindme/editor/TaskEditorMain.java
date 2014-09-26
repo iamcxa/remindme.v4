@@ -242,7 +242,8 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 				break;
 
 			case R.id.imageButtonSetLocation:
-				ShowTaskLocationSelectMenu();
+//				ShowTaskLocationSelectMenu();
+				new CustomLocationDialog().show(getFragmentManager() , "dialog");
 				break;
 
 			case R.id.btnMore:
