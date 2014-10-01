@@ -63,12 +63,11 @@ public class CustomLocationDialog extends DialogFragment
 	 */
 	private static GoogleMap map;
 	private static MapView mapView;
-	private SupportMapFragment fragment;
-
 	private View mContentView;
 	
 	public CustomLocationDialog newInstance() {
 		return new CustomLocationDialog();
+		
     }
 	
 	 @Override
@@ -79,27 +78,21 @@ public class CustomLocationDialog extends DialogFragment
 	    @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	            Bundle savedInstanceState) {
-	    	
+	    	getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    	mContentView= inflater.inflate(R.layout.activity_task_editor_tab_location, container, false);
-	    	 
 	    	 MapsInitializer.initialize(getActivity());
 	    	 
 	    	 switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
 	         {
 	             case ConnectionResult.SUCCESS:
-	                 Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
+//	                 Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
 	                 mapView = (MapView) mContentView.findViewById(R.id.map);
 	                 mapView.onCreate(savedInstanceState);
-//	                 setUpMapIfNeeded();
 	                 // Gets to GoogleMap from the MapView and does initialization stuff
 	                 if(mapView!=null)
 	                 {
+	                	 mapView.onResume();
 	                	 setUpMapIfNeeded();
-//	                     map = mapView.getMap();
-//	                     map.getUiSettings().setMyLocationButtonEnabled(false);
-//	                     map.setMyLocationEnabled(true);
-//	                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
-//	                     map.animateCamera(cameraUpdate);
 	                 }
 	                 break;
 	             case ConnectionResult.SERVICE_MISSING: 
