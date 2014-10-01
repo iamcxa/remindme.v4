@@ -87,7 +87,7 @@ public class CustomLocationDialog extends DialogFragment
 	    	 switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
 	         {
 	             case ConnectionResult.SUCCESS:
-//	                 Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
+	                 Toast.makeText(getActivity(), "SUCCESS", Toast.LENGTH_SHORT).show();
 	                 mapView = (MapView) mContentView.findViewById(R.id.map);
 	                 mapView.onCreate(savedInstanceState);
 //	                 setUpMapIfNeeded();
