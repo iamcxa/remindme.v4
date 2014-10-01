@@ -43,7 +43,9 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -72,6 +74,12 @@ public class CustomLocationDialog extends DialogFragment implements
 	private static MapView mapView;
 	private View mContentView;
 	private static TextView PlaceName;
+	private static EditText SearchText;
+	private static Button Search;
+	
+	private String locationName;
+	private double Lat;
+	private double Lon;
 	
 	public CustomLocationDialog newInstance() {
 		return new CustomLocationDialog();
@@ -89,6 +97,9 @@ public class CustomLocationDialog extends DialogFragment implements
 	    	getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    	mContentView= inflater.inflate(R.layout.activity_task_editor_tab_location, container, false);
 	    	PlaceName =(TextView)mContentView.findViewById(R.id.PlaceName);
+	    	SearchText = (EditText) mContentView.findViewById(R.id.SearchText);
+	    	Search = (Button) mContentView.findViewById(R.id.Search);
+			Search.setOnClickListener(SearchPlace);
 	    	 MapsInitializer.initialize(getActivity());
 	    	 
 	    	 switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
@@ -186,7 +197,42 @@ public class CustomLocationDialog extends DialogFragment implements
 		}
 	};
 	
-	
+	private Button.OnClickListener SearchPlace = new Button.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			if(v.getId()==R.id.Search)
+				SearchPlace();
+		}
+		
+	};
+	private void SearchPlace() {
+		if (!SearchText.getText().toString().equals("")) {
+			GeocodingAPI LoacationAddress2 = null;
+			LatLng SearchLocation = null;
+			LoacationAddress2 = new GeocodingAPI(getActivity(),
+					SearchText.getText().toString());
+			// textView2.setText("");
+			// locationName=LoacationAddress2.GeocodingApiAddressGet();
+			// textView2.setText(textView2.getText()+"\n"+Address);
+			SearchLocation = LoacationAddress2.GeocodingApiLatLngGet();
+			Lat=SearchLocation.latitude;
+			Lon=SearchLocation.longitude;
+			// textView2.setText(textView2.getText()+"\n"+SearchLocation);
+			locationName=LoacationAddress2.GeocodingApiAddressGet();
+			PlaceName.setText(locationName);
+			if (SearchLocation != null) {
+				map.animateCamera((CameraUpdateFactory.newLatLngZoom(
+						SearchLocation, map.getMaxZoomLevel() - 4)));
+				map.addMarker(new MarkerOptions().title("搜尋的位置")
+						.snippet(locationName).position(SearchLocation));
+			} else {
+				Toast.makeText(getActivity(), "查無地點哦,換個詞試試看",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 	/**
 	 * This is called when a long press occurs on our listView02 items.
 	 */

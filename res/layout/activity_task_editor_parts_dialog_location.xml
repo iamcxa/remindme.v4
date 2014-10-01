@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text=""
-		android:background="#96888888"
+		android:background="#96444444"
         android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textColor="#ffffff" />
 
