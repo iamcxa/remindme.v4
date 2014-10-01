@@ -2,12 +2,16 @@ package me.iamcxa.remindme.editor;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -52,7 +56,10 @@ import android.widget.Toast;
  * Tab 1 will be a list view. Tab 2 will be a list view.
  * 
  */
-public class CustomLocationDialog extends DialogFragment
+public class CustomLocationDialog extends DialogFragment implements
+	OnMarkerClickListener,
+	OnInfoWindowClickListener,
+	OnMarkerDragListener
 {
 	private static  CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 
@@ -64,6 +71,7 @@ public class CustomLocationDialog extends DialogFragment
 	private static GoogleMap map;
 	private static MapView mapView;
 	private View mContentView;
+	private static TextView PlaceName;
 	
 	public CustomLocationDialog newInstance() {
 		return new CustomLocationDialog();
@@ -80,6 +88,7 @@ public class CustomLocationDialog extends DialogFragment
 	            Bundle savedInstanceState) {
 	    	getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    	mContentView= inflater.inflate(R.layout.activity_task_editor_tab_location, container, false);
+	    	PlaceName =(TextView)mContentView.findViewById(R.id.PlaceName);
 	    	 MapsInitializer.initialize(getActivity());
 	    	 
 	    	 switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) )
@@ -109,8 +118,14 @@ public class CustomLocationDialog extends DialogFragment
 
 	        return mContentView;
 	    }
-	    
-	    
+	     
+	@Override
+		public void onActivityCreated(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onActivityCreated(savedInstanceState);
+//			PlaceName = (TextView) mContentView.findViewById(R.id.PlaceName);
+		}
+
 	private void setUpMapIfNeeded()
 	{
 //	    if(map == null)
@@ -125,6 +140,7 @@ public class CustomLocationDialog extends DialogFragment
 	        	map.getUiSettings().setZoomControlsEnabled(false);
 	        	map.setMyLocationEnabled(true);
 	        	map.setOnCameraChangeListener(listener);
+	        	map.setOnMapClickListener(mapclickListener);
 //	        	map.setOnMarkerClickListener(MarkerClickListener);
 	    		LatLng nowLoacation;
 //	    		if (gpsManager.LastLocation() != null) {
@@ -148,11 +164,25 @@ public class CustomLocationDialog extends DialogFragment
 		@Override
 		public void onCameraChange(CameraPosition position) {
 			// TODO Auto-generated method stub
+//			map.clear();
+//			LatLng now = new LatLng(position.target.latitude, position.target.longitude);
+//			map.addMarker(new MarkerOptions()
+//            .title("目的地")
+//            .position(now));
+		}
+	};
+	
+	private GoogleMap.OnMapClickListener mapclickListener = new GoogleMap.OnMapClickListener() {
+		
+		@Override
+		public void onMapClick(LatLng point) {
+			// TODO Auto-generated method stub
 			map.clear();
-			LatLng now = new LatLng(position.target.latitude, position.target.longitude);
+			LatLng now = new LatLng(point.latitude, point.longitude);
 			map.addMarker(new MarkerOptions()
             .title("目的地")
-            .position(now));
+            .position(now)
+            .draggable(true));
 		}
 	};
 	
@@ -183,5 +213,35 @@ public class CustomLocationDialog extends DialogFragment
 		}
 
 		return true;  
+	}
+
+	@Override
+	public void onMarkerDrag(Marker marker) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMarkerDragEnd(Marker marker) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMarkerDragStart(Marker marker) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		// TODO Auto-generated method stub
+		return false;
 	}  
 }

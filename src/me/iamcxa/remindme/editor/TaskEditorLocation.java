@@ -172,8 +172,8 @@ public class TaskEditorLocation extends ProgressFragment  /*implements GPSCallba
 	    			map.moveCamera((CameraUpdateFactory.newLatLngZoom(nowLoacation,
 	    					map.getMinZoomLevel() + 7)));
 //	    		}
-	    		map.addMarker(new MarkerOptions().title("當前位置").draggable(true)
-	    				.position(nowLoacation));
+//	    		map.addMarker(new MarkerOptions().title("當前位置").draggable(true)
+//	    				.position(nowLoacation));
 	        }
 	    }
 	}
