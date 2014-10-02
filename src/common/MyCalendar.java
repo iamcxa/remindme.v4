@@ -65,15 +65,15 @@ public class MyCalendar {
 	}
 	
 	
-	public static String getDate_From_TimeMillis(boolean HasHourAndMins,long A_Time_In_Milliseconds ) {
+	public static String getDate_From_TimeMillis(boolean IsNeedHourAndMins,long A_Time_In_Milliseconds ) {
 		SimpleDateFormat sdf = null;
-		if (HasHourAndMins) {
+		if (IsNeedHourAndMins) {
 			sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm",getDefaultLocal());
 		} else  {
 			sdf = new SimpleDateFormat("yyyy/MM/dd",getDefaultLocal());
 		}
 		String nowDate = sdf.format(A_Time_In_Milliseconds);
-		
+		MyDebug.MakeLog(1, "MyCalendar Millis->Date function\n,start with raw long="+A_Time_In_Milliseconds+", result="+nowDate);
 		return nowDate;
 	}
 
@@ -127,6 +127,18 @@ public class MyCalendar {
 	public static String getThisDay() {
 		Calendar today = Calendar.getInstance();
 		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
+		return String.valueOf(dayOfMonth);
+	}
+	
+	public static String getThisHour() {
+		Calendar today = Calendar.getInstance();
+		int dayOfMonth = today.get(Calendar.HOUR_OF_DAY);
+		return String.valueOf(dayOfMonth);
+	}
+
+	public static String getThisMinutes() {
+		Calendar today = Calendar.getInstance();
+		int dayOfMonth = today.get(Calendar.MINUTE);
 		return String.valueOf(dayOfMonth);
 	}
 	

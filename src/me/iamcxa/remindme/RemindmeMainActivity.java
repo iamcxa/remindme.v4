@@ -3,7 +3,6 @@
  */
 package me.iamcxa.remindme;
 
-import common.CommonVar;
 import common.MyDebug;
 import common.MyPreferences;
 
@@ -11,13 +10,10 @@ import me.iamcxa.remindme.cardfragment.ListCursorCardFragment;
 import me.iamcxa.remindme.editor.TaskEditorTab;
 import me.iamcxa.remindme.provider.LocationGetter;
 import me.iamcxa.remindme.service.TaskSortingService;
-import android.R.integer;
-import android.R.layout;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;   
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -34,7 +30,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -158,7 +153,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		if (savedInstanceState==null) {
-			selectItem(0);
+			selectItem(2);
 		}
 	}
 	/* The click listner for ListView in the navigation drawer */

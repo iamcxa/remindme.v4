@@ -5,6 +5,11 @@ import common.CommonVar;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+/**
+ * @author Kent
+ * @category database
+ * @version 20140930
+ */
 public final class ColumnLocation implements BaseColumns {
 
 	private ColumnLocation() {

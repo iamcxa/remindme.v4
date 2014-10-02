@@ -2,11 +2,14 @@ package me.iamcxa.remindme.database;
 
 import common.CommonVar;
 
-import me.iamcxa.remindme.database.ColumnTask.KEY;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
 
+/**
+ * @author Kent
+ * @category database
+ * @version 20140930
+ */
 public final class ColumnAlert implements BaseColumns {
 
 	private ColumnAlert() {

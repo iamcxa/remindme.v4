@@ -1,5 +1,9 @@
 package me.iamcxa.remindme.editor;
 
+/**
+ * @author Kent
+ * @version 20140930
+ */
 public class CommonEditorVar {
 
 	// 顯示日期、時間對話方塊常數
@@ -140,35 +144,143 @@ class LocationVar {
 	public void setDistance(Double distance) {
 		Distance = distance;
 	}
-
 }
 
 //任務提醒成員
 class AlertVar {
 
 	//任務是否提醒/提醒時間/提醒週期
-	private boolean isAlertOn = false;
-	private String alertTime ="null";
-	private String alertInterval ="null";
+	private long due_date_millis=0;
+	private String due_date_string="null";
+	private long interval=0;
+	private int loc_id=0;
+	private boolean loc_on=false;
+	private int loc_radius=0;
+	private String other="null";
+	private int task_id=0;
+	private int time_offset=0;
+	private int type=0;
 
 	//---------------Getter/Setter-----------------//
-	public boolean isAlertOn() {
-		return isAlertOn;
+	/**
+	 * @return the due_date_millis
+	 */
+	public long getDue_date_millis() {
+		return due_date_millis;
 	}
-	public void setAlertOn(boolean isAlertOn) {
-		this.isAlertOn = isAlertOn;
+	/**
+	 * @param due_date_millis the due_date_millis to set
+	 */
+	public void setDue_date_millis(long due_date_millis) {
+		this.due_date_millis = due_date_millis;
 	}
-	public String getAlertTime() {
-		return alertTime;
+	/**
+	 * @return the due_date_string
+	 */
+	public String getDue_date_string() {
+		return due_date_string;
 	}
-	public void setAlertTime(String alertTime) {
-		this.alertTime = alertTime;
+	/**
+	 * @param due_date_string the due_date_string to set
+	 */
+	public void setDue_date_string(String due_date_string) {
+		this.due_date_string = due_date_string;
 	}
-	public String getAlertInterval() {
-		return alertInterval;
+	/**
+	 * @return the interval
+	 */
+	public long getInterval() {
+		return interval;
 	}
-	public void setAlertInterval(String alertInterval) {
-		this.alertInterval = alertInterval;
+	/**
+	 * @param interval the interval to set
+	 */
+	public void setInterval(long interval) {
+		this.interval = interval;
+	}
+	/**
+	 * @return the loc_id
+	 */
+	public int getLoc_id() {
+		return loc_id;
+	}
+	/**
+	 * @param loc_id the loc_id to set
+	 */
+	public void setLoc_id(int loc_id) {
+		this.loc_id = loc_id;
+	}
+	/**
+	 * @return the loc_on
+	 */
+	public boolean isLoc_on() {
+		return loc_on;
+	}
+	/**
+	 * @param loc_on the loc_on to set
+	 */
+	public void setLoc_on(boolean loc_on) {
+		this.loc_on = loc_on;
+	}
+	/**
+	 * @return the loc_radius
+	 */
+	public int getLoc_radius() {
+		return loc_radius;
+	}
+	/**
+	 * @param loc_radius the loc_radius to set
+	 */
+	public void setLoc_radius(int loc_radius) {
+		this.loc_radius = loc_radius;
+	}
+	/**
+	 * @return the other
+	 */
+	public String getOther() {
+		return other;
+	}
+	/**
+	 * @param other the other to set
+	 */
+	public void setOther(String other) {
+		this.other = other;
+	}
+	/**
+	 * @return the task_id
+	 */
+	public int getTask_id() {
+		return task_id;
+	}
+	/**
+	 * @param task_id the task_id to set
+	 */
+	public void setTask_id(int task_id) {
+		this.task_id = task_id;
+	}
+	/**
+	 * @return the time_offset
+	 */
+	public int getTime_offset() {
+		return time_offset;
+	}
+	/**
+	 * @param time_offset the time_offset to set
+	 */
+	public void setTime_offset(int time_offset) {
+		this.time_offset = time_offset;
+	}
+	/**
+	 * @return the type
+	 */
+	public int getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(int type) {
+		this.type = type;
 	}
 }
 
@@ -183,6 +295,9 @@ class DateVar {
 	protected int mHour=0;
 	protected int mMinute=0;
 	//private int target;
+	// 毫秒
+	protected long mOnlyDateMillis=0;
+	protected long mDatePulsTimeMillis=0;
 
 	//---------------Getter/Setter-----------------//
 	public int getmYear() {
@@ -215,7 +330,18 @@ class DateVar {
 	public void setmMinute(int mMinute) {
 		this.mMinute = mMinute;
 	}
-
+	public long getmOnlyDateMillis() {
+		return mOnlyDateMillis;
+	}
+	public void setmOnlyDateMillis(long mOnlyDateMillis) {
+		this.mOnlyDateMillis = mOnlyDateMillis;
+	}
+	public long getmDatePulsTimeMillis() {
+		return mDatePulsTimeMillis;
+	}
+	public void setmDatePulsTimeMillis(long mDatePulsTimeMillis) {
+		this.mDatePulsTimeMillis = mDatePulsTimeMillis;
+	}
 }
 
 //任務類型/標籤/優先成員

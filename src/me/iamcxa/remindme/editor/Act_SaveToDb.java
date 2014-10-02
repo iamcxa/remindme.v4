@@ -1,8 +1,12 @@
 package me.iamcxa.remindme.editor;
 
+import java.util.Calendar;
+
 import me.iamcxa.remindme.database.ColumnTask;
 import common.MyCalendar;
 import common.MyDebug;
+import android.R.integer;
+import android.app.AlarmManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,8 +14,8 @@ import android.net.Uri;
 import android.widget.Toast;
 
 /**
- * @author cxa
- * 
+ * @author Kent
+ * @version 20140930
  */
 public class Act_SaveToDb {
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
@@ -32,9 +36,9 @@ public class Act_SaveToDb {
 		StartOver();
 	}
 
+	// 執行順序
 	private void StartOver(){
 		getDataFromView();
-		getDataFromEditorVar();
 		prepareAddDataToDatabase(
 				TaskField_Main,
 				TaskField_Location,
@@ -44,65 +48,101 @@ public class Act_SaveToDb {
 				);
 	}
 
-	/*
-	 * 
-	 */
-	// 由view物件取得輸入資訊
+	//由view物件取得輸入資訊
 	private void getDataFromView(){
 		// 標題字串
 		mEditorVar.Task.setTitle(TaskEditorMain.getTaskTitle());	
-		
+
 		// 註解字串（任務說明）
 		mEditorVar.Task.setContent(TaskEditorMain.getTaskContent());
-		
+
 		// 設定資料庫日期(字串)欄位
 		mEditorVar.Task.setDueDateString(TaskEditorMain.getTaskDueDate());
-		
+
 		// 設定資料庫日期(毫秒)欄位
-		Act_CheckDueDateField.setRawTaskDueDateString(TaskEditorMain.getTaskDueDate());
-		
+		mEditorVar.TaskDate.setmDatePulsTimeMillis(getTaskDueDateTime());
+
 		// 地點字串 - ID
 		//mEditorVar.TaskLocation.setLocationName(locationName);
-		
-		
-
 	}
 
-	// 將共同變數中的值合併為數個字串陣列
-	private void getDataFromEditorVar(){
+	// 取得日期與時間加總的到期日毫秒
+	private long getTaskDueDateTime(){
+		//Act_CheckDueDateField.setRawTaskDueDateString(TaskEditorMain.getTaskDueDate());
+		// 初始化
+		long taskDueDateTime=0;
+
+		// 
+		int mYear=mEditorVar.TaskDate.getmYear();
+		int mMonth=mEditorVar.TaskDate.getmMonth();
+		int mDay=mEditorVar.TaskDate.getmDay();
+		int mHour=mEditorVar.TaskDate.getmHour();
+		int mMinute=mEditorVar.TaskDate.getmMinute();
+
+		Calendar c = Calendar.getInstance();
+		c.set(mYear, mMonth, mDay, mHour, mMinute);
+
+		taskDueDateTime= c.getTimeInMillis();
+
+		return taskDueDateTime;
+	}
+
+
+	//
+	private void setTaskDateGroup(ContentValues values){
+
+		//
 		TaskField_Main=
-				mEditorVar.Task.getTaskId()+","+		
-						mEditorVar.Task.getTitle()+","+		
-						mEditorVar.Task.getContent()+","+		
-						mEditorVar.Task.getCreated()+","+		
-						mEditorVar.Task.getDueDateString()+","+	
-						mEditorVar.Task.getDueDateTime();
+						mEditorVar.Task.getTaskId()+","+		//0	  
+						mEditorVar.Task.getTitle()+","+			//1
+						mEditorVar.Task.getContent()+","+		//2
+						mEditorVar.Task.getCreated()+","+		//3
+						mEditorVar.Task.getDueDateString()+","+	//4
+						mEditorVar.Task.getDueDateTime();		//5
 		MyDebug.MakeLog(0,"TaskField_Main="+ TaskField_Main);
 
+		// 存入任務標題
+		String[] Split_TaskField_Main = TaskField_Main.split(",");
+		taskId=Integer.valueOf(Split_TaskField_Main[0]);
+		values.put(ColumnTask.KEY.title, Split_TaskField_Main[1]);
+		values.put(ColumnTask.KEY.content, Split_TaskField_Main[2]);
+		values.put(ColumnTask.KEY.created, Split_TaskField_Main[3]);
+		values.put(ColumnTask.KEY.
+				due_date_string,String.valueOf(Split_TaskField_Main[4]));
+		
+
+
+		TaskField_Other=
+				mEditorVar.TaskOther.getCollaborator()+","+					//0
+						mEditorVar.TaskOther.getGoogle_cal_sync_id()+","+	//1
+						mEditorVar.TaskOther.getTask_color();				//2
+		MyDebug.MakeLog(0,"TaskField_Other="+ TaskField_Other);
+		
+		
+
+		TaskField_Type=
+				mEditorVar.TaskType.getPriority()+","+						//0
+						mEditorVar.TaskType.getCategory()+","+				//1
+						mEditorVar.TaskType.getTag()+","+					//2
+						mEditorVar.TaskType.getLevel();						//3
+		MyDebug.MakeLog(0,"TaskField_Type="+ TaskField_Type);
+		
+
+
 		TaskField_Location=
-				mEditorVar.TaskLocation.getCoordinate()+","+	
-						mEditorVar.TaskLocation.getLocationName()+","+
-						mEditorVar.TaskLocation.getDistance();
+				mEditorVar.TaskLocation.getCoordinate()+","+				//0
+						mEditorVar.TaskLocation.getLocationName()+","+		//1
+						mEditorVar.TaskLocation.getDistance();				//2
 		MyDebug.MakeLog(0,"TaskField_Location="+ TaskField_Location);
+		
+
 
 		TaskField_Alert=
 				mEditorVar.TaskAlert .getAlertInterval()+","+	
 						mEditorVar.TaskAlert.getAlertTime();
 		MyDebug.MakeLog(0,"TaskField_Alert="+ TaskField_Alert);
-
-		TaskField_Type=
-				mEditorVar.TaskType.getPriority()+","+		
-						mEditorVar.TaskType.getCategory()+","+	
-						mEditorVar.TaskType.getTag()+","+
-						mEditorVar.TaskType.getLevel();			
-		MyDebug.MakeLog(0,"TaskField_Type="+ TaskField_Type);	
-
-		TaskField_Other=
-				mEditorVar.TaskOther.getCollaborator()+","+		
-						mEditorVar.TaskOther.getGoogle_cal_sync_id()+","+	
-						mEditorVar.TaskOther.getTask_color();			
-		MyDebug.MakeLog(0,"TaskField_Other="+ TaskField_Other);
 	}
+
 
 	// 將字串陣列拆解
 	private void prepareAddDataToDatabase(
@@ -115,26 +155,7 @@ public class Act_SaveToDb {
 		ContentValues values = new ContentValues();
 		values.clear();
 
-		// 存入任務標題
-		String[] Split_TaskField_Main = TaskField_Main.split(",");
-		//	String TaskField_Main=
-		//		mEditorVar.Task.getTaskId()+","+			0
-		//		mEditorVar.Task.getTittle()+","+			1
-		//		mEditorVar.Task.getContent()+","+			2
-		//		mEditorVar.Task.getCreated()+","+			3
-		//		mEditorVar.Task.getDueDateString()+","+		4
-		//		mEditorVar.Task.getDueDateTime();			5
-		taskId=Integer.valueOf(Split_TaskField_Main[0]);
-		values.put(ColumnTask.KEY.title, Split_TaskField_Main[1]);
-		values.put(ColumnTask.KEY.content, Split_TaskField_Main[2]);
-		values.put(ColumnTask.KEY.created, Split_TaskField_Main[3]);
-		// 確保DueDate欄位是數字
-		if((Split_TaskField_Main[4].contains("null"))){
-			String mDueDate="";
-			values.put(ColumnTask.KEY.due_date_string,String.valueOf(mDueDate));
-		}else {
-			values.put(ColumnTask.KEY.due_date_string,String.valueOf(Split_TaskField_Main[4]));
-		}
+		setTaskDateGroup(values);
 
 		isSaveOrUpdate(values, taskId);
 	}

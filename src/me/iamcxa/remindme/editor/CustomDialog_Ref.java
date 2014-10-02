@@ -30,7 +30,7 @@ import android.widget.Toast;
  * Tab 1 will be a list view. Tab 2 will be a list view.
  * 
  */
-public class CustomDialog_ extends AlertDialog
+public class CustomDialog_Ref extends AlertDialog
 {
 	private static  CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 
@@ -49,7 +49,7 @@ public class CustomDialog_ extends AlertDialog
 	 * 
 	 * @param context
 	 */
-	public CustomDialog_(Context context)
+	public CustomDialog_Ref(Context context)
 	{
 		super(context);
 

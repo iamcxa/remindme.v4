@@ -2,11 +2,11 @@ package me.iamcxa.remindme.database;
 
 import android.provider.BaseColumns;
 
-//public class MyCursor {
-//
-//	private MyCursor(){}
-//
-
+/**
+ * @author Kent
+ * @category database
+ * @version 20140930
+ */
 // 內部類別
 public final class ColumnCollaborator implements BaseColumns {
 

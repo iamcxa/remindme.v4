@@ -23,7 +23,7 @@
 
             <CalendarView
                 android:id="@+id/calendarView01"
-                android:layout_width="300dp"
+                android:layout_width="400dp"
                 android:layout_height="288dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="5dp" />
@@ -36,11 +36,17 @@
 
             <ListView
                 android:id="@+id/listView01"
-                android:layout_width="150dp"
-                android:layout_height="288dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scrollbarFadeDuration="1000000"
-                android:scrollbars="vertical" >
-            </ListView>
+                android:scrollbars="vertical" />
+
+            <ListView
+                android:id="@+id/listView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbarFadeDuration="1000000"
+                android:scrollbars="vertical" />
         </FrameLayout>
     </LinearLayout>
 

@@ -5,6 +5,11 @@ import common.CommonVar;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+/**
+ * @author Kent
+ * @category database
+ * @version 20140930
+ */
 public final class ColumnTask implements BaseColumns {
 
 	private ColumnTask() {
@@ -126,5 +131,4 @@ public final class ColumnTask implements BaseColumns {
 		public static final String location_id = "location_id";
 	}
 
-	
 }

@@ -359,6 +359,7 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	}
 
 	//-----------------TaskDueDate------------------//
+	// 取得文字
 	public static String getTaskDueDate() {
 		String taskDueDateString=nullString;
 		// 如果欄位不為空則放入使用者輸入數值
@@ -367,8 +368,18 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		}
 		return taskDueDateString;
 	}	
-	public static void setTaskDueDate(String taskDueDate) {
-		TaskEditorMain.taskDueDate.setText(taskDueDate);
+	// 取得長度
+	public static int getTaskDueDateStringLength() {
+		int taskDueDateStringLength=0;
+		// 如果欄位不為空則放入使用者輸入數值
+		if (!(taskDueDate.getText().toString().isEmpty())){
+			taskDueDateStringLength= taskDueDate.getText().length();
+		}
+		return taskDueDateStringLength;
+	}
+	// 設定文字
+	public static void setTaskDueDate(String taskDueDateString) {
+		TaskEditorMain.taskDueDate.setText(taskDueDateString);
 	}
 
 	//-----------------TaskContent------------------//
@@ -380,8 +391,8 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		}
 		return taskContentString;
 	}	
-	public static void setTaskContent(String taskContent) {
-		TaskEditorMain.taskContent.setText(taskContent);
+	public static void setTaskContent(String taskContentString) {
+		TaskEditorMain.taskContent.setText(taskContentString);
 	}
 
 	//-----------------TaskCategory------------------//

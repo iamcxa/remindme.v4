@@ -73,5 +73,13 @@
         <item>下</item>
         <item>每</item>
     </string-array>
+    
+    
+    <string name="String_Task_Editor_Dialog_Pick_A_Time">挑個時間</string>
+    
+    <string name="String_Task_Editor_Dialog_BUTTON_POSITIVE">我決定了</string>
+    <string name="String_Task_Editor_Dialog_BUTTON_NEGATIVE">放棄</string>
+    <string name="String_Task_Editor_Dialog_BUTTON_NEUTRAL">不要時間</string>
+    
 
 </resources>
