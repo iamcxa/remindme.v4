@@ -48,8 +48,6 @@ OnTimeChangedListener,
 OnShowListener,
 OnTabChangeListener
 
-
-
 {
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 

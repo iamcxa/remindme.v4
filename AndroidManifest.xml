@@ -24,6 +24,7 @@
     <uses-permission
         android:name="me.iamcxa.remindme.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
+    <uses-permission android:name="me.iamcxa.remindme.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -33,6 +34,7 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.vending.INTERACT_ACROSS_USERS_FULL" />
 
     <application
         android:allowBackup="true"
@@ -73,12 +75,19 @@
             android:name="RemindmePreference"
             android:screenOrientation="portrait" >
         </activity>
-
+		
+        <uses-library android:name="com.google.android.maps"/>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
+<<<<<<< HEAD
             android:value="AIzaSyALO3Tds0aL6qAV4g7zG4FCR8IG25CgGqA" />
         <!-- AIzaSyAwoaXdgj7AAm6YV3i8tZdX3sU6ZucSQec 耀德 Tx300 9/26 -->
         <!-- AIzaSyALO3Tds0aL6qAV4g7zG4FCR8IG25CgGqA 奎研  9/26 -->
+=======
+            android:value="AIzaSyD6j9RlI8W8livJ6EJFaS7rMCO5vvYXAHU" />
+        <!-- AIzaSyD6j9RlI8W8livJ6EJFaS7rMCO5vvYXAHU 耀德 Tx300 9/26-->
+        <!-- AIzaSyALO3Tds0aL6qAV4g7zG4FCR8IG25CgGqA 奎研  9/26-->
+>>>>>>> d7c64c7ce7c7662d8d50a060ca26ac6f9f4612fe
 
         <meta-data
             android:name="com.google.android.gms.version"
