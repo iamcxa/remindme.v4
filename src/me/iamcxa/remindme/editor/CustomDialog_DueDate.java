@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.os.Build;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -39,7 +40,16 @@ import android.widget.Toast;
  * Tab 1 will be a list view. Tab 2 will be a list view.
  * 
  */
-public class CustomDialog_DueDate extends AlertDialog
+public class CustomDialog_DueDate extends AlertDialog 
+implements 
+DialogInterface.OnClickListener,
+OnDateChangeListener,
+OnTimeChangedListener,
+OnShowListener,
+OnTabChangeListener
+
+
+
 {
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 
@@ -113,26 +123,26 @@ public class CustomDialog_DueDate extends AlertDialog
 		listView01.setVisibility(View.GONE);
 
 		// set tab host Tab Changed Listener - to add/remove button dynamically.
-		tabs.setOnTabChangedListener(tabsChangedListener);
+		tabs.setOnTabChangedListener(this);
 
 		// set dialog Buttons
 		this.setButton(BUTTON_POSITIVE,
 				getContext().getResources()
-				.getString(R.string.String_Task_Editor_Dialog_BUTTON_POSITIVE), btnClickListener);
+				.getString(R.string.String_Task_Editor_Dialog_BUTTON_POSITIVE), this);
 		this.setButton(BUTTON_NEUTRAL,
 				getContext().getResources()
-				.getString(R.string.String_Task_Editor_Dialog_BUTTON_NEUTRAL), btnClickListener);
+				.getString(R.string.String_Task_Editor_Dialog_BUTTON_NEUTRAL), this);
 		this.setButton(BUTTON_NEGATIVE,
 				getContext().getResources()
-				.getString(R.string.String_Task_Editor_Dialog_BUTTON_NEGATIVE), btnClickListener);
+				.getString(R.string.String_Task_Editor_Dialog_BUTTON_NEGATIVE), this);
 		this.setCanceledOnTouchOutside(false);
 
 		// set Show Listener - in case to hide BUTTON_NEUTRAL.
-		this.setOnShowListener(dialogShowListener);
+		this.setOnShowListener(this);
 
 		// Calendar - data picker
 		CalendarView cal = (CalendarView)dialoglayout.findViewById(R.id.calendarView01);
-		cal.setOnDateChangeListener(dateChangeListener);
+		cal.setOnDateChangeListener(this);
 
 		// TimePicker
 		TimePicker tPicker=(TimePicker)dialoglayout.findViewById(R.id.timePicker01);
@@ -363,21 +373,21 @@ public class CustomDialog_DueDate extends AlertDialog
 	/**
 	 *  Data Picker On-Click-Listener
 	 */
-	private OnDateChangeListener dateChangeListener=new OnDateChangeListener() {
-		@Override
-		public void onSelectedDayChange(CalendarView view, int year, int month,
-				int dayOfMonth) {
-			// TODO Auto-generated method stub	
-
-			//Calendar calendar= Calendar.getInstance();
-			//fixUpDatePickerCalendarView(calendar);
-
-			int mMonth=month+1;
-			setTab1Title(year, mMonth, dayOfMonth);
-			selectedDate=year+"/"+mMonth+"/"+dayOfMonth;
-			MyDebug.MakeLog(0, "The date you Selected="+selectedDate);
-		}
-	};
+//	private OnDateChangeListener dateChangeListener=new OnDateChangeListener() {
+//		@Override
+//		public void onSelectedDayChange(CalendarView view, int year, int month,
+//				int dayOfMonth) {
+//			// TODO Auto-generated method stub	
+//
+//			//Calendar calendar= Calendar.getInstance();
+//			//fixUpDatePickerCalendarView(calendar);
+//
+//			int mMonth=month+1;
+//			setTab1Title(year, mMonth, dayOfMonth);
+//			selectedDate=year+"/"+mMonth+"/"+dayOfMonth;
+//			MyDebug.MakeLog(0, "The date you Selected="+selectedDate);
+//		}
+//	};
 
 	/**
 	 * Time Picker On-Time-Changed-Listener
@@ -402,116 +412,116 @@ public class CustomDialog_DueDate extends AlertDialog
 	/**
 	 * 建立三個按鈕的監聽式
 	 */
-	private DialogInterface.OnClickListener btnClickListener = new DialogInterface.OnClickListener()
-	{
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			//which可以用來分辨是按下哪一個按鈕
-			switch (which) {
-			case Dialog.BUTTON_POSITIVE:	// save selected date/time
-
-				setBtnAction_Positive(dialog);
-
-				break;
-			case Dialog.BUTTON_NEUTRAL:		// 取消時間
-				setDialogShowing(dialog);
-				setBtnAction_Nutral();
-
-				break; 
-			case Dialog.BUTTON_NEGATIVE:	// 取消全部
-
-				setDialogDismiss(dialog);
-
-				break;
-			}
-		}
-	};
+//	private DialogInterface.OnClickListener btnClickListener = new DialogInterface.OnClickListener()
+//	{
+//		@Override
+//		public void onClick(DialogInterface dialog, int which) {
+//			//which可以用來分辨是按下哪一個按鈕
+//			switch (which) {
+//			case Dialog.BUTTON_POSITIVE:	// save selected date/time
+//
+//				setBtnAction_Positive(dialog);
+//
+//				break;
+//			case Dialog.BUTTON_NEUTRAL:		// 取消時間
+//				setDialogShowing(dialog);
+//				setBtnAction_Nutral();
+//
+//				break; 
+//			case Dialog.BUTTON_NEGATIVE:	// 取消全部
+//
+//				setDialogDismiss(dialog);
+//
+//				break;
+//			}
+//		}
+//	};
 
 	/**
 	 * Dialog On-Show-Listener 
 	 * 從 TaskEditorMain 讀取日期時間  / 隱藏放棄時間按鈕
 	 */
-	private OnShowListener dialogShowListener=new OnShowListener() {
-		@Override
-		public void onShow(DialogInterface dialog) {
-			// 啟動先隱藏放棄時間按鈕
-			getBtnNutral().setVisibility(ViewGroup.GONE);
-
-			// 檢查TaskEditorMain中的TaskDueDate欄位長度
-			if(TaskEditorMain.getTaskDueDateStringLength()>0){
-				// 如果有長度才讀出該欄位
-				String existDueDate=TaskEditorMain.getTaskDueDate();
-
-				// 判斷 TaskEditorMain.getTaskDueDate() 是否有"/"符號
-				if(existDueDate.contains("/")){
-					// 以"◎"符號分隔日期與時間 - YYYY/MM/DD◎HH:MM - 以[0]確保一定是抓到日期
-					String[] arrayExistDueDate=existDueDate.split("◎");
-
-					// 以"/"符號分隔年月日 - YYYY/MM/DD
-					String[] arrayExistDueDateDetail=arrayExistDueDate[0].split("/");
-
-					// 把YYYY/MM/DD部分放入變數selectedDate.
-					selectedDate=arrayExistDueDate[0];
-
-					//  由mEditorVar讀出所選擇日期之毫秒資訊
-					long dueDateMillis=mEditorVar.TaskDate.getmOnlyDateMillis();
-
-					// 將換算完成後的毫秒塞入calendar view中.
-					getDatePicker().setDate(dueDateMillis);
-
-					// 將日期資料放到 tab1標題上
-					setTab1Title(
-							Integer.valueOf(arrayExistDueDateDetail[0]), 
-							Integer.valueOf(arrayExistDueDateDetail[1]), 
-							Integer.valueOf(arrayExistDueDateDetail[2]));
-
-
-					// 讀時間資料到 tab 2 title.
-					// 如果有該欄位有時間部分, 則將其放入selectedTime.
-					if(existDueDate.contains("◎")) {
-						getBtnNutral().setVisibility(View.VISIBLE);
-						selectedTime=arrayExistDueDate[1];
-						setTab2Title(selectedTime);
-
-						// 設定所選擇時間到time picker
-						String[] arrayTimeStrings=arrayExistDueDate[1].split(":");
-						getTimePicker().setCurrentHour(Integer.valueOf(arrayTimeStrings[0]));
-						getTimePicker().setCurrentMinute(Integer.valueOf(arrayTimeStrings[1]));
-
-					}
-
-
-					// log
-					MyDebug.MakeLog(0, "arrayExistDueDate[0]="+arrayExistDueDate[0]);
-					MyDebug.MakeLog(0, "existDueDate="+existDueDate);
-					if(existDueDate.contains("◎")) MyDebug.MakeLog(0, "arrayExistDueDate[1]="+arrayExistDueDate[1]);
-					MyDebug.MakeLog(0, "dueDateMillis="+dueDateMillis);
-
-				}else {
-					// 預設選擇今天
-					selectedDate=String.valueOf(MyCalendar.getTodayString(0));
-					getDatePicker().setDate(MyCalendar.getNextFewDays(0));
-				}
-			}
-		}
-	};
+//	private OnShowListener dialogShowListener=new OnShowListener() {
+//		@Override
+//		public void onShow(DialogInterface dialog) {
+//			// 啟動先隱藏放棄時間按鈕
+//			getBtnNutral().setVisibility(ViewGroup.GONE);
+//
+//			// 檢查TaskEditorMain中的TaskDueDate欄位長度
+//			if(TaskEditorMain.getTaskDueDateStringLength()>0){
+//				// 如果有長度才讀出該欄位
+//				String existDueDate=TaskEditorMain.getTaskDueDate();
+//
+//				// 判斷 TaskEditorMain.getTaskDueDate() 是否有"/"符號
+//				if(existDueDate.contains("/")){
+//					// 以"◎"符號分隔日期與時間 - YYYY/MM/DD◎HH:MM - 以[0]確保一定是抓到日期
+//					String[] arrayExistDueDate=existDueDate.split("◎");
+//
+//					// 以"/"符號分隔年月日 - YYYY/MM/DD
+//					String[] arrayExistDueDateDetail=arrayExistDueDate[0].split("/");
+//
+//					// 把YYYY/MM/DD部分放入變數selectedDate.
+//					selectedDate=arrayExistDueDate[0];
+//
+//					//  由mEditorVar讀出所選擇日期之毫秒資訊
+//					long dueDateMillis=mEditorVar.TaskDate.getmOnlyDateMillis();
+//
+//					// 將換算完成後的毫秒塞入calendar view中.
+//					getDatePicker().setDate(dueDateMillis);
+//
+//					// 將日期資料放到 tab1標題上
+//					setTab1Title(
+//							Integer.valueOf(arrayExistDueDateDetail[0]), 
+//							Integer.valueOf(arrayExistDueDateDetail[1]), 
+//							Integer.valueOf(arrayExistDueDateDetail[2]));
+//
+//
+//					// 讀時間資料到 tab 2 title.
+//					// 如果有該欄位有時間部分, 則將其放入selectedTime.
+//					if(existDueDate.contains("◎")) {
+//						getBtnNutral().setVisibility(View.VISIBLE);
+//						selectedTime=arrayExistDueDate[1];
+//						setTab2Title(selectedTime);
+//
+//						// 設定所選擇時間到time picker
+//						String[] arrayTimeStrings=arrayExistDueDate[1].split(":");
+//						getTimePicker().setCurrentHour(Integer.valueOf(arrayTimeStrings[0]));
+//						getTimePicker().setCurrentMinute(Integer.valueOf(arrayTimeStrings[1]));
+//
+//					}
+//
+//
+//					// log
+//					MyDebug.MakeLog(0, "arrayExistDueDate[0]="+arrayExistDueDate[0]);
+//					MyDebug.MakeLog(0, "existDueDate="+existDueDate);
+//					if(existDueDate.contains("◎")) MyDebug.MakeLog(0, "arrayExistDueDate[1]="+arrayExistDueDate[1]);
+//					MyDebug.MakeLog(0, "dueDateMillis="+dueDateMillis);
+//
+//				}else {
+//					// 預設選擇今天
+//					selectedDate=String.valueOf(MyCalendar.getTodayString(0));
+//					getDatePicker().setDate(MyCalendar.getNextFewDays(0));
+//				}
+//			}
+//		}
+//	};
 
 	/**
 	 * TabHost On-Tab-ChangeListener
 	 */	
-	private TabHost.OnTabChangeListener tabsChangedListener = new OnTabChangeListener() {
-		@Override
-		public void onTabChanged(String tabId) {
-			// tab2=時間
-			if(tabId=="tab2") { 
-				selectedTime=getTimePicker().getCurrentHour()+":"+getTimePicker().getCurrentMinute();
-
-				getBtnNutral().setVisibility(View.VISIBLE);
-
-				setTab2Title(selectedTime);
-			}
-		}
-	};
+//	private TabHost.OnTabChangeListener tabsChangedListener = new OnTabChangeListener() {
+//		@Override
+//		public void onTabChanged(String tabId) {
+//			// tab2=時間
+//			if(tabId=="tab2") { 
+//				selectedTime=getTimePicker().getCurrentHour()+":"+getTimePicker().getCurrentMinute();
+//
+//				getBtnNutral().setVisibility(View.VISIBLE);
+//
+//				setTab2Title(selectedTime);
+//			}
+//		}
+//	};
 
 	/**
 	 * A custom list adapter for the listView01
@@ -634,5 +644,124 @@ public class CustomDialog_DueDate extends AlertDialog
 		}
 
 		return true;  
+	}
+
+	@Override
+	public void onTabChanged(String tabId) {
+		// TODO Auto-generated method stub
+		// tab2=時間
+		if(tabId=="tab2") { 
+			selectedTime=getTimePicker().getCurrentHour()+":"+getTimePicker().getCurrentMinute();
+
+			getBtnNutral().setVisibility(View.VISIBLE);
+
+			setTab2Title(selectedTime);
+		}
+	}
+
+	@Override
+	public void onShow(DialogInterface dialog) {
+		// TODO Auto-generated method stub
+		// 啟動先隱藏放棄時間按鈕
+		getBtnNutral().setVisibility(ViewGroup.GONE);
+
+		// 檢查TaskEditorMain中的TaskDueDate欄位長度
+		if(TaskEditorMain.getTaskDueDateStringLength()>0){
+			// 如果有長度才讀出該欄位
+			String existDueDate=TaskEditorMain.getTaskDueDate();
+
+			// 判斷 TaskEditorMain.getTaskDueDate() 是否有"/"符號
+			if(existDueDate.contains("/")){
+				// 以"◎"符號分隔日期與時間 - YYYY/MM/DD◎HH:MM - 以[0]確保一定是抓到日期
+				String[] arrayExistDueDate=existDueDate.split("◎");
+
+				// 以"/"符號分隔年月日 - YYYY/MM/DD
+				String[] arrayExistDueDateDetail=arrayExistDueDate[0].split("/");
+
+				// 把YYYY/MM/DD部分放入變數selectedDate.
+				selectedDate=arrayExistDueDate[0];
+
+				//  由mEditorVar讀出所選擇日期之毫秒資訊
+				long dueDateMillis=mEditorVar.TaskDate.getmOnlyDateMillis();
+
+				// 將換算完成後的毫秒塞入calendar view中.
+				getDatePicker().setDate(dueDateMillis);
+
+				// 將日期資料放到 tab1標題上
+				setTab1Title(
+						Integer.valueOf(arrayExistDueDateDetail[0]), 
+						Integer.valueOf(arrayExistDueDateDetail[1]), 
+						Integer.valueOf(arrayExistDueDateDetail[2]));
+
+
+				// 讀時間資料到 tab 2 title.
+				// 如果有該欄位有時間部分, 則將其放入selectedTime.
+				if(existDueDate.contains("◎")) {
+					getBtnNutral().setVisibility(View.VISIBLE);
+					selectedTime=arrayExistDueDate[1];
+					setTab2Title(selectedTime);
+
+					// 設定所選擇時間到time picker
+					String[] arrayTimeStrings=arrayExistDueDate[1].split(":");
+					getTimePicker().setCurrentHour(Integer.valueOf(arrayTimeStrings[0]));
+					getTimePicker().setCurrentMinute(Integer.valueOf(arrayTimeStrings[1]));
+
+				}
+
+
+				// log
+				MyDebug.MakeLog(0, "arrayExistDueDate[0]="+arrayExistDueDate[0]);
+				MyDebug.MakeLog(0, "existDueDate="+existDueDate);
+				if(existDueDate.contains("◎")) MyDebug.MakeLog(0, "arrayExistDueDate[1]="+arrayExistDueDate[1]);
+				MyDebug.MakeLog(0, "dueDateMillis="+dueDateMillis);
+
+			}else {
+				// 預設選擇今天
+				selectedDate=String.valueOf(MyCalendar.getTodayString(0));
+				getDatePicker().setDate(MyCalendar.getNextFewDays(0));
+			}
+		}
+	}
+
+	@Override
+	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSelectedDayChange(CalendarView view, int year, int month,
+			int dayOfMonth) {
+		// TODO Auto-generated method stub
+		//Calendar calendar= Calendar.getInstance();
+		//fixUpDatePickerCalendarView(calendar);
+
+		int mMonth=month+1;
+		setTab1Title(year, mMonth, dayOfMonth);
+		selectedDate=year+"/"+mMonth+"/"+dayOfMonth;
+		MyDebug.MakeLog(0, "The date you Selected="+selectedDate);
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		// TODO Auto-generated method stub
+		//which可以用來分辨是按下哪一個按鈕
+		switch (which) {
+		case Dialog.BUTTON_POSITIVE:	// save selected date/time
+
+			setBtnAction_Positive(dialog);
+
+			break;
+		case Dialog.BUTTON_NEUTRAL:		// 取消時間
+			setDialogShowing(dialog);
+			setBtnAction_Nutral();
+
+			break; 
+		case Dialog.BUTTON_NEGATIVE:	// 取消全部
+
+			setDialogDismiss(dialog);
+
+			break;
+		}
 	}  
 }

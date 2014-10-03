@@ -137,9 +137,9 @@ public class Act_SaveToDb {
 		
 
 
-		TaskField_Alert=
-				mEditorVar.TaskAlert .getAlertInterval()+","+	
-						mEditorVar.TaskAlert.getAlertTime();
+//		TaskField_Alert=
+//				mEditorVar.TaskAlert .getAlertInterval()+","+	
+//						mEditorVar.TaskAlert.getAlertTime();
 		MyDebug.MakeLog(0,"TaskField_Alert="+ TaskField_Alert);
 	}
 
