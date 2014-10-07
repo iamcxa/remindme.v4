@@ -33,20 +33,17 @@ public final class ColumnLocation implements BaseColumns {
 					+KEY.name  + " TEXT,"
 					+KEY.lat + " TEXT,"
 					+KEY.lon + " TEXT,"
-					+KEY.dintance + " INTEGER"
-					+ ");"+
-					" INSERT INTO "+ TABLE_NAME 
-					+KEY.name+ " VALUES ('請選擇地點')"
-					+KEY.lat + " VALUES ('0')" 
-					+KEY.lon + " VALUES ('0')"
-					+KEY.dintance + " VALUES ('0');";
+					+KEY.dintance + " INTEGER,"
+					+KEY.lastUsedTime +" INTEGER"
+					+ ");";
 	// 查詢欄位陣列
 	public static final String[] PROJECTION = new String[] { 
 		KEY._id ,
 		KEY.name ,
 		KEY.lat,
 		KEY.lon,
-		KEY.dintance 
+		KEY.dintance,
+		KEY.lastUsedTime
 	};
 
 	// 欄位索引
@@ -56,6 +53,7 @@ public final class ColumnLocation implements BaseColumns {
 		public static final int lat = 2;
 		public static final int lon = 3;
 		public static final int dintance = 4;
+		public static final int lastUsedTime = 5;
 	}
 
 	// 欄位名稱
@@ -65,6 +63,6 @@ public final class ColumnLocation implements BaseColumns {
 		public static final String lat = "lat";
 		public static final String lon = "lon";
 		public static final String dintance = "dintance";
-
+		public static final String lastUsedTime ="lastUsedTime";
 	}
 }

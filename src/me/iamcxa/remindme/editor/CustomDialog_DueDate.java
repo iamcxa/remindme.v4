@@ -394,16 +394,17 @@ OnTabChangeListener
 		@Override
 		public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 			// TODO Auto-generated method stub
-			// get millisecond from calendar selected.
-			mEditorVar.TaskDate.setmHour(view.getCurrentHour());
-			mEditorVar.TaskDate.setmMinute(view.getCurrentMinute());			
-
-			// give a new title with selected date.
-			String newTab2Title=view.getCurrentHour()+":"+view.getCurrentMinute();
-			setTab2Title(newTab2Title);
-
-			selectedTime=mEditorVar.TaskDate.getmHour()+":"+mEditorVar.TaskDate.getmMinute();
-			MyDebug.MakeLog(0, "The time you Selected="+selectedTime);
+//			// get millisecond from calendar selected.
+//			mEditorVar.TaskDate.setmHour(view.getCurrentHour());
+//			mEditorVar.TaskDate.setmMinute(view.getCurrentMinute());			
+//
+//			// give a new title with selected date.
+//			String newTab2Title=view.getCurrentHour()+":"+view.getCurrentMinute();
+//			setTab2Title(newTab2Title);
+//
+//			selectedTime=mEditorVar.TaskDate.getmHour()+":"+mEditorVar.TaskDate.getmMinute();
+//			MyDebug.MakeLog(0, "The time you Selected="+selectedTime);
+//		
 		}
 	};
 
@@ -586,7 +587,6 @@ OnTabChangeListener
 			{
 				holder = (ListView01Holder)row.getTag();
 			}
-
 			return row;
 		}
 
@@ -644,6 +644,9 @@ OnTabChangeListener
 		return true;  
 	}
 
+	/**
+	 * TabHost On-Tab-ChangeListener
+	 */	
 	@Override
 	public void onTabChanged(String tabId) {
 		// TODO Auto-generated method stub
@@ -657,6 +660,10 @@ OnTabChangeListener
 		}
 	}
 
+	/**
+	 * Dialog On-Show-Listener 
+	 * 從 TaskEditorMain 讀取日期時間  / 隱藏放棄時間按鈕
+	 */
 	@Override
 	public void onShow(DialogInterface dialog) {
 		// TODO Auto-generated method stub
@@ -666,7 +673,7 @@ OnTabChangeListener
 		// 檢查TaskEditorMain中的TaskDueDate欄位長度
 		if(TaskEditorMain.getTaskDueDateStringLength()>0){
 			// 如果有長度才讀出該欄位
-			String existDueDate=TaskEditorMain.getTaskDueDate();
+			String existDueDate=TaskEditorMain.getTaskDueDateString();
 
 			// 判斷 TaskEditorMain.getTaskDueDate() 是否有"/"符號
 			if(existDueDate.contains("/")){
@@ -721,12 +728,28 @@ OnTabChangeListener
 		}
 	}
 
+	/**
+	 * Time Picker On-Time-Changed-Listener
+	 */
 	@Override
 	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 		// TODO Auto-generated method stub
-		
+		// get millisecond from calendar selected.
+		mEditorVar.TaskDate.setmHour(view.getCurrentHour());
+		mEditorVar.TaskDate.setmMinute(view.getCurrentMinute());			
+
+		// give a new title with selected date.
+		String newTab2Title=view.getCurrentHour()+":"+view.getCurrentMinute();
+		setTab2Title(newTab2Title);
+
+		selectedTime=mEditorVar.TaskDate.getmHour()+":"+mEditorVar.TaskDate.getmMinute();
+		MyDebug.MakeLog(0, "The time you Selected="+selectedTime);
+	
 	}
 
+	/**
+	 *  Data Picker On-Click-Listener
+	 */
 	@Override
 	public void onSelectedDayChange(CalendarView view, int year, int month,
 			int dayOfMonth) {
@@ -740,6 +763,9 @@ OnTabChangeListener
 		MyDebug.MakeLog(0, "The date you Selected="+selectedDate);
 	}
 
+	/**
+	 * 建立三個按鈕的監聽式
+	 */
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		// TODO Auto-generated method stub

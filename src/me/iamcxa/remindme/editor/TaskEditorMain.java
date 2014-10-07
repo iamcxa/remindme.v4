@@ -1,19 +1,14 @@
 package me.iamcxa.remindme.editor;
 
-import common.MyCalendar;
 import common.CommonVar;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -25,23 +20,19 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TabHost;
-import android.widget.TextView;
-import android.widget.TimePicker;
 
-public class TaskEditorMain extends Fragment  implements
-LoaderManager.LoaderCallbacks<Cursor>  {
+public class TaskEditorMain extends Fragment 
+implements
+OnClickListener,
+LoaderManager.LoaderCallbacks<Cursor>
+{
 
-	private static CustomDialog_DueDate cDialog;
-	private static SimpleCursorAdapter mAdapter;
+	//private static CustomDialog_DueDate cDialog;
+	// static SimpleCursorAdapter mAdapter;
 
 	private static MultiAutoCompleteTextView taskTitle; 	// 任務標題
 	private static EditText taskDueDate;					// 任務到期日
@@ -119,7 +110,7 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		taskDueDate.setClickable(false);// 關閉選取暫時避免輸入偵測判斷
 		// 期限 - 選擇按鈕
 		taskBtnDueDate=(ImageButton)getView().findViewById(R.id.imageButtonResetDate);
-		taskBtnDueDate.setOnClickListener(btnClcikListener);
+		taskBtnDueDate.setOnClickListener(this);
 
 		// taskContent
 		taskContent=(EditText)getView().findViewById(R.id.editTextContent);
@@ -128,12 +119,12 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		// 地點 
 		tasklocation=(Spinner)getView().findViewById(R.id.spinnerTextLocation);
 		taskBtnLocation=(ImageButton)getView().findViewById(R.id.imageButtonSetLocation);
-		taskBtnLocation.setOnClickListener(btnClcikListener);
+		taskBtnLocation.setOnClickListener(this);
 
 		// btnMore 
 		btnMore=(Button)getView().findViewById(R.id.btnMore);
 		btnMore.setEnabled(true);
-		btnMore.setOnClickListener(btnClcikListener);
+		btnMore.setOnClickListener(this);
 
 		/*
 		 * 
@@ -168,153 +159,81 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 		if (b != null) {
 			//參照 底部之TaskFieldContents/RemindmeVar.class等處, 確保變數欄位與順序都相同
 			mEditorVar.Task.setTaskId(b.getInt(ColumnTask.KEY._id));
+			mEditorVar.Task.setTitle(b.getString(ColumnTask.KEY.title));
+			mEditorVar.Task.setContent(b.getString(ColumnTask.KEY.content));
+			mEditorVar.Task.setCreated(b.getLong(ColumnTask.KEY.created));
+			mEditorVar.Task.setDue_date_millis(b.getLong(ColumnTask.KEY.due_date_millis));
+			mEditorVar.Task.setDue_date_string(b.getString(ColumnTask.KEY.due_date_string));
+
+			mEditorVar.Task.setCategory_id(b.getInt(ColumnTask.KEY.category_id));
+			mEditorVar.Task.setPriority(b.getInt(ColumnTask.KEY.priority));
+			mEditorVar.Task.setTag_id(b.getString(ColumnTask.KEY.tag_id));
+
+
+
+			mEditorVar.Task.setTaskId(b.getInt(ColumnTask.KEY._id));
 			TaskEditorMain.setTaskTitle(b.getString(ColumnTask.KEY.title));
 			TaskEditorMain.setTaskDueDate(b.getString(ColumnTask.KEY.due_date_string));
 			TaskEditorMain.setTaskContent(b.getString(ColumnTask.KEY.content));
 		}
 	}
 
-	//--------------btnClcikListener---------------//
-	private OnClickListener btnClcikListener=new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			switch (v.getId()) {
-			case R.id.imageButtonResetDate:
-				//ShowTaskDueDateSelectMenu();
-				new CustomDialog_DueDate(getView().getContext()).show();
+	//	//--------------btnClcikListener---------------//
+	//	private OnClickListener btnClcikListener=new OnClickListener() {
+	//		@Override
+	//		public void onClick(View v) {
+	//			// TODO Auto-generated method stub
+	//			
+	//		}
+	//	};
 
-				//---------------------------------------------------------------//
-
-				//			        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-				//			       final EditText etInput    = new EditText(getActivity());
-				//			 
-				//			        alert.setTitle("Custom alert demo");
-				//			        LayoutInflater inflater = getActivity().getLayoutInflater();
-				//			        View dialoglayout = inflater.inflate(R.layout.custom_dialog, null);
-				//			        alert.setView(dialoglayout);
-				//		
-				//					// get our tabHost from the xml
-				//					TabHost tabs = (TabHost)dialoglayout.findViewById(R.id.TabHost01);
-				//					tabs.setup();
-				//
-				//					// create tab 1
-				//					TabHost.TabSpec tab1 = tabs.newTabSpec("tab1");
-				//					tab1.setContent(R.id.listView01);
-				//					tab1.setIndicator("1");
-				//					tabs.addTab(tab1);
-				//
-				//					// create tab 2	
-				//					TabHost.TabSpec tab2 = tabs.newTabSpec("tab2");
-				//					tab2.setContent(R.id.listView02);
-				//					tab2.setIndicator("2");
-				//					tabs.addTab(tab2);
-				//
-				//					// tab3
-				//					TabHost.TabSpec tab3 = tabs.newTabSpec("tab3");
-				//					tab3.setContent(R.id.calendarView1);
-				//					CalendarView cal = (CalendarView)getView().findViewById(R.id.calendarView1);
-				//					tab3.setIndicator("jj");
-				//					tabs.addTab(tab3);
-				//			        
-				//			        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				//			 
-				//			            @Override
-				//			            public void onClick(DialogInterface dialog, int which) {
-				//			                dialog.cancel(); 
-				//			            }
-				//			        });
-				//			 
-				//			        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				//			 
-				//			            @Override
-				//			            public void onClick(DialogInterface dialog, int which) {
-				//			                String name = etInput.getText().toString();
-				//			                // Toast.makeText(getActivity(), name, Toast.LENGTH_SHORT).show();
-				//			            }
-				//			        });
-				//			 
-				//			        alert.show();
-
-
-				//---------------------------------------------------------------//
-
-				break;
-
-			case R.id.imageButtonSetLocation:
-//				ShowTaskLocationSelectMenu();
-				new CustomLocationDialog().show(getFragmentManager() , "dialog");
-				break;
-
-			case R.id.btnMore:
-				if(taskCategory.getVisibility()==View.GONE){
-					taskCategory.setVisibility(View.VISIBLE);
-					taskPriority.setVisibility(View.VISIBLE);
-					taskProject.setVisibility(View.VISIBLE);
-					taskTag.setVisibility(View.VISIBLE);
-					btnMore.setText(getResources().getString(R.string.btnMore_Less));
-				}else {
-					taskCategory.setVisibility(View.GONE);
-					taskPriority.setVisibility(View.GONE);
-					taskProject.setVisibility(View.GONE);
-					taskTag.setVisibility(View.GONE);
-					btnMore.setText(getResources().getString(R.string.btnMore_More));
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
-
-	//--------------任務到期日選單---------------//
-	@SuppressLint("InflateParams")
-	private TaskEditorMain ShowTaskDueDateSelectMenu() {
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		View mview = inflater.inflate(
-				R.layout.custom_dialog_duedate,
-				null);
-		new AlertDialog.Builder(getActivity())
-		.setTitle(getResources().getString(R.string.TaskEditor_btnTaskDueDate_Title))
-		.setView(mview)
-		.setItems(R.array.Array_TaskEditor_btnTaskDueDate_String,
-				new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int which) {
-				switch (which) {
-				case 0:// 今天
-					taskDueDate.setText(
-							MyCalendar.getTodayString(0));
-					break;
-				case 1:// 明天
-					taskDueDate.setText(
-							MyCalendar.getTodayString(1));
-					break;
-				case 2:// 下週
-					taskDueDate.setText(
-							MyCalendar.getTodayString(7));
-					break;
-				case 3:// 一個月內
-					taskDueDate.setText(
-							MyCalendar.getTodayString(30));
-					break;
-				case 4:// 選擇日期
-					showDataPicker();
-
-
-
-
-
-					break;
-					//				case 5:// 說明
-					//
-					//					break;
-				}
-			}
-		}).show();
-		return this;
-	}
+	//	//--------------任務到期日選單---------------//
+	//	@SuppressLint("InflateParams")
+	//	private TaskEditorMain ShowTaskDueDateSelectMenu() {
+	//		LayoutInflater inflater = LayoutInflater.from(getActivity());
+	//		View mview = inflater.inflate(
+	//				R.layout.custom_dialog_duedate,
+	//				null);
+	//		new AlertDialog.Builder(getActivity())
+	//		.setTitle(getResources().getString(R.string.TaskEditor_btnTaskDueDate_Title))
+	//		.setView(mview)
+	//		.setItems(R.array.Array_TaskEditor_btnTaskDueDate_String,
+	//				new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog,
+	//					int which) {
+	//				switch (which) {
+	//				case 0:// 今天
+	//					taskDueDate.setText(
+	//							MyCalendar.getTodayString(0));
+	//					break;
+	//				case 1:// 明天
+	//					taskDueDate.setText(
+	//							MyCalendar.getTodayString(1));
+	//					break;
+	//				case 2:// 下週
+	//					taskDueDate.setText(
+	//							MyCalendar.getTodayString(7));
+	//					break;
+	//				case 3:// 一個月內
+	//					taskDueDate.setText(
+	//							MyCalendar.getTodayString(30));
+	//					break;
+	//				case 4:// 選擇日期
+	//					showDataPicker();
+	//
+	//
+	//
+	//
+	//
+	//					break;
+	//					//				case 5:// 說明
+	//					//
+	//					//					break;
+	//				}
+	//			}
+	//		}).show();
+	//		return this;
+	//	}
 
 	//--------------任務地點選擇器---------------//
 	@SuppressLint("InflateParams")
@@ -360,7 +279,7 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 
 	//-----------------TaskDueDate------------------//
 	// 取得文字
-	public static String getTaskDueDate() {
+	public static String getTaskDueDateString() {
 		String taskDueDateString=nullString;
 		// 如果欄位不為空則放入使用者輸入數值
 		if (!(taskDueDate.getText().toString().isEmpty())){
@@ -396,72 +315,91 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	}
 
 	//-----------------TaskCategory------------------//
+	//TODO 處理spinner對應資料
 	public static Spinner getTaskCategory() {
 		return taskCategory;
 	}
 	public static void setTaskCategory(Spinner taskCategory) {
 		TaskEditorMain.taskCategory = taskCategory;
+	}	
+	
+	//-----------------TaskTag------------------//
+	//TODO 處理spinner對應資料
+	public static Spinner getTaskTag() {
+		return taskTag;
+	}
+	public static void setTaskTag(Spinner taskTag) {
+		TaskEditorMain.taskTag = taskTag;
 	}
 
 	//-----------------TaskPriority------------------//
+	//TODO 處理spinner對應資料
 	public static Spinner getTaskPriority() {
 		return taskPriority;
 	}
 	public static void setTaskPriority(Spinner taskPriority) {
 		TaskEditorMain.taskPriority = taskPriority;
 	}
-
-	//-----------------DataPicker------------------//
-	private TaskEditorMain showDataPicker() {
-		String[] dataString=MyCalendar.getTodayString(0).split("/");
-
-		int year=Integer.valueOf(dataString[0]);
-		int month=Integer.valueOf(dataString[1])-1;
-		int	day=Integer.valueOf(dataString[2]);
-
-		new DatePickerDialog(getActivity(),
-				mDateSetListener, 
-				year,month, day
-				).show();
-
-		return this;
+	
+	//-----------------TaskLocation------------------//
+	//TODO 
+	public static Spinner getTaskLocation() {
+		return tasklocation;
 	}
-
-	//-----------------TimePicker------------------//
-	private TaskEditorMain showTimePicker() {
-		String[] dataString=MyCalendar.getTodayString(0).split("/");
-
-		int min=Integer.valueOf(dataString[0]);
-		int hour=Integer.valueOf(dataString[1])-1;
-
-		new TimePickerDialog(getActivity(),
-				mTimeSetListener, 
-				hour,min, false
-				).show();
-		return this;
+	public static void setTaskLocation(Spinner taskLocation) {
+		TaskEditorMain.tasklocation = taskLocation;
 	}
-
-	//-----------------時間選擇對話方塊------------------//
-	private TimePickerDialog.OnTimeSetListener mTimeSetListener =
-			new TimePickerDialog.OnTimeSetListener() {
-		@Override
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			mEditorVar.TaskDate.mHour = hourOfDay;
-			mEditorVar.TaskDate.mMinute = minute;
-			//timeDesc.setText(EditorVar.mHour + ":" + EditorVar.mMinute);
-		}
-	};
-
-	//-----------------日期選擇對話方塊------------------//
-	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-		@Override
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			//mEditorVar.TaskDate.setmYear(year);
-			//mEditorVar.TaskDate.setmMonth(monthOfYear);
-			//mEditorVar.TaskDate.setmDay(dayOfMonth);
-			taskDueDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-		}
-	};
+	//	//-----------------DataPicker------------------//
+	//	private TaskEditorMain showDataPicker() {
+	//		String[] dataString=MyCalendar.getTodayString(0).split("/");
+	//
+	//		int year=Integer.valueOf(dataString[0]);
+	//		int month=Integer.valueOf(dataString[1])-1;
+	//		int	day=Integer.valueOf(dataString[2]);
+	//
+	//		new DatePickerDialog(getActivity(),
+	//				mDateSetListener, 
+	//				year,month, day
+	//				).show();
+	//
+	//		return this;
+	//	}
+	//
+	//	//-----------------TimePicker------------------//
+	//	private TaskEditorMain showTimePicker() {
+	//		String[] dataString=MyCalendar.getTodayString(0).split("/");
+	//
+	//		int min=Integer.valueOf(dataString[0]);
+	//		int hour=Integer.valueOf(dataString[1])-1;
+	//
+	//		new TimePickerDialog(getActivity(),
+	//				mTimeSetListener, 
+	//				hour,min, false
+	//				).show();
+	//		return this;
+	//	}
+	//
+	//	//-----------------時間選擇對話方塊------------------//
+	//	private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+	//			new TimePickerDialog.OnTimeSetListener() {
+	//		@Override
+	//		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+	//			mEditorVar.TaskDate.mHour = hourOfDay;
+	//			mEditorVar.TaskDate.mMinute = minute;
+	//			//timeDesc.setText(EditorVar.mHour + ":" + EditorVar.mMinute);
+	//		}
+	//	};
+	//
+	//	//-----------------日期選擇對話方塊------------------//
+	//	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+	//		@Override
+	//		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+	//			//mEditorVar.TaskDate.setmYear(year);
+	//			//mEditorVar.TaskDate.setmMonth(monthOfYear);
+	//			//mEditorVar.TaskDate.setmDay(dayOfMonth);
+	//			taskDueDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+	//		}
+	//	};
 
 	//-----------------設定任務地點陣列------------------//
 	private ArrayAdapter<String> setLocationArray(Cursor data){
@@ -501,6 +439,43 @@ LoaderManager.LoaderCallbacks<Cursor>  {
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		if(tasklocation!=null) tasklocation.setAdapter(setLocationArray(null));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.imageButtonResetDate:
+			new CustomDialog_DueDate(getView().getContext()).show();
+			break;
+
+		case R.id.imageButtonSetLocation:
+			new CustomLocationDialog().show(getFragmentManager() , "dialog");
+			break;
+
+		case R.id.btnMore:
+			if(taskCategory.getVisibility()==View.GONE){
+				taskCategory.setVisibility(View.VISIBLE);
+				taskPriority.setVisibility(View.VISIBLE);
+				taskProject.setVisibility(View.VISIBLE);
+				taskTag.setVisibility(View.VISIBLE);
+				btnMore.setText(getResources().getString(R.string.btnMore_Less));
+			}else {
+				taskCategory.setVisibility(View.GONE);
+				taskPriority.setVisibility(View.GONE);
+				taskProject.setVisibility(View.GONE);
+				taskTag.setVisibility(View.GONE);
+				btnMore.setText(getResources().getString(R.string.btnMore_More));
+			}
+			break;
+
+		default:
+			break;
+		}
 	}
 
 }

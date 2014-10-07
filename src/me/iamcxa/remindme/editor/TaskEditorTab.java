@@ -1,23 +1,34 @@
 package me.iamcxa.remindme.editor;
 
-import common.CommonVar;
+import java.util.ArrayList;
+
+import common.MyDebug;
 import common.MyTabListener;
 
 import me.iamcxa.remindme.R;
+import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.content.Intent;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-public class TaskEditorTab extends FragmentActivity  {
+public class TaskEditorTab extends FragmentActivity 
+implements
+OnMenuItemClickListener{
 
-	static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
-	static Act_SaveToDb mSaveOrUpdate;
+	protected static Act_SaveToDb mSaveOrUpdate;
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -27,6 +38,7 @@ public class TaskEditorTab extends FragmentActivity  {
 		setupViewComponent();
 		//init(this.getIntent());
 	}
+
 
 	// This is the action bar menu
 	@Override
@@ -43,7 +55,7 @@ public class TaskEditorTab extends FragmentActivity  {
 
 		// actionAdd
 		MenuItem actionAdd = menu.findItem(R.id.action_add);
-		actionAdd.setOnMenuItemClickListener(btnClickListener);
+		actionAdd.setOnMenuItemClickListener(this);
 
 		return true;
 	}
@@ -60,49 +72,11 @@ public class TaskEditorTab extends FragmentActivity  {
 		return super.onOptionsItemSelected(item);
 	}
 
-	//  由資料庫初始化變數
-	public static void init(Intent intent) {
-		Bundle b = intent.getBundleExtra(CommonVar.BundleName);
-		if (b != null) {
-			//參照 底部之TaskFieldContents/RemindmeVar.class等處, 確保變數欄位與順序都相同
-			mEditorVar.Task.setTaskId(b.getInt(ColumnTask.KEY._id));
-			mEditorVar.Task.setTitle(b.getString(ColumnTask.KEY.title));
-			mEditorVar.Task.setContent(b.getString(ColumnTask.KEY.content));
-			mEditorVar.Task.setCreated(b.getString(ColumnTask.KEY.created));
-			mEditorVar.Task.setDueDateString(b.getString(ColumnTask.KEY.due_date_millis));
-			mEditorVar.Task.setDueDateString(b.getString(ColumnTask.KEY.due_date_string));
-
-			mEditorVar.TaskType.setCategory(b.getString(ColumnTask.KEY.category_id));
-			mEditorVar.TaskType.setPriority(b.getInt(ColumnTask.KEY.priority));
-			mEditorVar.TaskType.setTag(b.getString(ColumnTask.KEY.tag_id));
-
-			//TaskEditorMain.setTaskTitle(mEditorVar.Task.getTitle());
-			//TaskEditorMain.setTaskDueDate(mEditorVar.Task.getDueDate());
-
-
-			//			if (b.getString("dueDate") != null && b.getString("dueDate").length() > 0) {
-			//				String[] dateStr = mEditorVar.Task.getDueDate().split("/");
-			//				mEditorVar.TaskDate.setmYear(Integer.parseInt(dateStr[0]));
-			//				mEditorVar.TaskDate.setmMonth(Integer.parseInt(dateStr[1]) - 1);
-			//				mEditorVar.TaskDate.setmDay(Integer.parseInt(dateStr[2]));
-			//			}
-			//
-			//			if (b.getString("alertTime") != null && b.getString("alertTime").length() > 0) {
-			//				String[] timeStr = mEditorVar.TaskAlert.getAlertTime().split(":");
-			//				mEditorVar.TaskDate.setmHour (Integer.parseInt(timeStr[0]));
-			//				mEditorVar.TaskDate.setmMinute(Integer.parseInt(timeStr[1]));
-			//			}
-
-		}
-	}
-
-
-
 	//設定tab
 	private void setupViewComponent() {
 		final ActionBar actBar = getActionBar();
 		actBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
+
 
 		Fragment fragMarriSug = TaskEditorMain.newInstance();
 		actBar.addTab(actBar.newTab()
@@ -110,53 +84,26 @@ public class TaskEditorTab extends FragmentActivity  {
 				.setIcon(getResources().getDrawable(R.drawable.tear_of_calendar))
 				.setTabListener(new MyTabListener(fragMarriSug)));
 
-//		Fragment fragGame =  TaskEditorLocation.newInstance();
-//		actBar.addTab(actBar.newTab()
-//				.setText("")
-//				.setIcon(getResources().getDrawable(R.drawable.map_marker))
-//				.setTabListener(new MyTabListener(fragGame)));
-//
-//		Fragment fragVideo = new TaskEditorMain();
-//		actBar.addTab(actBar.newTab()
-//				.setText("")
-//				.setIcon(getResources().getDrawable(android.R.drawable.ic_media_play))
-//				.setTabListener(new MyTabListener(fragVideo)));
+		//		Fragment fragGame =  TaskEditorLocation.newInstance();
+		//		actBar.addTab(actBar.newTab()
+		//				.setText("")
+		//				.setIcon(getResources().getDrawable(R.drawable.map_marker))
+		//				.setTabListener(new MyTabListener(fragGame)));
+		//
+		//		Fragment fragVideo = new TaskEditorMain();
+		//		actBar.addTab(actBar.newTab()
+		//				.setText("")
+		//				.setIcon(getResources().getDrawable(android.R.drawable.ic_media_play))
+		//				.setTabListener(new MyTabListener(fragVideo)));
 
 	}
-
-
-
-
-	// 按鈕監聽
-	private MenuItem.OnMenuItemClickListener btnClickListener = new MenuItem.OnMenuItemClickListener() {
-
-		@Override
-		public boolean onMenuItemClick(MenuItem item) {
-			// TODO Auto-generated method stub
-			String itemName=String.valueOf(item.getTitle());
-			//Toast.makeText(getApplicationContext(),item.getTitle(),Toast.LENGTH_SHORT).show();
-			if (itemName.contentEquals( "action_add")){
-
-				btnActionAdd();
-
-			}else if (itemName.contentEquals( "action_cancel")) {
-				//btnActionCancel();//暫時取消此功能
-			}
-
-
-			return false;
-		}
-
-	};
-
-
 
 	private void btnActionAdd(){
 		//檢查title是否為空
 		boolean isEmpty=(TaskEditorMain.getTaskTitle().contentEquals("null"));
 		if(!isEmpty){
 			try {
-
+				
 				mSaveOrUpdate=new Act_SaveToDb(getApplicationContext());
 				finish();
 
@@ -169,6 +116,24 @@ public class TaskEditorTab extends FragmentActivity  {
 		}
 
 	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		// TODO Auto-generated method stub
+
+		String itemName=String.valueOf(item.getTitle());
+		
+		if (itemName.contentEquals( "action_add")){
+
+			btnActionAdd();
+
+		}else if (itemName.contentEquals( "action_cancel")) {
+			//btnActionCancel();//暫時取消此功能
+		}
+
+		return false;
+	}
+
 
 
 }

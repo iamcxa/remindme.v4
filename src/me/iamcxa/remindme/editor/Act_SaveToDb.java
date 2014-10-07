@@ -1,16 +1,25 @@
 package me.iamcxa.remindme.editor;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import me.iamcxa.remindme.database.ColumnAlert;
+import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import common.MyCalendar;
 import common.MyDebug;
 import android.R.integer;
-import android.app.AlarmManager;
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 /**
@@ -19,56 +28,34 @@ import android.widget.Toast;
  */
 public class Act_SaveToDb {
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
-	private Uri taskUri=ColumnTask.URI;
+	private Uri mUri;
 	private Act_SetAlarm mSetAlarm;
 	private Context context;
-	private int taskId=0;
-	private String TaskField_Main="";
-	private String TaskField_Location="";
-	private String TaskField_Alert="";
-	private String TaskField_Type="";
-	private String TaskField_Other="";
+	private ContentValues values= new ContentValues();
+	private int taskId=0,alertId=0,locId=0,alertSelected=0,locSelected=0;
+
+	private setTableTasks setTableTasks;
+	private setTableAlert setTableAlert;
+	private setTableLocation setTableLocation;
+	private readDB readDB;
 
 	public Act_SaveToDb(Context context) {
 		super();
 		this.context = context;
+
 		mSetAlarm = new Act_SetAlarm(context);
-		StartOver();
-	}
 
-	// 執行順序
-	private void StartOver(){
-		getDataFromView();
-		prepareAddDataToDatabase(
-				TaskField_Main,
-				TaskField_Location,
-				TaskField_Alert,
-				TaskField_Type,
-				TaskField_Other
-				);
-	}
+		// 取得日期與時間選擇器數值加總後的毫秒值
+		getTaskDueDateTime();
 
-	//由view物件取得輸入資訊
-	private void getDataFromView(){
-		// 標題字串
-		mEditorVar.Task.setTitle(TaskEditorMain.getTaskTitle());	
-
-		// 註解字串（任務說明）
-		mEditorVar.Task.setContent(TaskEditorMain.getTaskContent());
-
-		// 設定資料庫日期(字串)欄位
-		mEditorVar.Task.setDueDateString(TaskEditorMain.getTaskDueDate());
-
-		// 設定資料庫日期(毫秒)欄位
-		mEditorVar.TaskDate.setmDatePulsTimeMillis(getTaskDueDateTime());
-
-		// 地點字串 - ID
-		//mEditorVar.TaskLocation.setLocationName(locationName);
+		// 寫入或更新資料庫
+		saveTableTasks();
+		saveTableAlert();
+		//saveTableLocation();
 	}
 
 	// 取得日期與時間加總的到期日毫秒
-	private long getTaskDueDateTime(){
-		//Act_CheckDueDateField.setRawTaskDueDateString(TaskEditorMain.getTaskDueDate());
+	private static long getTaskDueDateTime(){
 		// 初始化
 		long taskDueDateTime=0;
 
@@ -84,80 +71,40 @@ public class Act_SaveToDb {
 
 		taskDueDateTime= c.getTimeInMillis();
 
+		mEditorVar.TaskDate.setmDatePulsTimeMillis(taskDueDateTime);
+
 		return taskDueDateTime;
 	}
 
-
-	//
-	private void setTaskDateGroup(ContentValues values){
-
-		//
-		TaskField_Main=
-						mEditorVar.Task.getTaskId()+","+		//0	  
-						mEditorVar.Task.getTitle()+","+			//1
-						mEditorVar.Task.getContent()+","+		//2
-						mEditorVar.Task.getCreated()+","+		//3
-						mEditorVar.Task.getDueDateString()+","+	//4
-						mEditorVar.Task.getDueDateTime();		//5
-		MyDebug.MakeLog(0,"TaskField_Main="+ TaskField_Main);
-
-		// 存入任務標題
-		String[] Split_TaskField_Main = TaskField_Main.split(",");
-		taskId=Integer.valueOf(Split_TaskField_Main[0]);
-		values.put(ColumnTask.KEY.title, Split_TaskField_Main[1]);
-		values.put(ColumnTask.KEY.content, Split_TaskField_Main[2]);
-		values.put(ColumnTask.KEY.created, Split_TaskField_Main[3]);
-		values.put(ColumnTask.KEY.
-				due_date_string,String.valueOf(Split_TaskField_Main[4]));
-		
-
-
-		TaskField_Other=
-				mEditorVar.TaskOther.getCollaborator()+","+					//0
-						mEditorVar.TaskOther.getGoogle_cal_sync_id()+","+	//1
-						mEditorVar.TaskOther.getTask_color();				//2
-		MyDebug.MakeLog(0,"TaskField_Other="+ TaskField_Other);
-		
-		
-
-		TaskField_Type=
-				mEditorVar.TaskType.getPriority()+","+						//0
-						mEditorVar.TaskType.getCategory()+","+				//1
-						mEditorVar.TaskType.getTag()+","+					//2
-						mEditorVar.TaskType.getLevel();						//3
-		MyDebug.MakeLog(0,"TaskField_Type="+ TaskField_Type);
-		
-
-
-		TaskField_Location=
-				mEditorVar.TaskLocation.getCoordinate()+","+				//0
-						mEditorVar.TaskLocation.getLocationName()+","+		//1
-						mEditorVar.TaskLocation.getDistance();				//2
-		MyDebug.MakeLog(0,"TaskField_Location="+ TaskField_Location);
-		
-
-
-//		TaskField_Alert=
-//				mEditorVar.TaskAlert .getAlertInterval()+","+	
-//						mEditorVar.TaskAlert.getAlertTime();
-		MyDebug.MakeLog(0,"TaskField_Alert="+ TaskField_Alert);
+	private void saveTableTasks() {
+		values.clear();
+		// 設定對應 URI, 執行 SQL 命令
+		mUri=ColumnTask.URI;
+		setTableTasks=new setTableTasks(values);
+		isSaveOrUpdate(values, taskId);
 	}
 
+	private void saveTableAlert() {
+		MyDebug.MakeLog(2, "readDB start");
+		readDB=new readDB(context);
 
-	// 將字串陣列拆解
-	private void prepareAddDataToDatabase(
-			String TaskField_Main,
-			String TaskField_Location,
-			String TaskField_Alert,
-			String TaskField_Type,
-			String TaskField_Other) {
-
-		ContentValues values = new ContentValues();
+		MyDebug.MakeLog(2, "readDB starting");
+		//ArrayList<String> idList=readDB.getContents(readDB.getCursor());
+		//	String newId=idList.get(idList.size());
+		//	MyDebug.MakeLog(2, "newID="+newId);
 		values.clear();
+		// 設定對應 URI, 執行 SQL 命令
+		mUri=ColumnAlert.URI;
+		setTableAlert=new setTableAlert(values,"0");
+		isSaveOrUpdate(values, alertId);
+	}
 
-		setTaskDateGroup(values);
-
-		isSaveOrUpdate(values, taskId);
+	private void saveTableLocation() {
+		values.clear();
+		// 設定對應 URI, 執行 SQL 命令
+		mUri=ColumnLocation.URI;
+		setTableLocation=new setTableLocation(values);
+		isSaveOrUpdate(values, locId);
 	}
 
 	// 判斷本次操作是寫入新資料或更新已存在資料
@@ -171,15 +118,14 @@ public class Act_SaveToDb {
 
 	// 寫入新資料
 	private boolean SaveIt(ContentValues values) {
-		try {			
-			values.put(ColumnTask.KEY.created, String.valueOf(MyCalendar.getToday()));
-			context.getContentResolver().insert(taskUri, values);
+		try {
+			context.getContentResolver().insert(mUri, values);
 			Toast.makeText(context, "新事項已經儲存", Toast.LENGTH_SHORT).show();
-			mSetAlarm.SetIt(true);
+			if(alertSelected==1) mSetAlarm.SetIt(true);
 			return true;
 		} catch (Exception e) {
 			Toast.makeText(context, "儲存出錯！", Toast.LENGTH_SHORT).show();
-			MyDebug.MakeLog(0, "SaveOrUpdate SaveIt error=" + e);
+			MyDebug.MakeLog(2, "SaveOrUpdate SaveIt error=" + e);
 			return false;
 		}
 	}
@@ -187,18 +133,303 @@ public class Act_SaveToDb {
 	// 更新已存在資料
 	private boolean UpdateIt(ContentValues values, int taskId) {
 		try {
-			Uri uri = ContentUris.withAppendedId(taskUri,
+			Uri uri = ContentUris.withAppendedId(mUri,
 					taskId);
 			context.getContentResolver().update(uri, values, null, null);
 			Toast.makeText(context, "事項更新成功！", Toast.LENGTH_SHORT).show();
-			mSetAlarm.SetIt(true);
+			if(alertSelected==1) mSetAlarm.SetIt(true);
 			return true;
 		} catch (Exception e) {
 			Toast.makeText(context, "儲存出錯！", Toast.LENGTH_SHORT).show();
-			MyDebug.MakeLog(0, "SaveOrUpdate UpdateIt error=" + e);
+			MyDebug.MakeLog(2, "SaveOrUpdate UpdateIt error=" + e);
 			return false;
 		}
 	}
-
 	// 結束 //
+}
+
+/*
+ * 
+ */
+class setTableTasks{
+	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
+
+	public setTableTasks(ContentValues values) {
+		super();
+		getTaskDataFields();
+		setTasksValues(values);
+	}
+
+	//TODO　由view物件取得輸入資訊
+	private static void getTaskDataFields(){
+
+		//---------------------------- 字串 -------------------------//
+		// 標題字串
+		mEditorVar.Task.setTitle(TaskEditorMain.getTaskTitle());	
+		// 確保任務狀態為"未完成"
+		mEditorVar.Task.setStatus(mEditorVar.Task.TASK_STATUS_UNFINISHED);
+		// 註解字串（任務說明）
+		mEditorVar.Task.setContent(TaskEditorMain.getTaskContent());
+
+		//---------------------------- 時間 -------------------------//
+		// 設定該任務建立時間
+		mEditorVar.Task.setCreated(MyCalendar.getNow());
+		// 設定資料庫日期(字串)欄位
+		mEditorVar.Task.setDue_date_string(TaskEditorMain.getTaskDueDateString());
+		// 設定資料庫日期(毫秒)欄位
+		mEditorVar.Task.setDue_date_millis(mEditorVar.TaskDate.getmDatePulsTimeMillis());
+
+		//---------------------------- IDs -------------------------//
+		// TODO "分類"與"專案"分野未決定
+		// TODO 設定優先權  - spinner - 預計直接取 index 0(高)~4（低)
+		mEditorVar.Task.setPriority(TaskEditorMain.getTaskPriority().getSelectedItemPosition());
+		// TODO 設定分類id  - spinner - 預計直接取 index(0~最後)
+		mEditorVar.Task.setCategory_id(TaskEditorMain.getTaskCategory().getSelectedItemPosition());
+		// TODO 設定專案  - spinner - 預計直接取 index(0~最後) 
+		mEditorVar.Task.setPriority(TaskEditorMain.getTaskPriority().getSelectedItemPosition());
+		// TODO 設定卡片顏色 - 預計與分類或專案搭配
+		mEditorVar.Task.setColor(mEditorVar.TaskCardColor.getTaskDefaultColor());
+		// TODO 設定標籤  - 未確定
+		mEditorVar.Task.setTag_id("null");
+
+		// TODO 設定協作人員id
+		mEditorVar.Task.setCollaborator_id("null");
+		// TODO 設定任務同步id
+		mEditorVar.Task.setSync_id(0);
+	}
+
+
+
+	// 存入資料表 - tasks
+	public void setTasksValues(ContentValues values){
+		// 1 - ID
+		//values.put(ColumnTask.KEY._id, mEditorVar.Task.getTaskId());
+		// 2 - 標題 
+		values.put(ColumnTask.KEY.title, mEditorVar.Task.getTitle());
+		// 3 - 狀態  - 0未完成 - 1完成
+		values.put(ColumnTask.KEY.status, mEditorVar.Task.getStatus());
+		// 4 - 備註
+		values.put(ColumnTask.KEY.content, mEditorVar.Task.getContent());
+		// 5 - 到期日 - 毫秒
+		values.put(ColumnTask.KEY.due_date_millis, mEditorVar.Task.getDue_date_millis());
+		// 6 - 到期日  - 字串
+		values.put(ColumnTask.KEY.due_date_string,mEditorVar.Task.getDue_date_string());
+		// 7 - 任務卡片顏色代號
+		values.put(ColumnTask.KEY.color, mEditorVar.Task.getColor());
+		// 8 - 優先權
+		values.put(ColumnTask.KEY.priority, mEditorVar.Task.getPriority());
+		// 9 - 此任務新增時間 
+		values.put(ColumnTask.KEY.created, mEditorVar.Task.getCreated());
+		// 10- 分類id 
+		values.put(ColumnTask.KEY.category_id, mEditorVar.Task.getCategory_id());
+		// 11- 專案id
+		values.put(ColumnTask.KEY.project_id, mEditorVar.Task.getProject_id());
+		// 12- 協作者uid 
+		values.put(ColumnTask.KEY.collaborator_id, mEditorVar.Task.getCollaborator_id());
+		// 13- 同步任務id
+		values.put(ColumnTask.KEY.sync_id, mEditorVar.Task.getSync_id());
+		// 14- 任務地點id
+		values.put(ColumnTask.KEY.location_id,mEditorVar.Task.getLocation_id());
+		// 15- 標籤id
+		values.put(ColumnTask.KEY.tag_id,mEditorVar.Task.getTag_id());
+	}
+}
+
+/*
+ * TODO
+ */
+class setTableLocation{
+	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
+
+	public setTableLocation(ContentValues values) {
+		super();
+		getLocationFields();
+		setTaskLocation(values);
+	}
+
+	private void getLocationFields() {
+		// TODO 地點判斷與取得相關資料部分仍未完成
+
+		if(TaskEditorMain.getTaskLocation().getSelectedItemPosition()!=-1){
+			// 設定地點名稱
+			mEditorVar.TaskLocation.setName("null");
+
+			// 設定經緯度
+			mEditorVar.TaskLocation.setLat(0.0);
+			mEditorVar.TaskLocation.setLon(0.0);
+
+			// 設定目的地與現在地點距離
+			mEditorVar.TaskLocation.setDistance(0.0);
+
+			// 設定該地點最近使用時間為現在
+			mEditorVar.TaskLocation.setLastUsedTime(MyCalendar.getNow());
+		}
+	}
+
+
+
+	// 存入資料到資料表 - task_location
+	public void setTaskLocation(ContentValues values){
+		// 1 - 任務地點id
+		//values.put(ColumnLocation.KEY._id,mEditorVar.TaskLocation.getLocationId());
+		// 2 - 地點名稱字串
+		values.put(ColumnLocation.KEY.name,mEditorVar.TaskLocation.getName());
+		// 3 - 4 - 經緯度
+		values.put(ColumnLocation.KEY.lat,mEditorVar.TaskLocation.getLat());
+		values.put(ColumnLocation.KEY.lon,mEditorVar.TaskLocation.getLon());
+		// 5 - 與上次偵測地點之距離
+		values.put(ColumnLocation.KEY.dintance,mEditorVar.TaskLocation.getDistance());
+		// 6 - 上次使用時間
+		values.put(ColumnLocation.KEY.lastUsedTime,mEditorVar.TaskLocation.getLastUsedTime());
+
+	}
+}
+
+/*
+ * TODO
+ */
+class setTableAlert{
+	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
+
+	int newId=0;
+
+	public setTableAlert(ContentValues values, String newId) {
+		super();
+		this.newId=Integer.valueOf(newId);
+		getAlertFields();
+		setTaskAlert(values);
+	}
+
+	private void getAlertFields() {
+		// 設定提醒時間毫秒數
+		mEditorVar.TaskAlert.setDue_date_millis(mEditorVar.TaskDate.getmDatePulsTimeMillis());
+		// 設定（同步）提醒時間字串
+		mEditorVar.TaskAlert.setDue_date_string(mEditorVar.Task.getDue_date_string());
+		// 設定提醒間隔
+		mEditorVar.TaskAlert.setInterval(0);
+		// 設定時間偏移
+		mEditorVar.TaskAlert.setTime_offset(0);
+		// 設定提醒類型 - 0已結束 - 1時間到提醒
+		mEditorVar.TaskAlert.setType(1);
+		// 設定對應任務id
+		mEditorVar.TaskAlert.setTask_id(newId+1);
+
+		// 設定是否使用靠近地點提醒 - 取得地點id/地點開關/地點半徑
+		setAlertByLocation();
+	}
+
+	private void setAlertByLocation() {
+		//		if(loc){
+		//
+		//		}else{
+		//			// 設定偵測地點ID
+		//			mEditorVar.TaskAlert.setLoc_id(0);
+		//			mEditorVar.TaskAlert.setLoc_on(0);
+		//			mEditorVar.TaskAlert.setLoc_radius(0);
+		//		}
+	}
+
+	// 存入資料到資料表 - task_alerts
+	public void setTaskAlert(ContentValues values){
+		// 1 - 提醒id
+		//values.put(ColumnAlert.KEY._id,mEditorVar.TaskAlert.getAlertID());
+		// 2 - 到期日 - 毫秒
+		values.put(ColumnAlert.KEY.due_date_millis,mEditorVar.TaskAlert.getDue_date_millis());
+		// 3 - 到期日 - 字串
+		values.put(ColumnAlert.KEY.due_date_string,mEditorVar.TaskAlert.getDue_date_string());
+		// 4 - 觸發間隔
+		values.put(ColumnAlert.KEY.interval,mEditorVar.TaskAlert.getInterval());
+		// 5 - 提醒事件包含的地點id
+		values.put(ColumnAlert.KEY.loc_id,mEditorVar.TaskAlert.getLoc_id());
+		// 6 - 是否開啟靠近地點提醒
+		values.put(ColumnAlert.KEY.loc_on,mEditorVar.TaskAlert.getLoc_on());
+		// 7 - 地點靠近提醒半徑
+		values.put(ColumnAlert.KEY.loc_radius,mEditorVar.TaskAlert.getLoc_radius());
+		// 8 - 備用欄位
+		values.put(ColumnAlert.KEY.other,mEditorVar.TaskAlert.getOther());
+		// 9 - 對應任務id
+		values.put(ColumnAlert.KEY.task_id,mEditorVar.TaskAlert.getTask_id());
+		// 10- 時間修正
+		values.put(ColumnAlert.KEY.time_offset,mEditorVar.TaskAlert.getTime_offset());
+		// 11- 提醒類型
+		values.put(ColumnAlert.KEY.type,mEditorVar.TaskAlert.getType());
+	}
+}
+
+class readDB implements 
+LoaderCallbacks<Cursor>{
+
+	private  LoaderManager loaderManager;
+	private  SimpleAdapter mAdapter=null;
+	private  ArrayList<String> idList=null;
+	private  Loader<Cursor> loader;
+	private Context context;
+	private Cursor cursor=null;
+
+	public readDB(Context context){
+		super();
+		MyDebug.MakeLog(2, "readDB super");
+		this.context=context;
+loader.startLoading();
+
+		MyDebug.MakeLog(2, "readDB initLoader");
+
+	}
+
+
+	public ArrayList<String> getContents(Cursor data) {
+
+		data.moveToFirst();
+		ArrayList<String> contents = new ArrayList<String>();
+		while(!data.isAfterLast()) {
+			contents.add(data.getString(data.getColumnIndex("_id")));
+			data.moveToNext();
+		}
+		data.close();
+		String content[] = (String[]) contents.toArray(new String[0]);
+		MyDebug.MakeLog(2, content);
+
+
+
+		return contents;
+
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		//switch (id) {
+		//case 0:
+		String[] projection = ColumnTask.PROJECTION ;
+		String selection = ColumnTask.KEY._id; 
+		String sortOrder = ColumnTask.DEFAULT_SORT_ORDER;
+		String[] selectionArgs = null;
+		loader =  new CursorLoader(context,
+				ColumnTask.URI,
+				projection, selection, selectionArgs, sortOrder);
+		//break;
+		//}
+		return loader;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		// TODO Auto-generated method stub
+		cursor=data;
+		//if(loader.getId()==0)
+		idList=getContents(data);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// TODO Auto-generated method stub
+		getContents(null);
+	}
+
+	public Cursor getCursor() {
+
+		loaderManager.restartLoader(0, null, this);
+		return cursor;
+	}
+
+
 }

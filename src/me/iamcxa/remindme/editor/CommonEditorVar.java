@@ -7,20 +7,20 @@ package me.iamcxa.remindme.editor;
 public class CommonEditorVar {
 
 	// 顯示日期、時間對話方塊常數
-	public final int DATE_DIALOG_ID = 0;
-	public final int TIME_DIALOG_ID = 1;
+	//public final int DATE_DIALOG_ID = 0;
+	//public final int TIME_DIALOG_ID = 1;
+
+
+	//切割分類
+	public DateFields TaskDate = new DateFields();
+	public LocationFields TaskLocation = new LocationFields();
+	public TaskFields Task = new TaskFields();
+	public AlertFields TaskAlert= new AlertFields();
+	public TaskColorFields TaskCardColor= new TaskColorFields();
+
+	private CommonEditorVar(){}
 
 	public static CommonEditorVar EditorVarInstance = new CommonEditorVar();
-	
-	//切割分類
-	public DateVar TaskDate = new DateVar();
-	public LocationVar TaskLocation = new LocationVar();
-	public EditorFields Task = new EditorFields();
-	public TaskTypeVar TaskType= new TaskTypeVar();
-	public AlertVar TaskAlert= new AlertVar();
-	public OtherVar TaskOther= new OtherVar();
-	
-	private CommonEditorVar(){}
 
 	public static CommonEditorVar GetInstance(){
 		return EditorVarInstance;
@@ -28,140 +28,403 @@ public class CommonEditorVar {
 
 }
 
-//任務基本成員
-class EditorFields {
-	// 任務ID
+/*
+ * 任務基本成員
+ */
+class TaskFields {
+	public final int TASK_STATUS_UNFINISHED=0;
+	public final int TASK_STATUS_FINISHED=1;
+	
+	// 1 - ID
 	private int taskId=0;
-	//任務標題/備註
+	// 2 - 標題 
 	private String title ="null";
+	// 3 - 狀態  - 0未完成 - 1完成
+	private int status=0;
+	// 4 - 備註
 	private String content ="null";
-	//任務到期日/建立日
-	private String dueDateTime ="null";
-	private String dueDateString ="null";
-	private String created ="null";
-
+	// 5 - 到期日 - 毫秒
+	private long due_date_millis=0;
+	// 6 - 到期日  - 字串
+	private String due_date_string="null";
+	// 7 - 任務卡片顏色代號
+	private int color=0;
+	// 8 - 優先權
+	private int priority=0;
+	// 9 - 此任務新增時間 
+	private long created=0;
+	// 10- 分類id 
+	private int category_id=0;
+	// 11- 專案id
+	private int project_id=0;
+	// 12- 協作者uid 
+	private String collaborator_id="null";
+	// 13- 同步任務id
+	private int sync_id=0;
+	// 14- 任務地點id
+	private int location_id=0;
+	// 15- 標籤id - 分割字串
+	private String tag_id="null";
+	
 	//---------------Getter/Setter-----------------//
+	
+	/**
+	 * @return the taskId
+	 */
 	public int getTaskId() {
 		return taskId;
 	}
+	/**
+	 * @param taskId the taskId to set
+	 */
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
 	}
+	/**
+	 * @return the title
+	 */
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String tittle) {
-		this.title = tittle;
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
+	/**
+	 * @return the status
+	 */
+	public int getStatus() {
+		return status;
+	}
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	/**
+	 * @return the content
+	 */
 	public String getContent() {
 		return content;
 	}
+	/**
+	 * @param content the content to set
+	 */
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getCreated() {
+	/**
+	 * @return the due_date_millis
+	 */
+	public long getDue_date_millis() {
+		return due_date_millis;
+	}
+	/**
+	 * @param due_date_millis the due_date_millis to set
+	 */
+	public void setDue_date_millis(long due_date_millis) {
+		this.due_date_millis = due_date_millis;
+	}
+	/**
+	 * @return the due_date_string
+	 */
+	public String getDue_date_string() {
+		return due_date_string;
+	}
+	/**
+	 * @param due_date_string the due_date_string to set
+	 */
+	public void setDue_date_string(String due_date_string) {
+		this.due_date_string = due_date_string;
+	}
+	/**
+	 * @return the color
+	 */
+	public int getColor() {
+		return color;
+	}
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(int color) {
+		this.color = color;
+	}
+	/**
+	 * @return the priority
+	 */
+	public int getPriority() {
+		return priority;
+	}
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	/**
+	 * @return the created
+	 */
+	public long getCreated() {
 		return created;
 	}
-	public void setCreated(String created) {
+	/**
+	 * @param created the created to set
+	 */
+	public void setCreated(long created) {
 		this.created = created;
 	}
-	public String getDueDateString() {
-		return dueDateString;
+	/**
+	 * @return the category_id
+	 */
+	public int getCategory_id() {
+		return category_id;
 	}
-	public void setDueDateString(String dueDateString) {
-		this.dueDateString = dueDateString;
+	/**
+	 * @param category_id the category_id to set
+	 */
+	public void setCategory_id(int category_id) {
+		this.category_id = category_id;
 	}
-	public String getDueDateTime() {
-		return dueDateTime;
+	/**
+	 * @return the project_id
+	 */
+	public int getProject_id() {
+		return project_id;
 	}
-	public void setDueDateTime(String dueDateTime) {
-		this.dueDateTime = dueDateTime;
+	/**
+	 * @param project_id the project_id to set
+	 */
+	public void setProject_id(int project_id) {
+		this.project_id = project_id;
 	}
-
+	/**
+	 * @return the collaborator_id
+	 */
+	public String getCollaborator_id() {
+		return collaborator_id;
+	}
+	/**
+	 * @param collaborator_id the collaborator_id to set
+	 */
+	public void setCollaborator_id(String collaborator_id) {
+		this.collaborator_id = collaborator_id;
+	}
+	/**
+	 * @return the sync_id
+	 */
+	public int getSync_id() {
+		return sync_id;
+	}
+	/**
+	 * @param sync_id the sync_id to set
+	 */
+	public void setSync_id(int sync_id) {
+		this.sync_id = sync_id;
+	}
+	/**
+	 * @return the location_id
+	 */
+	public int getLocation_id() {
+		return location_id;
+	}
+	/**
+	 * @param location_id the location_id to set
+	 */
+	public void setLocation_id(int location_id) {
+		this.location_id = location_id;
+	}
+	/**
+	 * @return the tag_id
+	 */
+	public String getTag_id() {
+		return tag_id;
+	}
+	/**
+	 * @param tag_id the tag_id to set
+	 */
+	public void setTag_id(String tag_id) {
+		this.tag_id = tag_id;
+	}
 }
 
-//任務地點成員
-class LocationVar {
-	//任務地點名稱/座標
-	private String locationName ="null";
-	private String coordinate ="null";
-	// gps使用時間
-	private int GpsUseTime = 0;
-	// 經緯度
-	private Double Latitude=0.0;
-	private Double Longitude=0.0;
+/*
+ * 任務地點成員
+ */
+class LocationFields {
+	// 1 - 任務地點id
+	private int locationId=0;
+	// 2 - 地點名稱字串
+	private String name ="null";
+	// 3 - 4 - 經緯度
+	private Double lat=0.0;
+	private Double lon=0.0;
+	// 5 - 與上次偵測地點之距離
+	private Double distance=0.0;
+	// 6 - 上次使用時間
+	private long lastUsedTime=0;
+	
+	// 額外欄位  - 資料庫目前沒有存入
 	// 是否有搜尋過地點
 	private Boolean isSearched = false;
 	private Boolean isDropped = false;
-	private Double Distance=0.0;
-
+	// gps使用時間
+	private int gpsUseTime = 0;
+	
 	//---------------Getter/Setter-----------------//
-	public String getLocationName() {
-		return locationName;
+
+	/**
+	 * @return the LocationId
+	 */
+	public int getLocationId() {
+		return locationId;
 	}
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
+	/**
+	 * @param LocationId the LocationId to set
+	 */
+	public void setLocationId(int _id) {
+		this.locationId = _id;
 	}
-	public String getCoordinate() {
-		return coordinate;
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
 	}
-	public void setCoordinate(String coordinate) {
-		this.coordinate = coordinate;
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
-	public int getGpsUseTime() {
-		return GpsUseTime;
+	/**
+	 * @return the lat
+	 */
+	public Double getLat() {
+		return lat;
 	}
-	public void setGpsUseTime(int gpsUseTime) {
-		GpsUseTime = gpsUseTime;
+	/**
+	 * @param lat the lat to set
+	 */
+	public void setLat(Double lat) {
+		this.lat = lat;
 	}
-	public Double getLatitude() {
-		return Latitude;
+	/**
+	 * @return the lon
+	 */
+	public Double getLon() {
+		return lon;
 	}
-	public void setLatitude(Double latitude) {
-		Latitude = latitude;
+	/**
+	 * @param lon the lon to set
+	 */
+	public void setLon(Double lon) {
+		this.lon = lon;
 	}
-	public Double getLongitude() {
-		return Longitude;
+	/**
+	 * @return the distance
+	 */
+	public Double getDistance() {
+		return distance;
 	}
-	public void setLongitude(Double longitude) {
-		Longitude = longitude;
+	/**
+	 * @param distance the distance to set
+	 */
+	public void setDistance(Double distance) {
+		this.distance = distance;
 	}
-	public Boolean getIsdidSearch() {
+	/**
+	 * @return the lastUsedTime
+	 */
+	public long getLastUsedTime() {
+		return lastUsedTime;
+	}
+	/**
+	 * @param lastUsedTime the lastUsedTime to set
+	 */
+	public void setLastUsedTime(long lastUsedTime) {
+		this.lastUsedTime = lastUsedTime;
+	}
+	/**
+	 * @return the isSearched
+	 */
+	public Boolean getIsSearched() {
 		return isSearched;
 	}
-	public void setIsdidSearch(Boolean isdidSearch) {
-		this.isSearched = isdidSearch;
+	/**
+	 * @param isSearched the isSearched to set
+	 */
+	public void setIsSearched(Boolean isSearched) {
+		this.isSearched = isSearched;
 	}
+	/**
+	 * @return the isDropped
+	 */
 	public Boolean getIsDropped() {
 		return isDropped;
 	}
+	/**
+	 * @param isDropped the isDropped to set
+	 */
 	public void setIsDropped(Boolean isDropped) {
 		this.isDropped = isDropped;
 	}
-	public Double getDistance() {
-		return Distance;
+	/**
+	 * @return the gpsUseTime
+	 */
+	public int getGpsUseTime() {
+		return gpsUseTime;
 	}
-	public void setDistance(Double distance) {
-		Distance = distance;
+	/**
+	 * @param gpsUseTime the gpsUseTime to set
+	 */
+	public void setGpsUseTime(int gpsUseTime) {
+		this.gpsUseTime = gpsUseTime;
 	}
 }
 
-//任務提醒成員
-class AlertVar {
-
-	//任務是否提醒/提醒時間/提醒週期
+/*
+ * 任務提醒成員
+ */
+class AlertFields {
+	// 1 - 提醒id
+	private int alertID=0;
+	// 2 - 到期日 - 毫秒
 	private long due_date_millis=0;
+	// 3 - 到期日 - 字串
 	private String due_date_string="null";
+	// 4 - 觸發間隔
 	private long interval=0;
+	// 5 - 提醒事件包含的地點id
 	private int loc_id=0;
-	private boolean loc_on=false;
+	// 6 - 是否開啟靠近地點提醒
+	private int loc_on=0;
+	// 7 - 地點靠近提醒半徑
 	private int loc_radius=0;
+	// 8 - 備用欄位
 	private String other="null";
+	// 9 - 對應任務id
 	private int task_id=0;
+	// 10- 時間修正
 	private int time_offset=0;
+	// 11- 提醒類型
 	private int type=0;
-
+	
 	//---------------Getter/Setter-----------------//
+	/**
+	 * @return the alertID
+	 */
+	public int getAlertID() {
+		return alertID;
+	}
+	/**
+	 * @param alertID the alertID to set
+	 */
+	public void setAlertID(int alertID) {
+		this.alertID = alertID;
+	}
 	/**
 	 * @return the due_date_millis
 	 */
@@ -213,13 +476,13 @@ class AlertVar {
 	/**
 	 * @return the loc_on
 	 */
-	public boolean isLoc_on() {
+	public int getLoc_on() {
 		return loc_on;
 	}
 	/**
 	 * @param loc_on the loc_on to set
 	 */
-	public void setLoc_on(boolean loc_on) {
+	public void setLoc_on(int loc_on) {
 		this.loc_on = loc_on;
 	}
 	/**
@@ -282,10 +545,11 @@ class AlertVar {
 	public void setType(int type) {
 		this.type = type;
 	}
+
 }
 
 //日期成員
-class DateVar {
+class DateFields {
 
 	// 日期
 	protected int mYear=0;
@@ -300,6 +564,7 @@ class DateVar {
 	protected long mDatePulsTimeMillis=0;
 
 	//---------------Getter/Setter-----------------//
+	
 	public int getmYear() {
 		return mYear;
 	}
@@ -342,71 +607,26 @@ class DateVar {
 	public void setmDatePulsTimeMillis(long mDatePulsTimeMillis) {
 		this.mDatePulsTimeMillis = mDatePulsTimeMillis;
 	}
+
 }
 
-//任務類型/標籤/優先成員
-class TaskTypeVar{
-
-	//任務優先等級
-	private int priority=0;
-	//任務分類
-	private String category="null";
-	//任務標籤
-	private String tag="null";
-	private String level="null";
-
+class TaskColorFields{
+	private int taskDefaultColor=0;
+	
 	//---------------Getter/Setter-----------------//
-	public int getPriority() {
-		return priority;
-	}
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
-	public String getTag() {
-		return tag;
-	}
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-	public String getLevel() {
-		return level;
-	}
-	public void setLevel(String level) {
-		this.level = level;
-	}
-}
 
-// 其他成員
-class OtherVar{
-
-	//任務顏色
-	private String collaborator="null";
-	private String google_cal_sync_id="null";
-	private int task_color=0;
-
-	//---------------Getter/Setter-----------------//
-	public int getTask_color() {
-		return task_color;
+	/**
+	 * @return the taskDefault
+	 */
+	public int getTaskDefaultColor() {
+		return taskDefaultColor;
 	}
-	public String getCollaborator() {
-		return collaborator;
+	/**
+	 * @param taskDefault the taskDefault to set
+	 */
+	public void setTaskDefaultColor(int taskDefaultColor) {
+		this.taskDefaultColor = taskDefaultColor;
 	}
-	public String getGoogle_cal_sync_id() {
-		return google_cal_sync_id;
-	}
-	public void setCollaborator(String collaborator) {
-		this.collaborator = collaborator;
-	}
-	public void setGoogle_cal_sync_id(String google_cal_sync_id) {
-		this.google_cal_sync_id = google_cal_sync_id;
-	}
-	public void setTask_color(int task_color) {
-		this.task_color = task_color;
-	}
+	
+	
 }

@@ -12,9 +12,11 @@ public class MyCalendar {
 	private MyCalendar() {
 	}
 
-	/***********************/
-	/** getDaysLeft **/
-	/***********************/
+	/**
+	 * @return 取得今天與輸入日期相距多久
+	 * @param {TaskDate} 要比對的日期
+	 * @param {Option} 輸入是否含有 HH:mm
+	 */
 	public static long getDaysLeft(String TaskDate, int Option) {
 		// 定義時間格式
 		// java.text.SimpleDateFormat sdf = new
@@ -27,7 +29,7 @@ public class MyCalendar {
 
 		// 取得現在時間
 		//Date now = new Date();
-		String nowDate = sdf.format(getToday());
+		String nowDate = sdf.format(getNow());
 		MyDebug.MakeLog(0, "now:" + nowDate + ", task:" + TaskDate);
 		try {
 			// 取得事件時間與現在時間
@@ -52,19 +54,30 @@ public class MyCalendar {
 			return -1;
 		}
 	}
-
+	
+	/**
+	 * @return 取得未來n天的毫秒數
+	 * @param {Days} 未來天數, 0即為今天
+	 */
 	public static long getNextFewDays(int Days) {
 		long NextFewDays=System.currentTimeMillis()+( 60 * 60 * 24 * 1000 * Days);//N天的毫秒數;
 		return NextFewDays;
 
 	}
-
-	public static long getToday() {
+	
+	/**
+	 * @return 取得現在當下的毫秒數
+	 */
+	public static long getNow() {
 		long curDate=System.currentTimeMillis();
 		return curDate;
 	}
 	
-	
+	/**
+	 * @return 將輸入的的毫秒數轉換為文字 YYYY/MM/DD 後輸出 
+	 * @param {A_Time_In_Milliseconds} 要被轉換的毫秒數
+	 * @param {IsNeedHourAndMins} 是否需要輸出小時/分鐘
+	 */
 	public static String getDate_From_TimeMillis(boolean IsNeedHourAndMins,long A_Time_In_Milliseconds ) {
 		SimpleDateFormat sdf = null;
 		if (IsNeedHourAndMins) {
@@ -76,7 +89,11 @@ public class MyCalendar {
 		MyDebug.MakeLog(1, "MyCalendar Millis->Date function\n,start with raw long="+A_Time_In_Milliseconds+", result="+nowDate);
 		return nowDate;
 	}
-
+	
+	/**
+	 * @return 由輸入的 YYYY/MM/DD 轉換為毫秒數輸出
+	 * @param {A_Date} 要被轉換的毫秒數
+	 */
 	public static long getTimeMillis_From_Date(String A_Date) {
 		String[] mTimeMillis={""};
 		MyDebug.MakeLog(0, "A_Date="+A_Date);

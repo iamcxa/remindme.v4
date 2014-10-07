@@ -12,8 +12,9 @@ import android.provider.BaseColumns;
  */
 public final class ColumnTask implements BaseColumns {
 
-	private ColumnTask() {
+	private ColumnTask() {	
 	}
+	
 	// 預設排序常數
 	public static final String DEFAULT_SORT_ORDER = "created DESC";
 
@@ -110,7 +111,9 @@ public final class ColumnTask implements BaseColumns {
 		public static final int location_id = 14;
 	}
 
-	// 其他欄位常數
+	/*
+	 * 其他欄位常數
+	 */
 	public static class KEY {
 		public static final String _id = "_id";
 		//主要內容
