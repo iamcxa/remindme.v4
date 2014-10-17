@@ -1,6 +1,5 @@
 package me.iamcxa.remindme.editor;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import me.iamcxa.remindme.database.ColumnAlert;
@@ -8,23 +7,15 @@ import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import common.MyCalendar;
 import common.MyDebug;
-import android.R.integer;
-import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 /**
  * @author Kent
- * @version 20140930
+ * @version 20141007
  */
 public class Act_SaveToDb {
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
@@ -33,17 +24,18 @@ public class Act_SaveToDb {
 	private Context context;
 	private ContentValues values= new ContentValues();
 	private int taskId=0,alertId=0,locId=0,alertSelected=0,locSelected=0;
+	private int lastTaskID,lastLocID;
 
-	private setTableTasks setTableTasks;
-	private setTableAlert setTableAlert;
-	private setTableLocation setTableLocation;
-	private readDB readDB;
+	protected setTableTasks setTableTasks;
+	protected setTableAlert setTableAlert;
+	protected setTableLocation setTableLocation;
+	//private readDB readDB;
 
-	public Act_SaveToDb(Context context) {
+	public Act_SaveToDb(Context context,int lastTaskID,int lastLocID) {
 		super();
 		this.context = context;
-
-		mSetAlarm = new Act_SetAlarm(context);
+		this.lastTaskID=lastTaskID;
+		this.lastLocID=lastLocID;
 
 		// 取得日期與時間選擇器數值加總後的毫秒值
 		getTaskDueDateTime();
@@ -51,7 +43,10 @@ public class Act_SaveToDb {
 		// 寫入或更新資料庫
 		saveTableTasks();
 		saveTableAlert();
-		//saveTableLocation();
+		saveTableLocation();
+
+		mSetAlarm = new Act_SetAlarm(context,mEditorVar.TaskDate.getmDatePulsTimeMillis());
+		
 	}
 
 	// 取得日期與時間加總的到期日毫秒
@@ -85,17 +80,10 @@ public class Act_SaveToDb {
 	}
 
 	private void saveTableAlert() {
-		MyDebug.MakeLog(2, "readDB start");
-		readDB=new readDB(context);
-
-		MyDebug.MakeLog(2, "readDB starting");
-		//ArrayList<String> idList=readDB.getContents(readDB.getCursor());
-		//	String newId=idList.get(idList.size());
-		//	MyDebug.MakeLog(2, "newID="+newId);
 		values.clear();
 		// 設定對應 URI, 執行 SQL 命令
 		mUri=ColumnAlert.URI;
-		setTableAlert=new setTableAlert(values,"0");
+		setTableAlert=new setTableAlert(values,lastTaskID,lastLocID);
 		isSaveOrUpdate(values, alertId);
 	}
 
@@ -119,9 +107,11 @@ public class Act_SaveToDb {
 	// 寫入新資料
 	private boolean SaveIt(ContentValues values) {
 		try {
+			
+			
 			context.getContentResolver().insert(mUri, values);
 			Toast.makeText(context, "新事項已經儲存", Toast.LENGTH_SHORT).show();
-			if(alertSelected==1) mSetAlarm.SetIt(true);
+			//if(alertSelected==1)mSetAlarm.SetIt(true);
 			return true;
 		} catch (Exception e) {
 			Toast.makeText(context, "儲存出錯！", Toast.LENGTH_SHORT).show();
@@ -137,7 +127,7 @@ public class Act_SaveToDb {
 					taskId);
 			context.getContentResolver().update(uri, values, null, null);
 			Toast.makeText(context, "事項更新成功！", Toast.LENGTH_SHORT).show();
-			if(alertSelected==1) mSetAlarm.SetIt(true);
+			//if(alertSelected==1) mSetAlarm.SetIt(true);
 			return true;
 		} catch (Exception e) {
 			Toast.makeText(context, "儲存出錯！", Toast.LENGTH_SHORT).show();
@@ -291,11 +281,14 @@ class setTableLocation{
 class setTableAlert{
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 
-	int newId=0;
+	int newTaskId=0;
+	int newLocId=0;
 
-	public setTableAlert(ContentValues values, String newId) {
+	public setTableAlert(ContentValues values, int lastTaskID,int lastLocID) {
 		super();
-		this.newId=Integer.valueOf(newId);
+		this.newTaskId=lastTaskID+1;
+		this.newLocId=lastLocID+1;
+		MyDebug.MakeLog(2, "@newTaskId="+newTaskId+", newLocId="+newLocId);
 		getAlertFields();
 		setTaskAlert(values);
 	}
@@ -312,7 +305,9 @@ class setTableAlert{
 		// 設定提醒類型 - 0已結束 - 1時間到提醒
 		mEditorVar.TaskAlert.setType(1);
 		// 設定對應任務id
-		mEditorVar.TaskAlert.setTask_id(newId+1);
+		mEditorVar.TaskAlert.setTask_id(newTaskId);
+		//
+		mEditorVar.TaskAlert.setLoc_id(newLocId);
 
 		// 設定是否使用靠近地點提醒 - 取得地點id/地點開關/地點半徑
 		setAlertByLocation();
@@ -323,7 +318,7 @@ class setTableAlert{
 		//
 		//		}else{
 		//			// 設定偵測地點ID
-		//			mEditorVar.TaskAlert.setLoc_id(0);
+		//			mEditorVar.TaskAlert.setLoc_id(newLocId);
 		//			mEditorVar.TaskAlert.setLoc_on(0);
 		//			mEditorVar.TaskAlert.setLoc_radius(0);
 		//		}
@@ -341,6 +336,8 @@ class setTableAlert{
 		values.put(ColumnAlert.KEY.interval,mEditorVar.TaskAlert.getInterval());
 		// 5 - 提醒事件包含的地點id
 		values.put(ColumnAlert.KEY.loc_id,mEditorVar.TaskAlert.getLoc_id());
+		MyDebug.MakeLog(2, "@set newTaskId="+mEditorVar.TaskAlert.getLoc_id());
+		
 		// 6 - 是否開啟靠近地點提醒
 		values.put(ColumnAlert.KEY.loc_on,mEditorVar.TaskAlert.getLoc_on());
 		// 7 - 地點靠近提醒半徑
@@ -354,82 +351,4 @@ class setTableAlert{
 		// 11- 提醒類型
 		values.put(ColumnAlert.KEY.type,mEditorVar.TaskAlert.getType());
 	}
-}
-
-class readDB implements 
-LoaderCallbacks<Cursor>{
-
-	private  LoaderManager loaderManager;
-	private  SimpleAdapter mAdapter=null;
-	private  ArrayList<String> idList=null;
-	private  Loader<Cursor> loader;
-	private Context context;
-	private Cursor cursor=null;
-
-	public readDB(Context context){
-		super();
-		MyDebug.MakeLog(2, "readDB super");
-		this.context=context;
-loader.startLoading();
-
-		MyDebug.MakeLog(2, "readDB initLoader");
-
-	}
-
-
-	public ArrayList<String> getContents(Cursor data) {
-
-		data.moveToFirst();
-		ArrayList<String> contents = new ArrayList<String>();
-		while(!data.isAfterLast()) {
-			contents.add(data.getString(data.getColumnIndex("_id")));
-			data.moveToNext();
-		}
-		data.close();
-		String content[] = (String[]) contents.toArray(new String[0]);
-		MyDebug.MakeLog(2, content);
-
-
-
-		return contents;
-
-	}
-
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		//switch (id) {
-		//case 0:
-		String[] projection = ColumnTask.PROJECTION ;
-		String selection = ColumnTask.KEY._id; 
-		String sortOrder = ColumnTask.DEFAULT_SORT_ORDER;
-		String[] selectionArgs = null;
-		loader =  new CursorLoader(context,
-				ColumnTask.URI,
-				projection, selection, selectionArgs, sortOrder);
-		//break;
-		//}
-		return loader;
-	}
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		// TODO Auto-generated method stub
-		cursor=data;
-		//if(loader.getId()==0)
-		idList=getContents(data);
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		// TODO Auto-generated method stub
-		getContents(null);
-	}
-
-	public Cursor getCursor() {
-
-		loaderManager.restartLoader(0, null, this);
-		return cursor;
-	}
-
-
 }

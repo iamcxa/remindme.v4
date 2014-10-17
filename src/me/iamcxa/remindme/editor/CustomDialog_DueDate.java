@@ -144,7 +144,7 @@ OnTabChangeListener
 
 		// TimePicker
 		TimePicker tPicker=(TimePicker)dialoglayout.findViewById(R.id.timePicker01);
-		tPicker.setOnTimeChangedListener(timeChangedListener);
+		tPicker.setOnTimeChangedListener(this);
 		tPicker.setIs24HourView(true);
 	}
 

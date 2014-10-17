@@ -8,6 +8,7 @@ import common.MyTabListener;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
+import android.R.integer;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.LoaderManager;
@@ -28,7 +29,7 @@ implements
 OnMenuItemClickListener{
 
 	protected static Act_SaveToDb mSaveOrUpdate;
-
+	private ReadDB_BeforeSaveDB readDB;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -77,6 +78,9 @@ OnMenuItemClickListener{
 		final ActionBar actBar = getActionBar();
 		actBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+		//ReadDB_BeforeSaveDB readDB=new ReadDB_BeforeSaveDB(getApplicationContext());
+		//getLoaderManager().initLoader(readDB.LOADER_ID_TASKS, null, readDB.getDBTaskID);
+		//getLoaderManager().initLoader(readDB.LOADER_ID_LOCATION, null, readDB.getDBLocID);
 
 		Fragment fragMarriSug = TaskEditorMain.newInstance();
 		actBar.addTab(actBar.newTab()
@@ -103,10 +107,13 @@ OnMenuItemClickListener{
 		boolean isEmpty=(TaskEditorMain.getTaskTitle().contentEquals("null"));
 		if(!isEmpty){
 			try {
-				
-				mSaveOrUpdate=new Act_SaveToDb(getApplicationContext());
-				finish();
 
+				// 取得最
+
+				mSaveOrUpdate=new Act_SaveToDb(
+						getApplicationContext(),lastTaskID(),lastLocID());
+
+				finish();
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(),"ERROR:"+e.toString() , Toast.LENGTH_SHORT).show();
 			}
@@ -122,17 +129,105 @@ OnMenuItemClickListener{
 		// TODO Auto-generated method stub
 
 		String itemName=String.valueOf(item.getTitle());
-		
+
 		if (itemName.contentEquals( "action_add")){
 
 			btnActionAdd();
 
-		}else if (itemName.contentEquals( "action_cancel")) {
+			lastTaskID();
+			lastLocID();
+
+		}else if (itemName.contentEquals("action_help")) {
 			//btnActionCancel();//暫時取消此功能
+
 		}
 
 		return false;
 	}
+
+	// 抓地點id
+	private int lastLocID(){
+		Cursor c= getApplicationContext().getContentResolver().
+				query(ColumnLocation.URI, ColumnLocation.PROJECTION, null, null, 
+						ColumnLocation.DEFAULT_SORT_ORDER);
+		int data=0;
+		if (c != null) {
+			c.moveToLast();
+			data = c.getInt(0);
+			MyDebug.MakeLog(2,"lastLocID="+data);
+			c.close();
+		}
+		return data;
+	}
+
+	// 抓任務id
+	private int lastTaskID(){	
+		Cursor c= getApplicationContext().getContentResolver().
+				query(ColumnTask.URI, ColumnTask.PROJECTION, null, null, 
+						ColumnTask.DEFAULT_SORT_ORDER);		
+		int data = 0;
+		if (c != null) {
+			c.moveToLast();
+			data = c.getInt(0);
+			MyDebug.MakeLog(2,"lastTaskID="+data);
+			c.close();
+		}
+
+		return data;
+	}
+
+	// 將讀出資料轉換為  ArrayList 後輸出
+	private ArrayList<String> getContents(Cursor data) {
+
+		data.moveToFirst();
+
+		ArrayList<String> contents = new ArrayList<String>();
+
+		while(!data.isAfterLast()) {
+			contents.add(data.getString(data.getColumnIndex("_id")));
+			//contents.add(data.getString(data.getColumnIndex("title")));
+			//contents.add(data.getString(data.getColumnIndex("title")));
+			data.moveToLast();
+
+
+			String content =  contents.toArray().toString();
+			MyDebug.MakeLog(2, "content="+contents);
+
+			return contents;
+		}
+
+		data.close();
+
+		return null;
+
+	}
+
+	//
+	//	private int lastTaskID(){
+	//	Cursor c= getApplicationContext().
+	//				getContentResolver().
+	//				query(ColumnTask.URI, 
+	//						ColumnTask.PROJECTION, null, null, 
+	//						ColumnTask.DEFAULT_SORT_ORDER);
+	//	String[] data;
+	//		if (c != null) {
+	////		    while(c.moveToNext()) {
+	////		        data = new String[3];
+	////		        data[0] = Integer.toString(c.getInt(0));
+	////		        //data[1] = c.getString(1);
+	////		        //data[2] = Integer.toString(c.getInt(2));
+	////		        
+	////		        MyDebug.MakeLog(2,"lastTaskID="+data[0]);
+	////		    }
+	//			data = new String[3];
+	//			c.moveToLast();
+	//			data[0] = Integer.toString(c.getInt(0));
+	//			
+	//			 MyDebug.MakeLog(2,"lastTaskID="+data[0]);
+	//		    c.close();
+	//		}
+	//		return 0;
+	//	}
 
 
 

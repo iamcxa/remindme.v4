@@ -1,6 +1,6 @@
 package me.iamcxa.remindme.editor;
 
-import java.util.Calendar;
+import common.MyDebug;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -14,15 +14,19 @@ public class Act_SetAlarm {
 	int mDay;
 	int mHour;
 	int mMinute;
+	long alertTime;
 
-	public Act_SetAlarm(Context context) {
+	public Act_SetAlarm(Context context,long alertTime) {
 		// TODO Auto-generated constructor stub
 		super();
 		this.context = context;
+		this.alertTime=alertTime;
+		SetIt(true);
 	}
 
 	// 設定通知提示
 	public void SetIt(boolean flag) {
+		MyDebug.MakeLog(2, "@SetAlarm");
 
 		// 保存內容、日期與時間字串
 		String content = null;
@@ -41,18 +45,22 @@ public class Act_SetAlarm {
 		intent.putExtra("msg", content);
 
 		// 實例化PendingIntent
-		final PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent,
-				0);
+		final PendingIntent pi =
+				PendingIntent.getBroadcast(context, 0, intent,0);
 
 		// 取得系統時間
 		final long time1 = System.currentTimeMillis();
-		Calendar c = Calendar.getInstance();
+		//Calendar c = Calendar.getInstance();
 
-		c.set(mYear, mMonth, mDay, mHour, mMinute);
-		long time2 = c.getTimeInMillis();
-		if (flag && (time2 - time1) > 0) {
-			am.set(AlarmManager.RTC_WAKEUP, time2, pi);
+		//c.set(mYear, mMonth, mDay, mHour, mMinute);
+		//long time2 = c.getTimeInMillis();
+		if (flag && (alertTime - time1) > 0) {
+			
+			am.set(AlarmManager.RTC_WAKEUP, alertTime, pi);
+			
+			MyDebug.MakeLog(2, "@SetAlarm set="+alertTime);
 		} else {
+			MyDebug.MakeLog(2, "@SetAlarm set failed");
 			am.cancel(pi);
 		}
 

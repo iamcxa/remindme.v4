@@ -1,5 +1,7 @@
 package me.iamcxa.remindme.editor;
 
+import me.iamcxa.remindme.database.TaskDbProvider;
+
 /**
  * @author Kent
  * @version 20140930
@@ -17,6 +19,7 @@ public class CommonEditorVar {
 	public TaskFields Task = new TaskFields();
 	public AlertFields TaskAlert= new AlertFields();
 	public TaskColorFields TaskCardColor= new TaskColorFields();
+	public GetDBdata getDBdata=new GetDBdata();
 
 	private CommonEditorVar(){}
 
@@ -398,7 +401,7 @@ class AlertFields {
 	// 4 - 觸發間隔
 	private long interval=0;
 	// 5 - 提醒事件包含的地點id
-	private int loc_id=0;
+	private int loc_id=-1;
 	// 6 - 是否開啟靠近地點提醒
 	private int loc_on=0;
 	// 7 - 地點靠近提醒半徑
@@ -629,4 +632,17 @@ class TaskColorFields{
 	}
 	
 	
+}
+
+class GetDBdata{
+	
+	private TaskDbProvider taskDbProvider=new TaskDbProvider();
+	
+	
+	
+
+	public TaskDbProvider getTaskDbProvider() {
+		return taskDbProvider;
+	}
+
 }
