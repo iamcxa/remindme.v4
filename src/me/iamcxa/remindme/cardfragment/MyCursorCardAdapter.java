@@ -13,12 +13,16 @@ import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
 import it.gmariotti.cardslib.library.view.component.CardHeaderView;
 import me.iamcxa.remindme.R;
+import android.R.color;
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -43,7 +47,7 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 	private MyCursorCardAdapter(Context context) {
 		super(context);
 	}
-	
+
 	public static MyCursorCardAdapter newInstance(Context context) {
 		MyCursorCardAdapter adapter = new MyCursorCardAdapter(context);
 		return adapter;
@@ -81,11 +85,41 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 		header.setOtherButtonClickListener(new CardHeader.OnClickCardHeaderOtherButtonListener() {
 			@Override
 			public void onButtonItemClick(Card card, View view) {
-				Toast.makeText(getContext(), "Click on Other Button",
-						Toast.LENGTH_LONG).show();
 
+				String status=null;
+				cursor.moveToPosition(Integer.valueOf(card.getId()));
+
+				if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("0")){
+					Toast.makeText(getContext(), "設定為已完成",
+							Toast.LENGTH_LONG).show();
+					card.setBackgroundResourceId(R.drawable.card_background_gray);
+					status="1";
+				}else if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("1")){
+					Toast.makeText(getContext(), "設定為仍待辦",
+							Toast.LENGTH_LONG).show();
+					card.setBackgroundResourceId(R.drawable.card_background);
+					status="0";
+				}
+				if(status!=null){
+					ContentValues values=new ContentValues();
+					values.clear();
+					values.put(ColumnTask.KEY.status, status);
+					getContext().getContentResolver().update(ColumnTask.URI
+							, values
+							, "_id = "+cursor.getString(0)
+							, null);
+				}
+
+				
+				MyDebug.MakeLog(2, "@id="+cursor.getString(0));
+				MyDebug.MakeLog(2, "@cursor.getString(ColumnTask.KEY_INDEX.status)="
+						+cursor.getString(ColumnTask.KEY_INDEX.status));
 			}
 		});
+
+		// set color
+		if(cursor.getString(ColumnTask.KEY_INDEX.status)=="0") card.setBackgroundResourceId(Color.WHITE);
+		if(cursor.getString(ColumnTask.KEY_INDEX.status)=="1") card.setBackgroundResourceId(Color.GRAY);
 
 		// Set the header title
 		header.setTitle(card.mainHeader);
@@ -124,7 +158,7 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 			public boolean onLongClick(Card card, View view) {
 				// TODO Auto-generated method stubs
 
-				ShowLongClickMenu(cursor.getInt(0));
+				ShowLongClickMenu(cursor.getInt(0),card.getId());
 
 				return false;
 
@@ -265,7 +299,7 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 		resolverTask.delete(ColumnTask.URI,
 				ColumnTask.KEY._id + " = ? ",
 				//new String[] { this.getCardFromCursor(getCursor()).getId() });
-		new String[] { String.valueOf(id) });
+				new String[] { String.valueOf(id) });
 
 		// Alert PArt
 		ContentResolver resolverAlert = getContext().getContentResolver();
@@ -302,7 +336,7 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 
 
 
-	private AlertDialog ShowLongClickMenu(final int id) {
+	private AlertDialog ShowLongClickMenu(final int id,final String cardID) {
 
 		return new AlertDialog.Builder(getContext())
 		.setTitle("請選擇...")
@@ -313,19 +347,10 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 
 				switch (which) {
 				case 0:// 修改
-
+					mReadCardOnClick.readIt(cardID);
 					break;
 				case 1:// 刪除
 					removeCard(id);
-
-					break;
-				case 2:// 提高優先
-
-					break;
-				case 3:// 降低優先
-
-					break;
-				case 5:// 分享
 
 					break;
 				}

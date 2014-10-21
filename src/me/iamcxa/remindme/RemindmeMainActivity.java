@@ -68,7 +68,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	
+
 
 		MyPreferences.mPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
@@ -77,8 +77,8 @@ public class RemindmeMainActivity extends FragmentActivity {
 		loading_Frame=(FrameLayout)findViewById(R.id.loading_frame);
 		content_Frame=(FrameLayout)findViewById(R.id.content_frame);
 		fragmentLoading=new RemindmeFragment();
-		
-		
+
+
 		//RemindmeMainActivity.
 		//		fragmentManager.
 		//		beginTransaction().
@@ -179,8 +179,8 @@ public class RemindmeMainActivity extends FragmentActivity {
 		// update the main content by replacing fragments
 		fragment = getFragmentManager().findFragmentById(R.id.content_frame);
 		//if(fragment==null){
-			fragment = RemindmeFragment.newInstance();
-			args = new Bundle();
+		fragment = RemindmeFragment.newInstance();
+		args = new Bundle();
 		//}
 
 		// 傳遞所按位置索引
@@ -194,19 +194,19 @@ public class RemindmeMainActivity extends FragmentActivity {
 
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"RemindmeFragment").commit();
-		
+
 		drawerActions(position);
 	}
-	
+
 	private void drawerActions(int position){
 		// update selected item and title, then close the drawer
-				mDrawerList.setItemChecked(position, true);
-				this.setTitle(mPlanetTitles[position]);
-				this.getActionBar().setTitle(mPlanetTitles[position]);
-				mDrawerLayout.closeDrawer(mDrawerList);
-				mTitle =mPlanetTitles[position];
+		mDrawerList.setItemChecked(position, true);
+		this.setTitle(mPlanetTitles[position]);
+		this.getActionBar().setTitle(mPlanetTitles[position]);
+		mDrawerLayout.closeDrawer(mDrawerList);
+		mTitle =mPlanetTitles[position];
 
-				lastPosition=position;
+		lastPosition=position;
 	}
 
 	/**********************/
@@ -233,7 +233,6 @@ public class RemindmeMainActivity extends FragmentActivity {
 
 		// 定義：搜尋按鈕
 		MenuItem actionSearch = menu.findItem(R.id.action_search);
-		actionSearch.setVisible(false);
 		// 設定：點擊接收器
 		// mSearchView = (SearchView) actionSearch.getActionView();
 		// setSearchView(actionSearch);
@@ -245,6 +244,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 
 		// 定義：重整按鈕
 		MenuItem actionRefresh = menu.findItem(R.id.action_refresh);
+		
 		// 設定：點擊接收器
 		actionRefresh.setOnMenuItemClickListener(btnRefreshClick);
 
@@ -252,8 +252,21 @@ public class RemindmeMainActivity extends FragmentActivity {
 		MenuItem actionPref = menu.findItem(R.id.action_settings);
 		// 設定：點擊接收器
 		actionPref.setOnMenuItemClickListener(btnPrefClick);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+		
+		//MenuInflater inflater = getMenuInflater();
+		//inflater.inflate(R.menu.main, menu);
+		
+
+		//-------------------------------------------------------//
+		//                     									 //
+		//                     上架暫時關閉地點						 //
+		//                     									 //
+		//-------------------------------------------------------//
+		actionRefresh.setEnabled(false);
+		actionRefresh.setVisible(false);
+		actionSearch.setEnabled(false);
+		actionSearch.setVisible(false);
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -262,7 +275,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content view
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+		//menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -350,7 +363,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 			UpdataLocation.UpdateOncePriority();
 
 			ListCursorCardFragment.getmAdapter().notifyDataSetChanged();
-			
+
 
 			Act_SetAlarm mSetAlarm = new Act_SetAlarm(getApplicationContext(),System.currentTimeMillis()+1000,10);
 			mSetAlarm.SetIt();

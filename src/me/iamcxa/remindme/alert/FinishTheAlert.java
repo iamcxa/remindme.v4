@@ -15,7 +15,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class FinishTheAlert extends IntentService {
 
@@ -30,12 +33,27 @@ public class FinishTheAlert extends IntentService {
 		
 		Bundle b = intent.getExtras();
 		
-		String taskID=b.getString("taskID");
+		String taskID=b.getString("taskID");   
 		
-        NotificationManager nNotificationManager = 
+        NotificationManager nm = 
         		(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nNotificationManager.cancel(Integer.valueOf(taskID));
-		
-	}
+        
+        nm.cancel("remindme",Integer.valueOf(taskID));	
 
+		AlertHandler alertHandler=AlertHandler.getInstance();
+		
+        ShowToastInIntentService("任務 "+alertHandler.getTaskName(this, taskID) +"完成！");
+   	
+	}
+	
+	public void ShowToastInIntentService(final String sText)
+	{  final Context MyContext = this;
+	new Handler(Looper.getMainLooper()).post(new Runnable()
+	{  @Override public void run()
+	{  Toast toast1 = Toast.makeText(MyContext, sText, 5);
+	toast1.show(); 
+	}
+	});
+	};
+	
 }

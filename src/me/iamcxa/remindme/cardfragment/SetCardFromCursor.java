@@ -9,6 +9,7 @@ import me.iamcxa.remindme.database.ColumnTask;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 
 public class SetCardFromCursor {
 
@@ -82,6 +83,12 @@ public class SetCardFromCursor {
 			card.resourceIdThumb = R.drawable.tear_of_calendar;
 			card.LocationName = "沒有任務地點";
 		}
+		
+		// set color
+		if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("0")) 
+			card.setBackgroundResourceId(R.drawable.card_background);
+		if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("1")) 
+			card.setBackgroundResourceId(R.drawable.card_background_gray);
 
 
 		// 距離與地點資訊	

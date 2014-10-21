@@ -60,7 +60,7 @@
    		<!--==================================================================-->
         <activity
             android:name=".editor.TaskEditorTab"
-            android:screenOrientation="portrait" android:uiOptions="splitActionBarWhenNarrow" android:hardwareAccelerated="true">
+            android:screenOrientation="portrait" android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.new" />
             </intent-filter>

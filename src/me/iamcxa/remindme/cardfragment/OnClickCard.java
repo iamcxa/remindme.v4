@@ -51,17 +51,21 @@ public class OnClickCard {
 
 	private void ReadDatefromCursor() {
 		int taskId = cursor.getInt(0);
-//		String[] DatefromCursor={""};
-//		int i=0;
-//		for (String element : ColumnTask.PROJECTION) {
-//			DatefromCursor[i]=element;
-//			i+=1;
-//		}
+		//		String[] DatefromCursor={""};
+		//		int i=0;
+		//		for (String element : ColumnTask.PROJECTION) {
+		//			DatefromCursor[i]=element;
+		//			i+=1;
+		//		}
 
 		Bundle b = new Bundle();
 		//主要內容
-				b.putInt(ColumnTask.KEY._id,taskId);
-				b.putString(ColumnTask.KEY.title,cursor.getString(ColumnTask.KEY_INDEX.title));
+		b.putInt(ColumnTask.KEY._id,taskId);
+		b.putString(ColumnTask.KEY.title, cursor.getString(ColumnTask.KEY_INDEX.title));
+		b.putString(ColumnTask.KEY.content, cursor.getString(ColumnTask.KEY_INDEX.content));
+		b.putString(ColumnTask.KEY.due_date_millis, cursor.getString(ColumnTask.KEY_INDEX.due_date_millis));
+		b.putString(ColumnTask.KEY.due_date_string, cursor.getString(ColumnTask.KEY_INDEX.due_date_string));
+		
 
 		// 將備忘錄資訊添加到Intent
 		Intent intent = new Intent();

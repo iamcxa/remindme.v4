@@ -33,9 +33,6 @@
     <string-array name="Array_Task_List_Card_Long_Clcik_String">
         <item>修改</item>
         <item>刪除</item>
-		<item>提高優先權</item>
-        <item>降低優先權</item>
-        <item>分享</item>
     </string-array>
     <!-- Value -->
     <string-array name="Array_Task_List_Card_Long_Clcik_Value">

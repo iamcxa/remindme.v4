@@ -11,12 +11,12 @@ public class MyPreferences {
 
 	// isServiceOn
 	public static boolean IS_SERVICE_ON() {
-		return mPreferences.getBoolean("isServiceOn", true);
+		return mPreferences.getBoolean("isServiceOn", false);
 	};
 
 	// isServiceOn
 	public static boolean IS_SORTING_ON() {
-		return mPreferences.getBoolean("isSortingOn", true);
+		return mPreferences.getBoolean("isSortingOn", false);
 	};
 
 	// isServiceOn

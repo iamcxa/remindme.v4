@@ -7,6 +7,7 @@ import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import common.MyCalendar;
 import common.MyDebug;
+import android.R.integer;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,7 +32,7 @@ public class Act_SaveToDb {
 	protected setTableLocation setTableLocation;
 	//private readDB readDB;
 
-	public Act_SaveToDb(Context context,int lastTaskID,int lastLocID) {
+	public Act_SaveToDb(Context context,int thisTaskID,int lastTaskID,int lastLocID) {
 		super();
 		this.context = context;
 		this.lastTaskID=lastTaskID;
@@ -59,12 +60,12 @@ public class Act_SaveToDb {
 		int mDay=mEditorVar.TaskDate.getmDay();
 		int mHour=mEditorVar.TaskDate.getmHour();
 		int mMinute=mEditorVar.TaskDate.getmMinute();
+		MyDebug.MakeLog(2,"@selected Date plus time="+mYear+"/"+mMonth+"/"+mDay+"/"+mHour+":"+mMinute);
 
 		Calendar c = Calendar.getInstance();
-		c.set(mYear, mMonth, mDay, mHour, mMinute);
-		
-		MyDebug.MakeLog(2,"@selected Date plus time="+mYear+mMonth+mDay+mHour+mMinute);
-
+		c.clear();
+		c.set(mYear, mMonth-1, mDay, mHour, mMinute);	
+	
 		taskDueDateTime= c.getTimeInMillis();
 
 		mEditorVar.TaskDate.setmDatePulsTimeMillis(taskDueDateTime);
@@ -88,7 +89,7 @@ public class Act_SaveToDb {
 		if (isSaveOrUpdate(values, alertId)){
 			mSetAlarm = new Act_SetAlarm(context
 					,mEditorVar.TaskDate.getmDatePulsTimeMillis()
-					,lastTaskID
+					,lastTaskID+1
 					);
 			mSetAlarm.SetIt();
 		}
@@ -136,6 +137,7 @@ public class Act_SaveToDb {
 			context.getContentResolver().update(uri, values, null, null);
 			Toast.makeText(context, "事項更新成功！", Toast.LENGTH_SHORT).show();
 			//if(alertSelected==1) mSetAlarm.SetIt(true);
+			mEditorVar.Task.setTaskId(0);
 			return true;
 		} catch (Exception e) {
 			Toast.makeText(context, "儲存出錯！", Toast.LENGTH_SHORT).show();

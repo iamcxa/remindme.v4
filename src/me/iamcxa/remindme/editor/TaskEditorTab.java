@@ -28,6 +28,7 @@ public class TaskEditorTab extends FragmentActivity
 implements
 OnMenuItemClickListener{
 
+	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 	protected static Act_SaveToDb mSaveOrUpdate;
 	private ReadDB_BeforeSaveDB readDB;
 
@@ -111,8 +112,9 @@ OnMenuItemClickListener{
 				// ¨ú±o³Ì
 
 				mSaveOrUpdate=new Act_SaveToDb(
-						getApplicationContext(),lastTaskID(),lastLocID());
-
+						getApplicationContext()
+						,mEditorVar.Task.getTaskId()
+						,lastTaskID(),lastLocID());
 
 				finish();
 			} catch (Exception e) {
@@ -153,9 +155,10 @@ OnMenuItemClickListener{
 						ColumnLocation.DEFAULT_SORT_ORDER);
 		int data=0;
 		if (c != null) {
-			c.moveToLast();
-			data = c.getInt(0);
-			MyDebug.MakeLog(2,"lastLocID="+data);
+			if(c.moveToLast()){
+				data = c.getInt(0);
+				MyDebug.MakeLog(2,"lastLocID="+data);
+			}
 			c.close();
 		}
 		return data;
@@ -168,9 +171,10 @@ OnMenuItemClickListener{
 						ColumnTask.DEFAULT_SORT_ORDER);		
 		int data = 0;
 		if (c != null) {
-			c.moveToLast();
-			data = c.getInt(0);
-			MyDebug.MakeLog(2,"lastTaskID="+data);
+			if(c.moveToLast()){
+				if(!c.isNull(0)) data = c.getInt(0);
+				MyDebug.MakeLog(2,"lastTaskID="+data);
+			}
 			c.close();
 		}
 

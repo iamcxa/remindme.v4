@@ -2,13 +2,18 @@ package me.iamcxa.remindme.editor;
 
 import java.util.Calendar;
 
+import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.RemindmeReceiver_TaskAlert;
 import common.MyDebug;
+import common.MyPreferences;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 public class Act_SetAlarm {
 	Context context;
@@ -21,7 +26,7 @@ public class Act_SetAlarm {
 
 	public Act_SetAlarm(Context context
 						,long alertTime
-						,long taskID) {
+						,int taskID) {
 		// TODO Auto-generated constructor stub
 		super();
 		this.context = context;
@@ -32,6 +37,7 @@ public class Act_SetAlarm {
 	// 設定通知提示
 	public void SetIt() {
 		MyDebug.MakeLog(2, "@SetAlarm");
+		MyDebug.MakeLog(2, "@SetAlarm check taskID="+taskID);
 
 		// 保存內容、日期與時間字串
 		//String content = null;
@@ -44,7 +50,6 @@ public class Act_SetAlarm {
 
 		// 實例化Intent
 		Intent intent = new Intent(context,RemindmeReceiver_TaskAlert.class);
-
 		
 		// 設定Intent action屬性
 		intent.setAction(BC_ACTION);
@@ -69,7 +74,7 @@ public class Act_SetAlarm {
 		//long time2 = c.getTimeInMillis();
 		if ( (alertTime - time1) > 0) {
 			
-			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
+			am.set(AlarmManager.RTC_WAKEUP, alertTime, pi);
 
 			//MyDebug.MakeLog(2, "@SetAlarm set="+alertTime);
 			MyDebug.MakeLog(2, "@SetAlarm alertTime="+alertTime);

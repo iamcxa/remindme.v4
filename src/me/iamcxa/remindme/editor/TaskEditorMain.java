@@ -64,7 +64,7 @@ OnClickListener
 			init(getActivity().getIntent());
 		}
 	};
-	  
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ OnClickListener
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		
+
 		obtainData();
 
 		if(savedInstanceState==null){
@@ -122,13 +122,25 @@ OnClickListener
 		tasklocation=(Spinner)getView().findViewById(R.id.spinnerTextLocation);
 		tasklocation.setAdapter(setLocationArray(c));
 		tasklocation.setOnItemSelectedListener(test);
+
 		taskBtnLocation=(ImageButton)getView().findViewById(R.id.imageButtonSetLocation);
 		taskBtnLocation.setOnClickListener(this);
 
 		// btnMore 
 		btnMore=(Button)getView().findViewById(R.id.btnMore);
-		btnMore.setEnabled(true);
 		btnMore.setOnClickListener(this);
+
+		//-------------------------------------------------------//
+		//                     									 //
+		//                     上架暫時關閉地點						 //
+		//                     									 //
+		//-------------------------------------------------------//
+		tasklocation.setEnabled(false);
+		tasklocation.setVisibility(View.GONE);
+		taskBtnLocation.setEnabled(false);
+		taskBtnLocation.setVisibility(View.GONE);
+		btnMore.setEnabled(false);
+		btnMore.setVisibility(View.GONE);
 
 		/*
 		 * 
@@ -155,7 +167,7 @@ OnClickListener
 		taskProject.setVisibility(View.GONE);
 
 	}
-	
+
 	private OnItemSelectedListener test=new OnItemSelectedListener() {
 
 		@Override
@@ -167,7 +179,7 @@ OnClickListener
 			Cursor c= getActivity().getContentResolver().
 					query(ColumnLocation.URI, ColumnLocation.PROJECTION, "name = ?",aa, 
 							ColumnLocation.DEFAULT_SORT_ORDER);
-			
+
 			if (c.moveToFirst()) {
 				MyDebug.MakeLog(2,"地點id="+c.getInt(0));
 				MyDebug.MakeLog(2,"地點名稱="+c.getString(1));
@@ -175,19 +187,19 @@ OnClickListener
 						,"地點id="+c.getInt(0)+"\n地點名稱="+c.getString(1)
 
 						, Toast.LENGTH_SHORT).show();
-				
-				
+
+
 				c.close();
 			}
-			
-			
-			
+
+
+
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> parent) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
 
@@ -210,32 +222,35 @@ OnClickListener
 
 
 			mEditorVar.Task.setTaskId(b.getInt(ColumnTask.KEY._id));
+			MyDebug.MakeLog(2, "@edit main id="+b.getInt(ColumnTask.KEY._id));
 			TaskEditorMain.setTaskTitle(b.getString(ColumnTask.KEY.title));
 			TaskEditorMain.setTaskDueDate(b.getString(ColumnTask.KEY.due_date_string));
-			TaskEditorMain.setTaskContent(b.getString(ColumnTask.KEY.content));
+			if(!b.getString(ColumnTask.KEY.content).equalsIgnoreCase("null")){
+				TaskEditorMain.setTaskContent(b.getString(ColumnTask.KEY.content));
+			}
 		}
 	}
 
 	//--------------任務地點選擇器---------------//
-//	@SuppressLint("InflateParams")
-//	private TaskEditorMain ShowTaskLocationSelectMenu() {
-//		LayoutInflater inflater = LayoutInflater.from(getActivity());
-//		View mview = inflater.inflate(
-//				R.layout.activity_task_editor_tab_location,	null);
-//		new AlertDialog.Builder(getActivity())
-//		.setTitle(getResources().getString(R.string.TaskEditor_Field_Location_Tittle))
-//		.setView(mview)
-//
-//		//		.setItems(R.array.Array_TaskEditor_btnTaskDueDate_String,
-//		//				new DialogInterface.OnClickListener() {
-//		//			public void onClick(DialogInterface dialog,
-//		//					int which) {
-//		//				
-//		//			}})
-//
-//		.show();
-//		return this;
-//	}
+	//	@SuppressLint("InflateParams")
+	//	private TaskEditorMain ShowTaskLocationSelectMenu() {
+	//		LayoutInflater inflater = LayoutInflater.from(getActivity());
+	//		View mview = inflater.inflate(
+	//				R.layout.activity_task_editor_tab_location,	null);
+	//		new AlertDialog.Builder(getActivity())
+	//		.setTitle(getResources().getString(R.string.TaskEditor_Field_Location_Tittle))
+	//		.setView(mview)
+	//
+	//		//		.setItems(R.array.Array_TaskEditor_btnTaskDueDate_String,
+	//		//				new DialogInterface.OnClickListener() {
+	//		//			public void onClick(DialogInterface dialog,
+	//		//					int which) {
+	//		//				
+	//		//			}})
+	//
+	//		.show();
+	//		return this;
+	//	}
 
 	//-----------------obtainData------------------//
 	private void obtainData() {

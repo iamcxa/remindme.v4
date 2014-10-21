@@ -19,6 +19,8 @@
     <color name="PagerSlidingTabStrip_dividerColor">#668ABD25</color>
 
     <!-- color card -->
+    <color name="card_background_white">#FFF</color>
+    <color name="card_background_gray">#e0e0e0</color>
     <color name="demo_card_background_color1">#FFBB33</color>
     <color name="demo_card_background_color2">#98CC00</color>
     <color name="demo_card_background_color3">#A966CC</color>
