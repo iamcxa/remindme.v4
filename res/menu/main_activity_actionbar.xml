@@ -9,7 +9,7 @@
     
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
-          android:title="action_settings"
+          android:title="@string/action_setting"
           android:showAsAction="never" 
           android:icon="@drawable/ic_action_settings"/>
     

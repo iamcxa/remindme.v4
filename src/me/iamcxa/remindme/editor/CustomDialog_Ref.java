@@ -81,8 +81,8 @@ public class CustomDialog_Ref extends AlertDialog
 		listView01Adapter = new ListView01Adapter(context);
 		listView01.setAdapter(listView01Adapter);
 
-		listView02Adapter = new ListView02Adapter(context);
-		listView02.setAdapter(listView02Adapter);
+		//listView02Adapter = new ListView02Adapter(context);
+		//listView02.setAdapter(listView02Adapter);
 
 		// bind a click listener to the listView01 list
 		listView01.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -95,14 +95,14 @@ public class CustomDialog_Ref extends AlertDialog
 		});
 
 		// bind a click listener to the listView02 list
-		listView02.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		{
-			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id)
-			{                   
-				// will dismiss the dialog
-				dismiss();          
-			}           
-		});
+//		listView02.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//		{
+//			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id)
+//			{                   
+//				// will dismiss the dialog
+//				dismiss();          
+//			}           
+//		});
 
 		// get our tabHost from the xml
 		TabHost tabs = (TabHost)dialoglayout.findViewById(R.id.TabHost01);

@@ -2,26 +2,26 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="Category 1" >
-            <SwitchPreference
-       android:defaultValue="true"
+        <SwitchPreference
+            android:defaultValue="true"
             android:enabled="true"
             android:key="isDebugMsgOn"
             android:summary="True of False"
             android:title="輸出debugmsg" />
         <SwitchPreference
-                      android:defaultValue="true"
+            android:defaultValue="false"
             android:enabled="true"
             android:key="isVibrationOn"
             android:summary="True of False"
             android:title="isVibrationOn" />
         <SwitchPreference
-               android:defaultValue="true"
+            android:defaultValue="false"
             android:enabled="true"
             android:key="isServiceOn"
             android:summary="True of False"
             android:title="service開關" />
         <SwitchPreference
-               android:defaultValue="true"
+            android:defaultValue="false"
             android:enabled="true"
             android:key="isSortingOn"
             android:summary="True of False"

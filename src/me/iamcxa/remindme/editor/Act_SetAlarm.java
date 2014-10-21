@@ -1,5 +1,8 @@
 package me.iamcxa.remindme.editor;
 
+import java.util.Calendar;
+
+import me.iamcxa.remindme.RemindmeReceiver_TaskAlert;
 import common.MyDebug;
 
 import android.app.AlarmManager;
@@ -14,22 +17,24 @@ public class Act_SetAlarm {
 	int mDay;
 	int mHour;
 	int mMinute;
-	long alertTime;
+	long alertTime,taskID;
 
-	public Act_SetAlarm(Context context,long alertTime) {
+	public Act_SetAlarm(Context context
+						,long alertTime
+						,long taskID) {
 		// TODO Auto-generated constructor stub
 		super();
 		this.context = context;
 		this.alertTime=alertTime;
-		SetIt(true);
+		this.taskID=taskID;
 	}
 
 	// 設定通知提示
-	public void SetIt(boolean flag) {
+	public void SetIt() {
 		MyDebug.MakeLog(2, "@SetAlarm");
 
 		// 保存內容、日期與時間字串
-		String content = null;
+		//String content = null;
 
 		final String BC_ACTION = "me.iamcxa.remindme.TaskReceiver";
 
@@ -38,27 +43,37 @@ public class Act_SetAlarm {
 				.getSystemService(Context.ALARM_SERVICE);
 
 		// 實例化Intent
-		Intent intent = new Intent();
+		Intent intent = new Intent(context,RemindmeReceiver_TaskAlert.class);
 
+		
 		// 設定Intent action屬性
 		intent.setAction(BC_ACTION);
-		intent.putExtra("msg", content);
+		intent.putExtra("msg", BC_ACTION);
+		intent.putExtra("taskID", taskID);
 
 		// 實例化PendingIntent
 		final PendingIntent pi =
-				PendingIntent.getBroadcast(context, 0, intent,0);
+				PendingIntent.getBroadcast(context, 1, intent,PendingIntent.FLAG_ONE_SHOT);
 
+		
+		Calendar cal = Calendar.getInstance();
+		// 設定於 3 分鐘後執行
+		cal.add(Calendar.SECOND, 10);
+	
+		
 		// 取得系統時間
 		final long time1 = System.currentTimeMillis();
 		//Calendar c = Calendar.getInstance();
 
 		//c.set(mYear, mMonth, mDay, mHour, mMinute);
 		//long time2 = c.getTimeInMillis();
-		if (flag && (alertTime - time1) > 0) {
+		if ( (alertTime - time1) > 0) {
 			
-			am.set(AlarmManager.RTC_WAKEUP, alertTime, pi);
-			
-			MyDebug.MakeLog(2, "@SetAlarm set="+alertTime);
+			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
+
+			//MyDebug.MakeLog(2, "@SetAlarm set="+alertTime);
+			MyDebug.MakeLog(2, "@SetAlarm alertTime="+alertTime);
+			MyDebug.MakeLog(2, "@SetAlarm cal 1min="+cal.getTimeInMillis());
 		} else {
 			MyDebug.MakeLog(2, "@SetAlarm set failed");
 			am.cancel(pi);
@@ -67,3 +82,6 @@ public class Act_SetAlarm {
 	}
 
 }
+
+
+

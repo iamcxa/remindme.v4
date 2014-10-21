@@ -43,9 +43,8 @@ public class Act_SaveToDb {
 		// 寫入或更新資料庫
 		saveTableTasks();
 		saveTableAlert();
-		saveTableLocation();
+		//saveTableLocation();
 
-		mSetAlarm = new Act_SetAlarm(context,mEditorVar.TaskDate.getmDatePulsTimeMillis());
 		
 	}
 
@@ -63,6 +62,8 @@ public class Act_SaveToDb {
 
 		Calendar c = Calendar.getInstance();
 		c.set(mYear, mMonth, mDay, mHour, mMinute);
+		
+		MyDebug.MakeLog(2,"@selected Date plus time="+mYear+mMonth+mDay+mHour+mMinute);
 
 		taskDueDateTime= c.getTimeInMillis();
 
@@ -84,7 +85,13 @@ public class Act_SaveToDb {
 		// 設定對應 URI, 執行 SQL 命令
 		mUri=ColumnAlert.URI;
 		setTableAlert=new setTableAlert(values,lastTaskID,lastLocID);
-		isSaveOrUpdate(values, alertId);
+		if (isSaveOrUpdate(values, alertId)){
+			mSetAlarm = new Act_SetAlarm(context
+					,mEditorVar.TaskDate.getmDatePulsTimeMillis()
+					,lastTaskID
+					);
+			mSetAlarm.SetIt();
+		}
 	}
 
 	private void saveTableLocation() {
@@ -111,7 +118,8 @@ public class Act_SaveToDb {
 			
 			context.getContentResolver().insert(mUri, values);
 			Toast.makeText(context, "新事項已經儲存", Toast.LENGTH_SHORT).show();
-			//if(alertSelected==1)mSetAlarm.SetIt(true);
+			
+			
 			return true;
 		} catch (Exception e) {
 			Toast.makeText(context, "儲存出錯！", Toast.LENGTH_SHORT).show();
@@ -287,8 +295,8 @@ class setTableAlert{
 	public setTableAlert(ContentValues values, int lastTaskID,int lastLocID) {
 		super();
 		this.newTaskId=lastTaskID+1;
-		this.newLocId=lastLocID+1;
-		MyDebug.MakeLog(2, "@newTaskId="+newTaskId+", newLocId="+newLocId);
+		this.newLocId=lastLocID;
+		MyDebug.MakeLog(2, "@newTaskId="+newTaskId+", selectedLocId="+newLocId);
 		getAlertFields();
 		setTaskAlert(values);
 	}

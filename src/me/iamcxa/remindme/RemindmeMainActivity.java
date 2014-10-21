@@ -7,6 +7,8 @@ import common.MyDebug;
 import common.MyPreferences;
 
 import me.iamcxa.remindme.cardfragment.ListCursorCardFragment;
+import me.iamcxa.remindme.editor.Act_SetAlarm;
+import me.iamcxa.remindme.editor.CommonEditorVar;
 import me.iamcxa.remindme.editor.TaskEditorTab;
 import me.iamcxa.remindme.provider.LocationGetter;
 import me.iamcxa.remindme.service.TaskSortingService;
@@ -41,6 +43,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 	/** Variables LOCALE **/
 	/**********************/
 	// Used in savedInstanceState
+	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 	private static ProgressDialog psDialog;
 	private static int lastPosition=9999;
 	private static Bundle args;
@@ -347,6 +350,10 @@ public class RemindmeMainActivity extends FragmentActivity {
 			UpdataLocation.UpdateOncePriority();
 
 			ListCursorCardFragment.getmAdapter().notifyDataSetChanged();
+			
+
+			Act_SetAlarm mSetAlarm = new Act_SetAlarm(getApplicationContext(),System.currentTimeMillis()+1000,10);
+			mSetAlarm.SetIt();
 
 			return false;
 		}

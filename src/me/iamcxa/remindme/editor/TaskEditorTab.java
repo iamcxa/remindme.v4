@@ -113,6 +113,7 @@ OnMenuItemClickListener{
 				mSaveOrUpdate=new Act_SaveToDb(
 						getApplicationContext(),lastTaskID(),lastLocID());
 
+
 				finish();
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(),"ERROR:"+e.toString() , Toast.LENGTH_SHORT).show();
@@ -137,7 +138,7 @@ OnMenuItemClickListener{
 			lastTaskID();
 			lastLocID();
 
-		}else if (itemName.contentEquals("action_help")) {
+		}else if (itemName.contentEquals("action_refresh")) {
 			//btnActionCancel();//暫時取消此功能
 
 		}

@@ -82,4 +82,7 @@
     <string name="String_Task_Editor_Dialog_BUTTON_NEUTRAL">不要時間</string>
     
 
+    <string name="String_Task_Editor_Date_Year">年</string>
+    <string name="String_Task_Editor_Date_Month">月</string>
+    <string name="String_Task_Editor_Date_Day">日</string>
 </resources>
