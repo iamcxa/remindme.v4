@@ -3,6 +3,8 @@
  */
 package me.iamcxa.remindme;
 
+import com.shamanland.fab.ShowHideOnScroll;
+
 import common.MyDebug;
 import common.MyPreferences;
 
@@ -20,15 +22,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.AdapterView;	
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -48,9 +49,9 @@ public class RemindmeMainActivity extends FragmentActivity {
 	private static int lastPosition=9999;
 	private static Bundle args;
 	private static Fragment fragment;
-	DrawerLayout mDrawerLayout;
+	private static DrawerLayout mDrawerLayout;
+	private static ActionBarDrawerToggle mDrawerToggle;
 	ListView mDrawerList;
-	ActionBarDrawerToggle mDrawerToggle;
 
 	CharSequence mDrawerTitle;
 	CharSequence mTitle;
@@ -79,13 +80,14 @@ public class RemindmeMainActivity extends FragmentActivity {
 		fragmentLoading=new RemindmeFragment();
 
 
+
 		//RemindmeMainActivity.
 		//		fragmentManager.
 		//		beginTransaction().
 		//		replace(R.id.loading_frame, RemindmeMainActivity.fragmentLoading,"loading").commit();
 
 		//setLoadingStart();
-		setLoadingEnd();
+		//setLoadingEnd();
 
 
 		setNavigationDrawer(savedInstanceState);
@@ -140,8 +142,8 @@ public class RemindmeMainActivity extends FragmentActivity {
 				this,                  /* host Activity */
 				mDrawerLayout,         /* DrawerLayout object */
 				R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-				R.string.drawer_open,  /* "open drawer" description for accessibility */
-				R.string.drawer_close  /* "close drawer" description for accessibility */
+				R.string.drawer_open//,  /* "open drawer" description for accessibility */
+				//R.string.drawer_close  /* "close drawer" description for accessibility */
 				) {
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle(mTitle);
@@ -244,7 +246,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 
 		// 定義：重整按鈕
 		MenuItem actionRefresh = menu.findItem(R.id.action_refresh);
-		
+
 		// 設定：點擊接收器
 		actionRefresh.setOnMenuItemClickListener(btnRefreshClick);
 
@@ -252,10 +254,10 @@ public class RemindmeMainActivity extends FragmentActivity {
 		MenuItem actionPref = menu.findItem(R.id.action_settings);
 		// 設定：點擊接收器
 		actionPref.setOnMenuItemClickListener(btnPrefClick);
-		
+
 		//MenuInflater inflater = getMenuInflater();
 		//inflater.inflate(R.menu.main, menu);
-		
+
 
 		//-------------------------------------------------------//
 		//                     									 //
@@ -266,7 +268,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 		actionRefresh.setVisible(false);
 		actionSearch.setEnabled(false);
 		actionSearch.setVisible(false);
-		
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -392,14 +394,11 @@ public class RemindmeMainActivity extends FragmentActivity {
 	};
 
 	public static void setLoadingEnd() {
-		//		RemindmeMainActivity.
-		//		fragmentManager.
-		//			beginTransaction().
-		//			remove(RemindmeMainActivity.fragmentLoading).commit();
 
 		RemindmeMainActivity.loading_Frame.setVisibility(View.GONE);
 		RemindmeMainActivity.content_Frame.setVisibility(View.VISIBLE);
 	}
+	
 	public static void setLoadingStart() {
 
 

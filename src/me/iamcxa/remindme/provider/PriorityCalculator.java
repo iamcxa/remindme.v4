@@ -11,8 +11,6 @@ import me.iamcxa.remindme.database.TaskDbEditor;
 
 import common.MyCalendar;
 import common.MyDebug;
-import common.CommonVar;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;

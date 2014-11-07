@@ -5,11 +5,6 @@ package common;
 
 import java.util.Locale;
 
-import android.content.Context;
-import android.net.Uri;
-import android.view.View;
-import android.widget.ProgressBar;
-
 /**
  * @author cxa
  */

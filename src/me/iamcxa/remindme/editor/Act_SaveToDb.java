@@ -7,7 +7,6 @@ import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import common.MyCalendar;
 import common.MyDebug;
-import android.R.integer;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;

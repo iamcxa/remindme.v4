@@ -67,7 +67,7 @@ public class ReadDB_BeforeSaveDB {
 			data.moveToNext();
 		}
 		data.close();
-		String content[] = (String[]) contents.toArray(new String[0]);
+		String content[] = contents.toArray(new String[0]);
 		MyDebug.MakeLog(2, content);
 
 		return contents;

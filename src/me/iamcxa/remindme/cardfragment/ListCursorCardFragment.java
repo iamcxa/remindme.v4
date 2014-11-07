@@ -18,6 +18,8 @@
 
 package me.iamcxa.remindme.cardfragment;
 
+import com.shamanland.fab.ShowHideOnScroll;
+
 import common.MyCalendar;
 import common.MyDebug;
 
@@ -26,14 +28,21 @@ import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.database.ColumnAlert;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
+import android.annotation.SuppressLint;
 import android.app.LoaderManager;
+import android.app.usage.UsageEvents.Event;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnGenericMotionListener;
+import android.view.View.OnHoverListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -73,6 +82,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	/********************/
 	/** Initialization **/
 	/********************/
+	@SuppressLint("ClickableViewAccessibility")
 	private void init() {
 
 		//int filter = getArguments().getInt(FILTER_STRING);
@@ -114,8 +124,29 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		mAdapter = MyCursorCardAdapter.newInstance(getActivity());
 		mListView = (CardListView) getActivity().findViewById(
 				R.id.carddemo_list_cursor);
-		if (mListView != null)mListView.setAdapter(mAdapter);
-		
+
+		if (mListView != null) {
+			mListView.setAdapter(mAdapter);
+
+			final View fab_add = getActivity().findViewById(R.id.fab_add);
+			fab_add.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+					//fab_add.setBackgroundColor(getResources().getColor(R.color.demo_card_background_color2));
+
+					//Toast.makeText(v.getContext(), R.string.TaskEditor_Field_Inbox, Toast.LENGTH_SHORT).show();
+				}
+			});
+			
+			
+
+			mListView.setOnTouchListener(new ShowHideOnScroll(fab_add));
+
+		}
+
+
+
 		// Force start background query to load sessions
 		getLoaderManager();
 		getLoaderManager().restartLoader(101, null, this);
@@ -182,7 +213,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		if (getActivity() == null) {
 			return;
 		}
-		
+
 		mAdapter.swapCursor(data);
 	}
 

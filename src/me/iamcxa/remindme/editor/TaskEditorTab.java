@@ -8,20 +8,14 @@ import common.MyTabListener;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
-import android.R.integer;
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class TaskEditorTab extends FragmentActivity 

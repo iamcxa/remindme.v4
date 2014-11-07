@@ -6,7 +6,6 @@ import common.MyCalendar;
 import common.MyDebug;
 
 import me.iamcxa.remindme.R;
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -164,6 +163,7 @@ OnTabChangeListener
 		// bind a click listener to the listView01 list
 		listView01.setOnItemClickListener(new AdapterView.OnItemClickListener()
 		{
+			@Override
 			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id)
 			{                   
 				// will dismiss the dialog
@@ -244,18 +244,18 @@ OnTabChangeListener
 	}
 
 	private Button getBtnNutral(){
-		Button nutralButton = getButton(AlertDialog.BUTTON_NEUTRAL);
+		Button nutralButton = getButton(DialogInterface.BUTTON_NEUTRAL);
 		return nutralButton;
 	}
 
 	private Button getBtnPositive(){
-		Button positiveButton = getButton(AlertDialog.BUTTON_POSITIVE);
+		Button positiveButton = getButton(DialogInterface.BUTTON_POSITIVE);
 		//Button negativeButton = getButton(AlertDialog.BUTTON_NEGATIVE);
 		return positiveButton;
 	}
 
 	private Button getBtnNegative(){
-		Button negativeButton = getButton(AlertDialog.BUTTON_NEGATIVE);
+		Button negativeButton = getButton(DialogInterface.BUTTON_NEGATIVE);
 		return negativeButton;
 	}
 
@@ -536,6 +536,7 @@ OnTabChangeListener
 		/**
 		 * This is used to return how many rows are in the list view
 		 */
+		@Override
 		public int getCount()
 		{
 			// add code here to determine how many results we have, hard coded for now
@@ -547,6 +548,7 @@ OnTabChangeListener
 		 * Should return whatever object represents one row in the
 		 * list.
 		 */
+		@Override
 		public Object getItem(int position)
 		{
 			return position;
@@ -555,6 +557,7 @@ OnTabChangeListener
 		/**
 		 * Used to return the id of any custom data object.
 		 */
+		@Override
 		public long getItemId(int position)
 		{
 			return position;
@@ -563,6 +566,7 @@ OnTabChangeListener
 		/**
 		 * This is used to define each row in the list view.
 		 */
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{            
 			View row = convertView;
@@ -620,6 +624,7 @@ OnTabChangeListener
 	/**
 	 * This is called when a long press occurs on our listView02 items.
 	 */
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -631,6 +636,7 @@ OnTabChangeListener
 	/**
 	 * This is called when an item in our context menu is clicked.
 	 */
+	@Override
 	public boolean onContextItemSelected(MenuItem item)
 	{  
 		if(item.getTitle() == "Delete")
@@ -669,7 +675,7 @@ OnTabChangeListener
 	public void onShow(DialogInterface dialog) {
 		// TODO Auto-generated method stub
 		// 啟動先隱藏放棄時間按鈕
-		getBtnNutral().setVisibility(ViewGroup.GONE);
+		getBtnNutral().setVisibility(View.GONE);
 
 		// 檢查TaskEditorMain中的TaskDueDate欄位長度
 		if(TaskEditorMain.getTaskDueDateStringLength()>0){
@@ -781,17 +787,17 @@ OnTabChangeListener
 		// TODO Auto-generated method stub
 		//which可以用來分辨是按下哪一個按鈕
 		switch (which) {
-		case Dialog.BUTTON_POSITIVE:	// save selected date/time
+		case DialogInterface.BUTTON_POSITIVE:	// save selected date/time
 
 			setBtnAction_Positive(dialog);
 
 			break;
-		case Dialog.BUTTON_NEUTRAL:		// 取消時間
+		case DialogInterface.BUTTON_NEUTRAL:		// 取消時間
 			setDialogShowing(dialog);
 			setBtnAction_Nutral();
 
 			break; 
-		case Dialog.BUTTON_NEGATIVE:	// 取消全部
+		case DialogInterface.BUTTON_NEGATIVE:	// 取消全部
 
 			setDialogDismiss(dialog);
 

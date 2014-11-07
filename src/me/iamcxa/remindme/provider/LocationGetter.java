@@ -1,7 +1,6 @@
 package me.iamcxa.remindme.provider;
 
 import common.MyDebug;
-import common.CommonVar;
 import common.MyPreferences;
 
 import android.content.Context;

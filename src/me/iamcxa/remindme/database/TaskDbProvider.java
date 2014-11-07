@@ -5,8 +5,6 @@ package me.iamcxa.remindme.database;
 
 import java.util.HashMap;
 import common.CommonVar;
-import common.MyDebug;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;

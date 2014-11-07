@@ -1,17 +1,12 @@
 package me.iamcxa.remindme.editor;
 
-import java.sql.Array;
-
 import common.CommonVar;
 import common.MyDebug;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.database.ColumnLocation;
 import me.iamcxa.remindme.database.ColumnTask;
 import android.app.Fragment;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;

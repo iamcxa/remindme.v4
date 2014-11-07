@@ -9,7 +9,6 @@ import me.iamcxa.remindme.database.ColumnTask;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 
 public class SetCardFromCursor {
 

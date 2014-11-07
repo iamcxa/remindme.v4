@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import android.R.integer;
-
 public class MyCalendar {
 
 	private MyCalendar() {

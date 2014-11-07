@@ -3,16 +3,13 @@
  */
 package me.iamcxa.remindme.service;
 
-import common.CommonVar;
 import common.MyDebug;
 import common.MyPreferences;
 
-import me.iamcxa.remindme.provider.GPSManager;
 import me.iamcxa.remindme.provider.LocationGetter;
 import me.iamcxa.remindme.provider.PriorityCalculator;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.RemindmeMainActivity;
-import me.iamcxa.remindme.provider.GPSCallback;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,7 +18,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;

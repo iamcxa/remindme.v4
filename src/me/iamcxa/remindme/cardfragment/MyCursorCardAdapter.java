@@ -13,8 +13,6 @@ import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
 import it.gmariotti.cardslib.library.view.component.CardHeaderView;
 import me.iamcxa.remindme.R;
-import android.R.color;
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -342,6 +340,7 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 		.setTitle("½Ð¿ï¾Ü...")
 		.setItems(R.array.Array_Task_List_Card_Long_Clcik_String,
 				new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog,
 					int which) {
 

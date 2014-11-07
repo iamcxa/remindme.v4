@@ -30,17 +30,13 @@ public class RemindmeFragment extends ProgressFragment   {
 			setContentShown(true);
 			FragmentManager fragmentManager = getFragmentManager();
 			fragment = getFragmentManager().findFragmentById(R.id.content_container);
-			//if(fragment==null){
-				fragment = ListCursorCardFragment.newInstance();
-		//	}
+			fragment = ListCursorCardFragment.newInstance();
 
-			//			int filter = getArguments().getInt(FILTER_STRING);
-			//			Bundle args = new Bundle();
-			//			args.putInt(RemindmeFragment.FILTER_STRING,filter);
-			//			
-			//			Fragment fragment= ListCursorCardFragment.newInstance();
-			//			fragment.setArguments(args);
-			fragmentManager.beginTransaction().replace(R.id.content_container, fragment,"ListCursorCardFragment").commit();
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.content_container, fragment,"ListCursorCardFragment")
+			.commit();
+			
 			MyDebug.MakeLog(0, "RemindmeFragment.run³Q°õ¦æ");
 		}
 
@@ -59,7 +55,7 @@ public class RemindmeFragment extends ProgressFragment   {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mContentView =inflater.inflate(R.layout.activity_loading, container, false);
+		mContentView =inflater.inflate(R.layout.activity_loading_container, container, false);
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	@Override

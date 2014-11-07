@@ -87,6 +87,7 @@ public class CustomDialog_Ref extends AlertDialog
 		// bind a click listener to the listView01 list
 		listView01.setOnItemClickListener(new AdapterView.OnItemClickListener()
 		{
+			@Override
 			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id)
 			{                   
 				// will dismiss the dialog
@@ -159,17 +160,17 @@ public class CustomDialog_Ref extends AlertDialog
 		public void onClick(DialogInterface dialog, int which) {
 			//which可以用來分辨是按下哪一個按鈕
 			switch (which) {
-			case Dialog.BUTTON_POSITIVE:  
+			case DialogInterface.BUTTON_POSITIVE:  
 				//快顯訊息
 				Toast.makeText(getContext(), "左邊按鈕",  
 						Toast.LENGTH_SHORT).show();
 				break; 
-			case Dialog.BUTTON_NEUTRAL:  
+			case DialogInterface.BUTTON_NEUTRAL:  
 				//快顯訊息
 				Toast.makeText(getContext(), "中間按鈕",  
 						Toast.LENGTH_SHORT).show();
 				break; 
-			case Dialog.BUTTON_NEGATIVE:  
+			case DialogInterface.BUTTON_NEGATIVE:  
 				//快顯訊息
 				Toast.makeText(getContext(), "右邊按鈕",  
 						Toast.LENGTH_SHORT).show();
@@ -188,13 +189,13 @@ public class CustomDialog_Ref extends AlertDialog
 			TabHost tabs = (TabHost)getWindow().findViewById(R.id.TabHost01);
 			String tag=tabs.getCurrentTabTag();
 			Toast.makeText(getContext(),tag,Toast.LENGTH_SHORT).show();
-			Button positiveButton = getButton(AlertDialog.BUTTON_POSITIVE);
-			Button negativeButton = getButton(AlertDialog.BUTTON_NEGATIVE);
-			Button nutralButton = getButton(AlertDialog.BUTTON_NEUTRAL);
-			 nutralButton.setVisibility(ViewGroup.GONE);
+			Button positiveButton = getButton(DialogInterface.BUTTON_POSITIVE);
+			Button negativeButton = getButton(DialogInterface.BUTTON_NEGATIVE);
+			Button nutralButton = getButton(DialogInterface.BUTTON_NEUTRAL);
+			 nutralButton.setVisibility(View.GONE);
 
-			if(tag=="tab1") nutralButton.setVisibility(ViewGroup.GONE);
-			if(tag=="tab2") nutralButton.setVisibility(ViewGroup.VISIBLE);
+			if(tag=="tab1") nutralButton.setVisibility(View.GONE);
+			if(tag=="tab2") nutralButton.setVisibility(View.VISIBLE);
 		}
 	};
 
@@ -212,6 +213,7 @@ public class CustomDialog_Ref extends AlertDialog
 		/**
 		 * This is used to return how many rows are in the list view
 		 */
+		@Override
 		public int getCount()
 		{
 			// add code here to determine how many results we have, hard coded for now
@@ -223,6 +225,7 @@ public class CustomDialog_Ref extends AlertDialog
 		 * Should return whatever object represents one row in the
 		 * list.
 		 */
+		@Override
 		public Object getItem(int position)
 		{
 			return position;
@@ -231,6 +234,7 @@ public class CustomDialog_Ref extends AlertDialog
 		/**
 		 * Used to return the id of any custom data object.
 		 */
+		@Override
 		public long getItemId(int position)
 		{
 			return position;
@@ -239,6 +243,7 @@ public class CustomDialog_Ref extends AlertDialog
 		/**
 		 * This is used to define each row in the list view.
 		 */
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{            
 			View row = convertView;
@@ -307,6 +312,7 @@ public class CustomDialog_Ref extends AlertDialog
 		/**
 		 * This is used to return how many rows are in the list view
 		 */
+		@Override
 		public int getCount()
 		{
 			// add code here to determine how many results we have, hard coded for now
@@ -318,6 +324,7 @@ public class CustomDialog_Ref extends AlertDialog
 		 * Should return whatever object represents one row in the
 		 * list.
 		 */
+		@Override
 		public Object getItem(int position)
 		{
 			return position;
@@ -326,6 +333,7 @@ public class CustomDialog_Ref extends AlertDialog
 		/**
 		 * Used to return the id of any custom data object.
 		 */
+		@Override
 		public long getItemId(int position)
 		{
 			return position;
@@ -334,6 +342,7 @@ public class CustomDialog_Ref extends AlertDialog
 		/**
 		 * This is used to define each row in the list view.
 		 */
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{            
 			View row = convertView;
@@ -370,6 +379,7 @@ public class CustomDialog_Ref extends AlertDialog
 	/**
 	 * This is called when a long press occurs on our listView02 items.
 	 */
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -381,6 +391,7 @@ public class CustomDialog_Ref extends AlertDialog
 	/**
 	 * This is called when an item in our context menu is clicked.
 	 */
+	@Override
 	public boolean onContextItemSelected(MenuItem item)
 	{  
 		if(item.getTitle() == "Delete")
