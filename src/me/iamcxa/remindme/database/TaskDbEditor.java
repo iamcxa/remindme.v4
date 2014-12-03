@@ -1,5 +1,6 @@
 package me.iamcxa.remindme.database;
 import me.iamcxa.remindme.database.TaskDbProvider.DatabaseHelper;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

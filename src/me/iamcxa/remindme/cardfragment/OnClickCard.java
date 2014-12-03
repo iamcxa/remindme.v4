@@ -1,11 +1,11 @@
 package me.iamcxa.remindme.cardfragment;
 
 
-import common.MyDebug;
-import common.CommonVar;
+import tw.remindme.common.function.CommonVar;
+import tw.remindme.common.function.MyDebug;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import me.iamcxa.remindme.database.ColumnTask;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 import me.iamcxa.remindme.editor.TaskEditorTab;
 import android.content.Context;
 import android.content.Intent;
@@ -61,10 +61,10 @@ public class OnClickCard {
 		Bundle b = new Bundle();
 		//主要內容
 		b.putInt(ColumnTask.KEY._id,taskId);
-		b.putString(ColumnTask.KEY.title, cursor.getString(ColumnTask.KEY_INDEX.title));
-		b.putString(ColumnTask.KEY.content, cursor.getString(ColumnTask.KEY_INDEX.content));
-		b.putString(ColumnTask.KEY.due_date_millis, cursor.getString(ColumnTask.KEY_INDEX.due_date_millis));
-		b.putString(ColumnTask.KEY.due_date_string, cursor.getString(ColumnTask.KEY_INDEX.due_date_string));
+		b.putString(ColumnTask.KEY.title, cursor.getString(ColumnTask.KEY.INDEX.title));
+		b.putString(ColumnTask.KEY.content, cursor.getString(ColumnTask.KEY.INDEX.content));
+		b.putString(ColumnTask.KEY.due_date_millis, cursor.getString(ColumnTask.KEY.INDEX.due_date_millis));
+		b.putString(ColumnTask.KEY.due_date_string, cursor.getString(ColumnTask.KEY.INDEX.due_date_string));
 		
 
 		// 將備忘錄資訊添加到Intent

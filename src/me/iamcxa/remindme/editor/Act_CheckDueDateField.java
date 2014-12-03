@@ -1,8 +1,8 @@
 package me.iamcxa.remindme.editor;
 
-import common.MyDebug;
+import tw.remindme.common.function.CommonVar;
+import tw.remindme.common.function.MyDebug;
 
-import common.CommonVar;
 
 public class Act_CheckDueDateField {
 

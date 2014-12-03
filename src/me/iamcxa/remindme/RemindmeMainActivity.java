@@ -3,10 +3,11 @@
  */
 package me.iamcxa.remindme;
 
+import tw.remindme.common.function.MyDebug;
+import tw.remindme.common.function.MyPreferences;
+
 import com.shamanland.fab.ShowHideOnScroll;
 
-import common.MyDebug;
-import common.MyPreferences;
 
 import me.iamcxa.remindme.cardfragment.ListCursorCardFragment;
 import me.iamcxa.remindme.editor.Act_SetAlarm;
@@ -14,18 +15,19 @@ import me.iamcxa.remindme.editor.CommonEditorVar;
 import me.iamcxa.remindme.editor.TaskEditorTab;
 import me.iamcxa.remindme.provider.LocationGetter;
 import me.iamcxa.remindme.service.TaskSortingService;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;   
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +41,7 @@ import android.widget.Toast;
 /**
  * @author cxa Main Activity
  */
-public class RemindmeMainActivity extends FragmentActivity {
+public class RemindmeMainActivity extends ActionBarActivity {
 	/**********************/
 	/** Variables LOCALE **/
 	/**********************/
@@ -74,21 +76,16 @@ public class RemindmeMainActivity extends FragmentActivity {
 		MyPreferences.mPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 
-		fragmentManager = getFragmentManager();
+		fragmentManager = getSupportFragmentManager();
 		loading_Frame=(FrameLayout)findViewById(R.id.loading_frame);
 		content_Frame=(FrameLayout)findViewById(R.id.content_frame);
 		fragmentLoading=new RemindmeFragment();
 
 
 
-		//RemindmeMainActivity.
-		//		fragmentManager.
-		//		beginTransaction().
-		//		replace(R.id.loading_frame, RemindmeMainActivity.fragmentLoading,"loading").commit();
-
-		//setLoadingStart();
-		//setLoadingEnd();
-
+		// set toolbar
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
 		setNavigationDrawer(savedInstanceState);
 		setViewComponent();
@@ -133,8 +130,8 @@ public class RemindmeMainActivity extends FragmentActivity {
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the sliding drawer and the action bar app icon
@@ -146,12 +143,12 @@ public class RemindmeMainActivity extends FragmentActivity {
 				//R.string.drawer_close  /* "close drawer" description for accessibility */
 				) {
 			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
+				getSupportActionBar().setTitle(mTitle);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(mDrawerTitle);
+				getSupportActionBar().setTitle(mDrawerTitle);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
 		};
@@ -179,7 +176,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 		// setLoadingStart();
 
 		// update the main content by replacing fragments
-		fragment = getFragmentManager().findFragmentById(R.id.content_frame);
+		fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
 		//if(fragment==null){
 		fragment = RemindmeFragment.newInstance();
 		args = new Bundle();
@@ -194,7 +191,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 
 		MyDebug.MakeLog(0, "position@MainActivity="+position);
 
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment,"RemindmeFragment").commit();
 
 		drawerActions(position);
@@ -204,7 +201,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
 		this.setTitle(mPlanetTitles[position]);
-		this.getActionBar().setTitle(mPlanetTitles[position]);
+		this.getSupportActionBar().setTitle(mPlanetTitles[position]);
 		mDrawerLayout.closeDrawer(mDrawerList);
 		mTitle =mPlanetTitles[position];
 
@@ -293,7 +290,7 @@ public class RemindmeMainActivity extends FragmentActivity {
 		case R.id.action_websearch:
 			// create intent to perform web search for this planet
 			Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-			intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
+			intent.putExtra(SearchManager.QUERY, getSupportActionBar().getTitle());
 			// catch event that there's no activity to handle intent
 			if (intent.resolveActivity(getPackageManager()) != null) {
 				startActivity(intent);

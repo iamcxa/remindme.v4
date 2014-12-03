@@ -3,7 +3,7 @@
  */
 package me.iamcxa.remindme.cardfragment;
 
-import common.MyDebug;
+import tw.remindme.common.function.MyDebug;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardCursorAdapter;
@@ -27,8 +27,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import me.iamcxa.remindme.cardfragment.SetCardFromCursor;
-import me.iamcxa.remindme.database.ColumnAlert;
-import me.iamcxa.remindme.database.ColumnTask;
+import me.iamcxa.remindme.database.columns.ColumnAlert;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 
 /**
  * @author cxa
@@ -87,12 +87,12 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 				String status=null;
 				cursor.moveToPosition(Integer.valueOf(card.getId()));
 
-				if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("0")){
+				if(cursor.getString(ColumnTask.KEY.INDEX.status).equalsIgnoreCase("0")){
 					Toast.makeText(getContext(), "設定為已完成",
 							Toast.LENGTH_LONG).show();
 					card.setBackgroundResourceId(R.drawable.card_background_gray);
 					status="1";
-				}else if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("1")){
+				}else if(cursor.getString(ColumnTask.KEY.INDEX.status).equalsIgnoreCase("1")){
 					Toast.makeText(getContext(), "設定為仍待辦",
 							Toast.LENGTH_LONG).show();
 					card.setBackgroundResourceId(R.drawable.card_background);
@@ -110,14 +110,14 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 
 				
 				MyDebug.MakeLog(2, "@id="+cursor.getString(0));
-				MyDebug.MakeLog(2, "@cursor.getString(ColumnTask.KEY_INDEX.status)="
-						+cursor.getString(ColumnTask.KEY_INDEX.status));
+				MyDebug.MakeLog(2, "@cursor.getString(ColumnTask.KEY.INDEX.status)="
+						+cursor.getString(ColumnTask.KEY.INDEX.status));
 			}
 		});
 
 		// set color
-		if(cursor.getString(ColumnTask.KEY_INDEX.status)=="0") card.setBackgroundResourceId(Color.WHITE);
-		if(cursor.getString(ColumnTask.KEY_INDEX.status)=="1") card.setBackgroundResourceId(Color.GRAY);
+		if(cursor.getString(ColumnTask.KEY.INDEX.status)=="0") card.setBackgroundResourceId(Color.WHITE);
+		if(cursor.getString(ColumnTask.KEY.INDEX.status)=="1") card.setBackgroundResourceId(Color.GRAY);
 
 		// Set the header title
 		header.setTitle(card.mainHeader);
@@ -129,7 +129,7 @@ public class MyCursorCardAdapter extends CardCursorAdapter {
 		CardExpand expand = new CardExpand(getContext());
 		// Set inner title in Expand Area
 		String aa = "dbId=" + cursor.getString(0) + ",w="
-				+ cursor.getString(ColumnTask.KEY_INDEX.priority)
+				+ cursor.getString(ColumnTask.KEY.INDEX.priority)
 				+ "cardID="+card.getId();
 
 		expand.setTitle(aa);

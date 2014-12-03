@@ -15,8 +15,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.provider.GeocodingAPI;
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;

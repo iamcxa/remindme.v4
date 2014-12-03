@@ -1,4 +1,4 @@
-package me.iamcxa.remindme.database;
+package me.iamcxa.remindme.database.columns;
 
 import android.provider.BaseColumns;
 
@@ -8,9 +8,9 @@ import android.provider.BaseColumns;
  * @version 20140930
  */
 // 內部類別
-public final class ColumnCollaborator implements BaseColumns {
+public final class ColumnCategory implements BaseColumns {
 
-	private ColumnCollaborator() {
+	private ColumnCategory() {
 	}
 
 	// 預設排序常數

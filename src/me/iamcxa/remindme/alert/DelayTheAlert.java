@@ -2,8 +2,9 @@ package me.iamcxa.remindme.alert;
 
 import java.util.Calendar;
 
+import tw.remindme.common.function.MyDebug;
+
 import me.iamcxa.remindme.editor.Act_SetAlarm;
-import common.MyDebug;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;

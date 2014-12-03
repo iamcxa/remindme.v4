@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="me.iamcxa.remindme"
     android:installLocation="internalOnly"
-    android:versionCode="20141018"
-    android:versionName="Alpha" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionCode="20141112"
+    android:versionName="智慧提醒" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--======================================================================-->
     <uses-sdk
@@ -43,7 +43,7 @@
         android:icon="@drawable/remindme_logo"
         android:largeHeap="true"
         android:logo="@drawable/remindme_logo"
-        android:theme="@android:style/Theme.Holo.Light">
+        android:theme="@style/AppTheme">
         
    		<!--==================================================================-->
         <activity

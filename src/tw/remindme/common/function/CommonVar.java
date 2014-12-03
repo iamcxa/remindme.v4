@@ -1,7 +1,7 @@
 /**
  * 
  */
-package common;
+package tw.remindme.common.function;
 
 import java.util.Locale;
 

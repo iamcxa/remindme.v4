@@ -18,31 +18,28 @@
 
 package me.iamcxa.remindme.cardfragment;
 
+import tw.remindme.common.function.MyCalendar;
+import tw.remindme.common.function.MyDebug;
+
 import com.shamanland.fab.ShowHideOnScroll;
 
-import common.MyCalendar;
-import common.MyDebug;
 
 import it.gmariotti.cardslib.library.view.CardListView;
 import me.iamcxa.remindme.R;
-import me.iamcxa.remindme.database.ColumnAlert;
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
+import me.iamcxa.remindme.database.columns.ColumnAlert;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
+import me.iamcxa.remindme.editor.TaskEditorTab;
 import android.annotation.SuppressLint;
-import android.app.LoaderManager;
-import android.app.usage.UsageEvents.Event;
-import android.content.CursorLoader;
-import android.content.Loader;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnGenericMotionListener;
-import android.view.View.OnHoverListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -133,9 +130,13 @@ LoaderManager.LoaderCallbacks<Cursor> {
 				@Override
 				public void onClick(View v) {
 
+					
+					Intent intent = new Intent();
+					intent.setClass(getActivity(), TaskEditorTab.class);
+					startActivity(intent);
 					//fab_add.setBackgroundColor(getResources().getColor(R.color.demo_card_background_color2));
 
-					//Toast.makeText(v.getContext(), R.string.TaskEditor_Field_Inbox, Toast.LENGTH_SHORT).show();
+					Toast.makeText(v.getContext(), R.string.TaskEditor_Field_Inbox, Toast.LENGTH_SHORT).show();
 				}
 			});
 			

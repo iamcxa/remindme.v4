@@ -2,29 +2,42 @@ package me.iamcxa.remindme.editor;
 
 import java.util.ArrayList;
 
-import common.MyDebug;
-import common.MyTabListener;
+import tw.remindme.common.function.MyDebug;
+import tw.remindme.common.function.MyTabListener;
+import tw.remindme.common.view.SlidingTabLayout;
+import tw.remindme.taskeditor.adapter.TaskEditorFragmentPagerAdapter;
 
 import me.iamcxa.remindme.R;
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
-import android.app.ActionBar;
-import android.app.Fragment;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
 
-public class TaskEditorTab extends FragmentActivity 
+public class TaskEditorTab extends ActionBarActivity 
 implements
 OnMenuItemClickListener{
 
 	private static CommonEditorVar mEditorVar=CommonEditorVar.GetInstance();
 	protected static Act_SaveToDb mSaveOrUpdate;
 	private ReadDB_BeforeSaveDB readDB;
+
+	private static Toolbar toolbar;
+	private static SlidingTabLayout slidingTabLayout;
+	private static ViewPager viewPager;
+
+	private ArrayList<Fragment> fragments;
+	private TaskEditorFragmentPagerAdapter viewPager_Adapter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -43,7 +56,7 @@ OnMenuItemClickListener{
 		getMenuInflater().inflate(R.menu.editor_activity_actionbar, menu);
 
 		// 啟用action bar返回首頁箭頭
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayUseLogoEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -66,22 +79,49 @@ OnMenuItemClickListener{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
+	}	
 
 	//設定tab
 	private void setupViewComponent() {
-		final ActionBar actBar = getActionBar();
-		actBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		// 實例化介面物件
+		toolbar = (Toolbar) findViewById(R.id.taskeditor_toolbar);
+		slidingTabLayout = (SlidingTabLayout) findViewById(R.id.taskeditor_tab);
+		viewPager = (ViewPager) findViewById(R.id.taskeditor_viewpage);
+
+		// 設置 ViewPager
+		fragments = new ArrayList<Fragment>();
+		fragments.add(new TaskEditorMain());
+		fragments.add(new TaskEditorLocation());
+		viewPager_Adapter = new TaskEditorFragmentPagerAdapter(
+				getSupportFragmentManager()
+				,fragments);
+		viewPager.setOffscreenPageLimit(fragments.size());
+		viewPager.setAdapter(viewPager_Adapter);
+		// 設置SlidingTab
+		slidingTabLayout.setViewPager(viewPager);
+		setSupportActionBar(toolbar);  
+
+
+
+		//	final ActionBar actBar = getSupportActionBar();
+		//	actBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+
+		//final ActionBar toolbar = getSupportActionBar();
 
 		//ReadDB_BeforeSaveDB readDB=new ReadDB_BeforeSaveDB(getApplicationContext());
 		//getLoaderManager().initLoader(readDB.LOADER_ID_TASKS, null, readDB.getDBTaskID);
 		//getLoaderManager().initLoader(readDB.LOADER_ID_LOCATION, null, readDB.getDBLocID);
 
-		Fragment fragMarriSug = TaskEditorMain.newInstance();
-		actBar.addTab(actBar.newTab()
-				.setText("")
-				.setIcon(getResources().getDrawable(R.drawable.tear_of_calendar))
-				.setTabListener(new MyTabListener(fragMarriSug)));
+		//Fragment fragMarriSug = TaskEditorMain.newInstance();
+
+
+		//		actBar.addTab(actBar.newTab()
+		//				.setText("")
+		//				.setIcon(getResources().getDrawable(R.drawable.tear_of_calendar)));
+		//.setTabListener(new MyTabListener(fragMarriSug)));
+		//.setTabListener(new MyTabListener(fragMarriSug)));
 
 		//		Fragment fragGame =  TaskEditorLocation.newInstance();
 		//		actBar.addTab(actBar.newTab()
@@ -200,34 +240,6 @@ OnMenuItemClickListener{
 		return null;
 
 	}
-
-	//
-	//	private int lastTaskID(){
-	//	Cursor c= getApplicationContext().
-	//				getContentResolver().
-	//				query(ColumnTask.URI, 
-	//						ColumnTask.PROJECTION, null, null, 
-	//						ColumnTask.DEFAULT_SORT_ORDER);
-	//	String[] data;
-	//		if (c != null) {
-	////		    while(c.moveToNext()) {
-	////		        data = new String[3];
-	////		        data[0] = Integer.toString(c.getInt(0));
-	////		        //data[1] = c.getString(1);
-	////		        //data[2] = Integer.toString(c.getInt(2));
-	////		        
-	////		        MyDebug.MakeLog(2,"lastTaskID="+data[0]);
-	////		    }
-	//			data = new String[3];
-	//			c.moveToLast();
-	//			data[0] = Integer.toString(c.getInt(0));
-	//			
-	//			 MyDebug.MakeLog(2,"lastTaskID="+data[0]);
-	//		    c.close();
-	//		}
-	//		return 0;
-	//	}
-
 
 
 }

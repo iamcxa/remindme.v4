@@ -1,4 +1,4 @@
-package me.iamcxa.remindme.database;
+package me.iamcxa.remindme.database.columns;
 
 import android.provider.BaseColumns;
 

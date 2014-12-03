@@ -1,4 +1,4 @@
-package common;
+package tw.remindme.common.function;
 
 import android.content.SharedPreferences;
 

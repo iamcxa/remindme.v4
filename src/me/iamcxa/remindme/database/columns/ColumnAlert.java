@@ -1,6 +1,6 @@
-package me.iamcxa.remindme.database;
+package me.iamcxa.remindme.database.columns;
 
-import common.CommonVar;
+import tw.remindme.common.function.CommonVar;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

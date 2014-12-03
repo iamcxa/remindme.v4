@@ -5,12 +5,13 @@ package me.iamcxa.remindme.provider;
 
 import java.text.DecimalFormat;
 
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
-import me.iamcxa.remindme.database.TaskDbEditor;
+import tw.remindme.common.function.MyCalendar;
+import tw.remindme.common.function.MyDebug;
 
-import common.MyCalendar;
-import common.MyDebug;
+import me.iamcxa.remindme.database.TaskDbEditor;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;

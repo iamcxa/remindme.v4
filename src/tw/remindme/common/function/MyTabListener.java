@@ -1,4 +1,4 @@
-package common;
+package tw.remindme.common.function;
 
 import me.iamcxa.remindme.R;
 import android.app.ActionBar;
@@ -6,7 +6,7 @@ import android.app.ActionBar.Tab;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 
-public class MyTabListener implements ActionBar.TabListener {
+public class MyTabListener implements  ActionBar.TabListener {
 
 	private Fragment mFragment;
 

@@ -3,8 +3,8 @@
  */
 package me.iamcxa.remindme.service;
 
-import common.MyDebug;
-import common.MyPreferences;
+import tw.remindme.common.function.MyDebug;
+import tw.remindme.common.function.MyPreferences;
 
 import me.iamcxa.remindme.provider.LocationGetter;
 import me.iamcxa.remindme.provider.PriorityCalculator;

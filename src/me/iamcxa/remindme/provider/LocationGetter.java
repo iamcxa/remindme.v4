@@ -1,7 +1,7 @@
 package me.iamcxa.remindme.provider;
 
-import common.MyDebug;
-import common.MyPreferences;
+import tw.remindme.common.function.MyDebug;
+import tw.remindme.common.function.MyPreferences;
 
 import android.content.Context;
 import android.location.Location;

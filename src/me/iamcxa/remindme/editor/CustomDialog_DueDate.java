@@ -2,8 +2,9 @@ package me.iamcxa.remindme.editor;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
-import common.MyCalendar;
-import common.MyDebug;
+import tw.remindme.common.function.MyCalendar;
+import tw.remindme.common.function.MyDebug;
+
 
 import me.iamcxa.remindme.R;
 import android.annotation.SuppressLint;

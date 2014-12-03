@@ -2,8 +2,9 @@ package me.iamcxa.remindme.editor;
 
 import java.util.Calendar;
 
+import tw.remindme.common.function.MyDebug;
+
 import me.iamcxa.remindme.RemindmeReceiver_TaskAlert;
-import common.MyDebug;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;

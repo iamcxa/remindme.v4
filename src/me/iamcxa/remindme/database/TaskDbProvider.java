@@ -4,7 +4,12 @@
 package me.iamcxa.remindme.database;
 
 import java.util.HashMap;
-import common.CommonVar;
+
+import me.iamcxa.remindme.database.columns.ColumnAlert;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
+
+import tw.remindme.common.function.CommonVar;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -221,7 +226,7 @@ public class TaskDbProvider extends ContentProvider {
 			// 取得資料庫實例
 			db = mOpenHelper.getWritableDatabase();
 			// 保存資料返回欄位ID
-			rowId = db.insert(TABLE_ALERT, ColumnAlert.KEY._id,
+			rowId = db.insert(TABLE_LOCATION, ColumnLocation.KEY._id,
 					values);
 			if (rowId > 0) {
 				Uri thisUri = ContentUris.withAppendedId(ColumnLocation.URI,

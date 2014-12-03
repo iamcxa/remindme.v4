@@ -1,5 +1,7 @@
 package me.iamcxa.remindme.editor;
 
+import tw.remindme.common.function.MyDebug;
+
 import com.devspark.progressfragment.ProgressFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -8,7 +10,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import common.MyDebug;
 
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.provider.GeocodingAPI;
@@ -142,8 +143,8 @@ public class TaskEditorLocation extends ProgressFragment  /*implements GPSCallba
 	{
 	    if(map == null)
 	    {
-	    	map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-	        if(map == null)
+	    	//map = ((MapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+	    	 if(map == null)
 	        {
 	            Log.d("", "googleMap is null !!!!!!!!!!!!!!!");
 	        }else

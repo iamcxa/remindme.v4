@@ -1,10 +1,10 @@
 package me.iamcxa.remindme.alert;
 
+import tw.remindme.common.function.MyDebug;
+import tw.remindme.common.function.MyPreferences;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.RemindmeMainActivity;
-import me.iamcxa.remindme.database.ColumnTask;
-import common.MyDebug;
-import common.MyPreferences;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -60,7 +60,7 @@ public class AlertHandler extends IntentService {
 		String data = null;
 		if (c != null) {
 			c.moveToFirst();
-			data = c.getString(ColumnTask.KEY_INDEX.title);
+			data = c.getString(ColumnTask.KEY.INDEX.title);
 			MyDebug.MakeLog(2,"getTaskName="+data);
 			c.close();
 		}

@@ -1,4 +1,4 @@
-package common;
+package tw.remindme.common.function;
 
 import android.util.Log;
 
@@ -9,10 +9,11 @@ public class MyDebug {
 	public static final String DEBUG_MSG_TAG= CommonVar.TASKLIST;
 
 	/**
-	 * @param Log.v  ==>Log_Level=0
-	 * @param Log.w  ==>Log_Level=1
-	 * @param Log.wtf =>Log_Level=2
-	 * @param msgs
+	 * @param Log_Level 型別int；錯誤訊息等級。<br>
+	 *   Log.v   ==0<br>
+	 *   Log.w   ==1<br>
+	 *   Log.wtf ==2
+	 * @param msgs 型別String；錯誤訊息內容。
 	 */
 	public static void MakeLog(int Log_Level, String msgs) {
 		if (MyPreferences.IS_DEBUG_MSG_ON()) {

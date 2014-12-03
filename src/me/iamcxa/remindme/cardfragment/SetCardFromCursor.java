@@ -1,11 +1,11 @@
 package me.iamcxa.remindme.cardfragment;
 
-import common.MyCalendar;
-import common.MyDebug;
+import tw.remindme.common.function.MyCalendar;
+import tw.remindme.common.function.MyDebug;
 import me.iamcxa.remindme.R;
 import me.iamcxa.remindme.cardfragment.MyCursorCardAdapter.MyCursorCard;
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -25,24 +25,24 @@ public class SetCardFromCursor {
 	public void setIt() {
 		// 準備常數
 		boolean Extrainfo = cursor
-				.isNull(ColumnTask.KEY_INDEX.tag_id);
-		int CID = cursor.getInt(ColumnTask.KEY_INDEX._id);		
+				.isNull(ColumnTask.KEY.INDEX.tag_id);
+		int CID = cursor.getInt(ColumnTask.KEY.INDEX._id);		
 		//主要內容
-		String title=cursor.getString(ColumnTask.KEY_INDEX.title);				
-		String status=cursor.getString(ColumnTask.KEY_INDEX.status);		
-		String content=cursor.getString(ColumnTask.KEY_INDEX.content);			
-		int due_date_millis=cursor.getInt(ColumnTask.KEY_INDEX.due_date_millis);			
-		String due_date_string=cursor.getString(ColumnTask.KEY_INDEX.due_date_string);		
-		int color=cursor.getInt(ColumnTask.KEY_INDEX.color);	
-		int priority=cursor.getInt(ColumnTask.KEY_INDEX.priority);		
-		int created=cursor.getInt(ColumnTask.KEY_INDEX.created);	
+		String title=cursor.getString(ColumnTask.KEY.INDEX.title);				
+		String status=cursor.getString(ColumnTask.KEY.INDEX.status);		
+		String content=cursor.getString(ColumnTask.KEY.INDEX.content);			
+		int due_date_millis=cursor.getInt(ColumnTask.KEY.INDEX.due_date_millis);			
+		String due_date_string=cursor.getString(ColumnTask.KEY.INDEX.due_date_string);		
+		int color=cursor.getInt(ColumnTask.KEY.INDEX.color);	
+		int priority=cursor.getInt(ColumnTask.KEY.INDEX.priority);		
+		int created=cursor.getInt(ColumnTask.KEY.INDEX.created);	
 		//分類,標籤與優先
-		int category_id=cursor.getInt(ColumnTask.KEY_INDEX.category_id);
-		int tag_id=cursor.getInt(ColumnTask.KEY_INDEX.tag_id);
-		int project_id=cursor.getInt(ColumnTask.KEY_INDEX.project_id);
-		int collaborator_id=cursor.getInt(ColumnTask.KEY_INDEX.collaborator_id);
-		int sync_id=cursor.getInt(ColumnTask.KEY_INDEX.sync_id);	
-		int location_id=cursor.getInt(ColumnTask.KEY_INDEX.location_id);
+		int category_id=cursor.getInt(ColumnTask.KEY.INDEX.category_id);
+		int tag_id=cursor.getInt(ColumnTask.KEY.INDEX.tag_id);
+		int project_id=cursor.getInt(ColumnTask.KEY.INDEX.project_id);
+		int collaborator_id=cursor.getInt(ColumnTask.KEY.INDEX.collaborator_id);
+		int sync_id=cursor.getInt(ColumnTask.KEY.INDEX.sync_id);	
+		int location_id=cursor.getInt(ColumnTask.KEY.INDEX.location_id);
 
 		long dayLeft = MyCalendar.getDaysLeft(due_date_string, 2);
 		// int dayLeft = Integer.parseInt("" + dayLeftLong);
@@ -84,9 +84,9 @@ public class SetCardFromCursor {
 		}
 		
 		// set color
-		if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("0")) 
+		if(cursor.getString(ColumnTask.KEY.INDEX.status).equalsIgnoreCase("0")) 
 			card.setBackgroundResourceId(R.drawable.card_background);
-		if(cursor.getString(ColumnTask.KEY_INDEX.status).equalsIgnoreCase("1")) 
+		if(cursor.getString(ColumnTask.KEY.INDEX.status).equalsIgnoreCase("1")) 
 			card.setBackgroundResourceId(R.drawable.card_background_gray);
 
 
@@ -100,13 +100,13 @@ public class SetCardFromCursor {
 				ColumnLocation.DEFAULT_SORT_ORDER);
 		String dintence;
 		if(cursorLocation.getCount()>0){
-			 dintence=String.valueOf(cursorLocation.getLong(ColumnLocation.KEY_INDEX.dintance));
+			 dintence=String.valueOf(cursorLocation.getLong(ColumnLocation.KEY.INDEX.dintance));
 		}else {
 			 dintence="null";
 		}
 		MyDebug.MakeLog(0, "dintence=" +dintence);
 		if (dintence == "") {
-			card.LocationName = cursorLocation.getString(ColumnLocation.KEY_INDEX.name);
+			card.LocationName = cursorLocation.getString(ColumnLocation.KEY.INDEX.name);
 		} else {
 			//			if (Double.valueOf(dintence) < 1) {
 			//				card.LocationName = LocationName + " - 距離 "
@@ -122,7 +122,7 @@ public class SetCardFromCursor {
 		 card.Notifications = "dbId="
 		 + cursor.getString(0)
 		 + ",priority="
-		 + cursor.getString(ColumnTask.KEY_INDEX.priority);
+		 + cursor.getString(ColumnTask.KEY.INDEX.priority);
 		if (!Extrainfo) {
 			card.resourceIdThumb = R.drawable.outline_star_act;
 			// 額外資訊提示 - 第四行
@@ -131,9 +131,9 @@ public class SetCardFromCursor {
 		card.Notifications = cursor.getString(0);
 
 		// 依照權重給予卡片顏色
-		if (cursor.getInt(ColumnTask.KEY_INDEX.priority) > 6000) {
+		if (cursor.getInt(ColumnTask.KEY.INDEX.priority) > 6000) {
 			card.setBackgroundResourceId(R.drawable.demo_card_selector_color5);
-		} else if (cursor.getInt(ColumnTask.KEY_INDEX.priority) > 3000) {
+		} else if (cursor.getInt(ColumnTask.KEY.INDEX.priority) > 3000) {
 			card.setBackgroundResourceId(R.drawable.demo_card_selector_color3);
 		}
 	}

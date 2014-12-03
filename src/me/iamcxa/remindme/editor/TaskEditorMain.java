@@ -1,15 +1,17 @@
 package me.iamcxa.remindme.editor;
 
-import common.CommonVar;
-import common.MyDebug;
+import tw.remindme.common.function.CommonVar;
+import tw.remindme.common.function.MyDebug;
 import me.iamcxa.remindme.R;
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
-import android.app.Fragment;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
+import me.iamcxa.remindme.database.helper.DBLocationHelper;
+import me.iamcxa.remindme.database.helper.DBTasksHelper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -100,8 +102,8 @@ OnClickListener
 		taskDueDate =(EditText)getView().findViewById(R.id.editTextDueDate);
 		taskDueDate.setHint(getResources().getString(R.string.TaskEditor_Field_DueDate_Hint));
 		//taskDueDate.setText(mEditorVar.Task.getDueDate());
-		taskDueDate.setEnabled(false);  // 關閉欄位暫時避免輸入偵測判斷
-		taskDueDate.setClickable(false);// 關閉選取暫時避免輸入偵測判斷
+		//taskDueDate.setEnabled(false);  // 關閉欄位暫時避免輸入偵測判斷
+		//taskDueDate.setClickable(false);// 關閉選取暫時避免輸入偵測判斷
 		// 期限 - 選擇按鈕
 		taskBtnDueDate=(ImageButton)getView().findViewById(R.id.imageButtonResetDate);
 		taskBtnDueDate.setOnClickListener(this);
@@ -117,29 +119,16 @@ OnClickListener
 		tasklocation=(Spinner)getView().findViewById(R.id.spinnerTextLocation);
 		tasklocation.setAdapter(setLocationArray(c));
 		tasklocation.setOnItemSelectedListener(test);
+		tasklocation.setEnabled(true);
 
 		taskBtnLocation=(ImageButton)getView().findViewById(R.id.imageButtonSetLocation);
 		taskBtnLocation.setOnClickListener(this);
+		taskBtnLocation.setEnabled(true);
 
 		// btnMore 
 		btnMore=(Button)getView().findViewById(R.id.btnMore);
 		btnMore.setOnClickListener(this);
-
-		//-------------------------------------------------------//
-		//                     									 //
-		//                     上架暫時關閉地點						 //
-		//                     									 //
-		//-------------------------------------------------------//
-		tasklocation.setEnabled(false);
-		tasklocation.setVisibility(View.GONE);
-		taskBtnLocation.setEnabled(false);
-		taskBtnLocation.setVisibility(View.GONE);
-		btnMore.setEnabled(false);
-		btnMore.setVisibility(View.GONE);
-
-		/*
-		 * 
-		 */
+		btnMore.setEnabled(true);
 
 		// 類別選擇框
 		taskCategory=(Spinner)getActivity().findViewById(R.id.spinnerCategory);
@@ -161,6 +150,42 @@ OnClickListener
 		taskProject.setPrompt(getResources().getString(R.string.TaskEditor_Field_Project_Hint));
 		taskProject.setVisibility(View.GONE);
 
+		//TODO 執行範例
+		exampleOfDBLocationHelper();
+	}
+
+	//-------------------------------------------------------//
+	//                     									 //
+	//                 DBLocationHelper 範例					 //
+	//                     									 //
+	//-------------------------------------------------------//
+	private void exampleOfDBLocationHelper(){
+		DBLocationHelper dbLocationHelper=new DBLocationHelper(getActivity());
+
+		// 增加物件
+		dbLocationHelper.addItem("測試", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
+		dbLocationHelper.addItem("測試2", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
+		
+		// 修改物件
+		dbLocationHelper.setItem(2, ColumnLocation.KEY.dintance,123123.2);
+		
+		// 取得物件
+		// 預設cursor
+		Cursor defaultDbLocCursor=dbLocationHelper.getCursor();
+		// 特殊指定cursor
+		String[] projection = null,selectionArgs = null;
+		String selection = null,shortOrder = null;
+		Cursor customDbLocCursor=dbLocationHelper.getCursor(projection, selection, selectionArgs, shortOrder);
+		
+		// 取得id=0欄位之地點名稱
+		String locNameString=dbLocationHelper.getItemString(0, ColumnLocation.KEY.name);
+		// 取得id=0欄位之地點距離
+		Double locDistance=dbLocationHelper.getItemDouble(0, ColumnLocation.KEY.dintance);
+		// 取得id=0欄位之地點類型
+		int locType=dbLocationHelper.getItemInt(0, ColumnLocation.KEY.type);
+		
+		
+		MyDebug.MakeLog(2, "dbLocationHelper.getCount="+dbLocationHelper.getCount());
 	}
 
 	private OnItemSelectedListener test=new OnItemSelectedListener() {

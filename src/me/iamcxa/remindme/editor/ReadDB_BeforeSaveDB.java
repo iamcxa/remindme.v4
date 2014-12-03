@@ -2,9 +2,11 @@ package me.iamcxa.remindme.editor;
 
 import java.util.ArrayList;
 
+import tw.remindme.common.function.MyDebug;
+
 import me.iamcxa.remindme.R;
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -14,7 +16,6 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import common.MyDebug;
 
 public class ReadDB_BeforeSaveDB {
 

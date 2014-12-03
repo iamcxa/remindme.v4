@@ -1,6 +1,6 @@
-package me.iamcxa.remindme.database;
+package me.iamcxa.remindme.database.columns;
 
-import common.CommonVar;
+import tw.remindme.common.function.CommonVar;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -34,7 +34,10 @@ public final class ColumnLocation implements BaseColumns {
 					+KEY.lat + " TEXT,"
 					+KEY.lon + " TEXT,"
 					+KEY.dintance + " INTEGER,"
-					+KEY.lastUsedTime +" INTEGER"
+					+KEY.lastUsedTime +" INTEGER,"
+					+KEY.weight +" INTEGER,"
+					+KEY.type +" INTEGER,"
+					+KEY.tag +" TEXT"
 					+ ");";
 	// 查詢欄位陣列
 	public static final String[] PROJECTION = new String[] { 
@@ -43,18 +46,13 @@ public final class ColumnLocation implements BaseColumns {
 		KEY.lat,
 		KEY.lon,
 		KEY.dintance,
-		KEY.lastUsedTime
+		KEY.lastUsedTime,
+		KEY.weight,
+		KEY.type,
+		KEY.tag
 	};
 
-	// 欄位索引
-	public static class KEY_INDEX {
-		public static final int _id = 0;
-		public static final int name = 1;
-		public static final int lat = 2;
-		public static final int lon = 3;
-		public static final int dintance = 4;
-		public static final int lastUsedTime = 5;
-	}
+
 
 	// 欄位名稱
 	public static class KEY {
@@ -64,5 +62,22 @@ public final class ColumnLocation implements BaseColumns {
 		public static final String lon = "lon";
 		public static final String dintance = "dintance";
 		public static final String lastUsedTime ="lastUsedTime";
+		public static final String weight ="weight";
+		public static final String type ="type";
+		public static final String tag ="tag";
+
+
+		// 欄位索引
+		public static class INDEX {
+			public static final int _id = 0;
+			public static final int name = 1;
+			public static final int lat = 2;
+			public static final int lon = 3;
+			public static final int dintance = 4;
+			public static final int lastUsedTime = 5;
+			public static final int weight = 6;
+			public static final int type = 7;
+			public static final int tag = 8;
+		}
 	}
 }

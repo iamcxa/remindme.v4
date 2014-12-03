@@ -1,7 +1,7 @@
 package me.iamcxa.remindme;
 
+import tw.remindme.common.function.MyDebug;
 import me.iamcxa.remindme.alert.AlertHandler;
-import common.MyDebug;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

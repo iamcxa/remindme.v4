@@ -2,11 +2,12 @@ package me.iamcxa.remindme.editor;
 
 import java.util.Calendar;
 
-import me.iamcxa.remindme.database.ColumnAlert;
-import me.iamcxa.remindme.database.ColumnLocation;
-import me.iamcxa.remindme.database.ColumnTask;
-import common.MyCalendar;
-import common.MyDebug;
+import tw.remindme.common.function.MyCalendar;
+import tw.remindme.common.function.MyDebug;
+
+import me.iamcxa.remindme.database.columns.ColumnAlert;
+import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
