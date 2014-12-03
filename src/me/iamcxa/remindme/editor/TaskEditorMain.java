@@ -165,6 +165,10 @@ OnClickListener
 		// 增加物件
 		dbLocationHelper.addItem("測試", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
 		dbLocationHelper.addItem("測試2", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
+		dbLocationHelper.addItem("測試3", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
+		
+		// 刪除物件
+		dbLocationHelper.deleteItem(4);
 		
 		// 修改物件
 		dbLocationHelper.setItem(2, ColumnLocation.KEY.dintance,123123.2);
@@ -184,8 +188,9 @@ OnClickListener
 		// 取得id=0欄位之地點類型
 		int locType=dbLocationHelper.getItemInt(0, ColumnLocation.KEY.type);
 		
-		
-		MyDebug.MakeLog(2, "dbLocationHelper.getCount="+dbLocationHelper.getCount());
+		// 取得總數量
+		int count=dbLocationHelper.getCount();
+		MyDebug.MakeLog(2, "dbLocationHelper.getCount="+count);
 	}
 
 	private OnItemSelectedListener test=new OnItemSelectedListener() {

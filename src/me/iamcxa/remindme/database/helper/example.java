@@ -11,7 +11,8 @@ import android.database.Cursor;
 
 /**
  * @author Kent
- *
+ * @version 0.1
+ * @since 20141203
  */
 public class example extends Activity {
 	
@@ -31,6 +32,10 @@ public class example extends Activity {
 		// 增加物件
 		dbLocationHelper.addItem("測試", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
 		dbLocationHelper.addItem("測試2", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
+		dbLocationHelper.addItem("測試3", "1.0", "2.0", 333.0, 444.0, 5,0,"null");
+		
+		// 刪除物件
+		dbLocationHelper.deleteItem(3);
 		
 		// 修改物件
 		dbLocationHelper.setItem(2, ColumnLocation.KEY.dintance,123123.2);

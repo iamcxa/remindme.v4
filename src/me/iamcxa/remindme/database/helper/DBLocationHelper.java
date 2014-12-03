@@ -7,6 +7,7 @@ package me.iamcxa.remindme.database.helper;
  */
 import tw.remindme.common.function.MyDebug;
 import me.iamcxa.remindme.database.columns.ColumnLocation;
+import me.iamcxa.remindme.database.columns.ColumnTask;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -219,7 +220,7 @@ public class DBLocationHelper {
 
 	/**
 	 * 本方法可更新一筆資料資料表task_locations中的字串資料。<br>
-	 *@param itemId 型別String；地點名稱。
+	 *@param itemId 型別String；地點ID。
 	 *@param targetKey 型別String；目標欄位名稱，由ColumnLocation.Key提供。
 	 *@param newValue 型別String；目標欄位的新值。
 	 *@return True.
@@ -247,7 +248,7 @@ public class DBLocationHelper {
 
 	/**
 	 * 本方法可更新一筆資料資料表task_locations中的數值資料。<br>
-	 *@param itemId 型別String；地點名稱。
+	 *@param itemId 型別String；地點ID。
 	 *@param targetKey 型別String；目標欄位名稱，由ColumnLocation.Key提供。
 	 *@param newValue 型別Double；目標欄位的新值。
 	 *@return True.
@@ -269,6 +270,27 @@ public class DBLocationHelper {
 		} catch (Exception e) {
 
 			MyDebug.MakeLog(2, "DBLocationHelpr setItem method error="+e.toString());
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * 本方法可刪除一筆資料資料表task_locations中的資料。<br>
+	 *@param itemId 型別String；地點ID。
+	 *@return True.
+	 *@throws False, also logcat will output "DBLocationHelpr deleteItem method error=..."。
+	 */
+	public boolean deleteItem(int itemId) {
+
+		try {
+
+			context.getContentResolver().delete(mUri, "_id = ?", new String[] { String.valueOf(itemId) });
+
+			return true;
+		} catch (Exception e) {
+
+			MyDebug.MakeLog(2, "DBLocationHelpr deleteItem method error="+e.toString());
 			return false;
 		}
 	}
