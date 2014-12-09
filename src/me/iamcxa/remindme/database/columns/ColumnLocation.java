@@ -15,13 +15,13 @@ public final class ColumnLocation implements BaseColumns {
 	private ColumnLocation() {
 	}
 
-	// ¹w³]±Æ§Ç±`¼Æ
+	// é è¨­æ’åºå¸¸æ•¸
 	public static final String DEFAULT_SORT_ORDER = "_id DESC";
 
-	// ¸ê®Æªí¦WºÙ±`¼Æ
+	// è³‡æ–™è¡¨åç¨±å¸¸æ•¸
 	public static final String TABLE_NAME = "task_locations";
 
-	// ¦s¨úUri
+	// å­˜å–Uri
 	public static final Uri URI =
 			Uri.parse("content://" + CommonVar.AUTHORITY + "/" + TABLE_NAME);
 
@@ -33,13 +33,13 @@ public final class ColumnLocation implements BaseColumns {
 					+KEY.name  + " TEXT,"
 					+KEY.lat + " TEXT,"
 					+KEY.lon + " TEXT,"
-					+KEY.dintance + " INTEGER,"
+					// +KEY.dintance + " INTEGER,"
 					+KEY.lastUsedTime +" INTEGER,"
 					+KEY.weight +" INTEGER,"
 					+KEY.type +" INTEGER,"
 					+KEY.tag +" TEXT"
 					+ ");";
-	// ¬d¸ßÄæ¦ì°}¦C
+	// æŸ¥è©¢æ¬„ä½é™£åˆ—
 	public static final String[] PROJECTION = new String[] { 
 		KEY._id ,
 		KEY.name ,
@@ -54,7 +54,7 @@ public final class ColumnLocation implements BaseColumns {
 
 
 
-	// Äæ¦ì¦WºÙ
+	// æ¬„ä½åç¨±
 	public static class KEY {
 		public static final String _id = "_id";
 		public static final String name = "name";
@@ -67,7 +67,7 @@ public final class ColumnLocation implements BaseColumns {
 		public static final String tag ="tag";
 
 
-		// Äæ¦ì¯Á¤Ş
+		// æ¬„ä½ç´¢å¼•
 		public static class INDEX {
 			public static final int _id = 0;
 			public static final int name = 1;
